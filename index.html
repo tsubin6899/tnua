@@ -4,12 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
+<meta name="theme-color" content="#17324d">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/app-icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/app-icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <title>國立臺北藝術大學招生互動儀表板</title>
 <style>
 :root{--ink:#14213d;--navy:#17324d;--blue:#2878b5;--teal:#168a83;--gold:#d5a021;--red:#c5534d;--paper:#f7f4ee;--panel:#edf1f4;--line:#ccd5dd;--muted:#667085;--white:#fff;--shadow:0 16px 50px rgba(20,33,61,.10)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;overflow-x:hidden;background:linear-gradient(180deg,#f4f7f9 0,#f7f4ee 52%,#f2f5f7 100%);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;line-height:1.55}
 button,input,select{font:inherit}button{cursor:pointer}.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;z-index:99;background:#fff;padding:10px 14px;border:2px solid var(--blue)}
-.hero{background:var(--navy);color:#fff;padding:42px max(24px,calc((100vw - 1500px)/2));position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border:90px solid rgba(109,203,244,.11);border-radius:50%}.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:#a9ddef;font-weight:800}.hero h1{font-size:clamp(2rem,4vw,4.3rem);line-height:1.08;max-width:950px;margin:.4rem 0 1rem;letter-spacing:-.025em}.hero p{max-width:850px;color:#dbeaf2;margin:0;font-size:1.05rem}.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.badge{border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:6px 10px;color:#eaf4f8;font-size:.82rem;background:rgba(255,255,255,.06)}
+.hero{background:var(--navy);color:#fff;padding:42px max(24px,calc((100vw - 1500px)/2));position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border:90px solid rgba(109,203,244,.11);border-radius:50%}.hero-brand{display:flex;align-items:flex-start;gap:22px;position:relative;z-index:1}.app-mark{width:96px;height:96px;flex:0 0 96px;border-radius:22px;background:#fff;box-shadow:0 12px 30px rgba(0,0,0,.24)}.hero-copy{min-width:0}.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:#a9ddef;font-weight:800}.hero h1{font-size:clamp(2rem,4vw,4.3rem);line-height:1.08;max-width:950px;margin:.4rem 0 1rem;letter-spacing:-.025em}.hero p{max-width:850px;color:#dbeaf2;margin:0;font-size:1.05rem}.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:1}.badge{border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:6px 10px;color:#eaf4f8;font-size:.82rem;background:rgba(255,255,255,.06)}
 .shell{max-width:1500px;margin:auto;padding:22px 24px 70px}.filterbar{position:sticky;top:0;z-index:20;background:rgba(247,244,238,.94);backdrop-filter:blur(14px);border:1px solid rgba(204,213,221,.8);box-shadow:0 8px 26px rgba(20,33,61,.08);border-radius:18px;padding:16px;margin:-22px 0 22px}.filters{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px}.filters>*{min-width:0}.field label{display:block;font-size:.76rem;font-weight:800;color:var(--muted);margin:0 0 5px}.field select,.field input{width:100%;max-width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 10px;color:var(--ink);outline:none}.field select:disabled{background:#eef1f3;color:#8b95a3}.field select:focus,.field input:focus,button:focus-visible{outline:3px solid rgba(40,120,181,.28);outline-offset:2px}.filter-actions{display:flex;gap:8px;align-items:end}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800;background:var(--navy);color:#fff}.btn.secondary{background:#e5ebef;color:var(--ink)}.btn.gold{background:var(--gold);color:#241b05}.btn.danger{background:#f7e7e5;color:#8e302b}.btn.small{font-size:.82rem;padding:7px 10px}
 .statusline{display:flex;justify-content:space-between;gap:16px;align-items:center;margin:6px 2px 18px;color:var(--muted);font-size:.88rem}.statusline strong{color:var(--ink)}
 .kpis{display:grid;grid-template-columns:repeat(8,minmax(120px,1fr));gap:12px;margin-bottom:20px}.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;min-height:122px;box-shadow:0 8px 22px rgba(20,33,61,.05)}.kpi.primary{background:#eaf4f9;border-color:#bdd8e6}.kpi.good{background:#e7f4f1;border-color:#b9ddd6}.kpi.alert{background:#fae9e6;border-color:#e7b6b0}.kpi .label{color:var(--muted);font-size:.76rem;font-weight:800}.kpi .value{font-size:clamp(1.55rem,2vw,2.45rem);font-weight:900;line-height:1.2;margin:.35rem 0}.kpi .foot{font-size:.75rem;color:var(--muted)}
@@ -26,14 +30,19 @@ button,input,select{font:inherit}button{cursor:pointer}.skip{position:absolute;l
 @media(max-width:430px){.filters,.kpis,.formgrid{grid-template-columns:1fr}.hero h1{font-size:2.15rem}.kpi{min-height:100px}.chart{min-height:250px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 @media print{.filterbar,.editor,.form-actions{display:none!important}.hero{padding:24px}.shell{max-width:none}.panel,.kpi{break-inside:avoid;box-shadow:none}.grid{display:block}.panel{margin-bottom:14px}}
+table{min-width:1240px}
+@media(max-width:760px){.hero-brand{gap:14px}.app-mark{width:68px;height:68px;flex-basis:68px;border-radius:16px}}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">跳到主要內容</a>
 <header class="hero">
-  <div class="eyebrow">Admissions intelligence · 2026</div>
-  <h1>招生數據，從彙整<br>走向可行動的判讀</h1>
-  <p>整合學士班、碩博士班、碩士在職專班、七年一貫制、學士後學士與招生名額變化；保留官方口徑，也支援自行新增資料。</p>
+  <div class="hero-brand">
+    <img class="app-mark" src="assets/app-icon-192.png" alt="北藝大招生儀表板 APP 圖示" width="96" height="96">
+    <div class="hero-copy"><div class="eyebrow">Admissions intelligence · 2026</div>
+    <h1>招生數據，從彙整<br>走向可行動的判讀</h1>
+    <p>整合學士班、碩博士班、碩士在職專班、七年一貫制、學士後學士與招生名額變化；保留官方口徑，也支援自行新增資料。</p></div>
+  </div>
   <div class="meta"><span class="badge">資料涵蓋 96–116 學年度</span><span class="badge">最後整理 2026-07-14</span><span class="badge">離線可用 · 本機保存</span></div>
 </header>
 <main class="shell" id="main">
@@ -72,8 +81,8 @@ button,input,select{font:inherit}button{cursor:pointer}.skip{position:absolute;l
       <div id="rankChart"></div><div class="chart-summary" id="rankSummary"></div>
     </article>
     <article class="panel wide">
-      <div class="panel-head"><div><h2>精確資料明細</h2><p>關鍵數值可直接編輯，變更後會立即更新上方指標與圖表。</p><div class="edit-note">編輯內容僅儲存在目前瀏覽器，不會改寫原始 Excel，也不會同步給其他使用者。</div></div><div class="panel-actions"><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button></div></div>
-      <div class="table-wrap"><table><thead><tr><th>資料層級</th><th>學年度</th><th>學制</th><th>招生管道</th><th>學院</th><th>系所</th><th class="num">報名</th><th class="num">名額</th><th class="num">錄取</th><th class="num">註冊報到</th><th class="num">競爭倍率</th><th class="num">報到率</th><th>狀態</th></tr></thead><tbody id="detailBody"></tbody></table></div>
+      <div class="panel-head"><div><h2>精確資料明細</h2><p>關鍵數值可直接編輯，變更後會立即更新上方指標與圖表。</p><div class="edit-note">正取、備取原始檔未提供，預設留白供補登。編輯內容僅儲存在目前瀏覽器，不會改寫原始 Excel，也不會同步給其他使用者。</div></div><div class="panel-actions"><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button></div></div>
+      <div class="table-wrap"><table><thead><tr><th>資料層級</th><th>學年度</th><th>學制</th><th>招生管道</th><th>學院</th><th>系所</th><th class="num">報名</th><th class="num">名額</th><th class="num">錄取</th><th class="num">正取人數</th><th class="num">備取人數</th><th class="num">註冊報到</th><th class="num">競爭倍率</th><th class="num">報到率</th><th>狀態</th></tr></thead><tbody id="detailBody"></tbody></table></div>
     </article>
     <article class="panel wide">
       <details class="editor" id="editor"><summary>自行填入／管理資料</summary>
@@ -603,10 +612,11 @@ button,input,select{font:inherit}button{cursor:pointer}.skip{position:absolute;l
   function setInlineEdit(recordId,field,value){
     const original=originalRowById(recordId);if(!original)return;
     const changes={...(inlineEdits[recordId]||{})};
-    if(value===n(original[field]))delete changes[field];else changes[field]=value;
+    if(original[field]!=null&&value===n(original[field]))delete changes[field];else changes[field]=value;
     if(Object.keys(changes).length)inlineEdits[recordId]=changes;else delete inlineEdits[recordId];
     saveInlineEdits();
   }
+  function clearInlineEdit(recordId,field){const changes={...(inlineEdits[recordId]||{})};delete changes[field];if(Object.keys(changes).length)inlineEdits[recordId]=changes;else delete inlineEdits[recordId];saveInlineEdits()}
   function saveCustomRows(){if(customRows.length)localStorage.setItem(STORAGE_KEY,JSON.stringify(customRows));else localStorage.removeItem(STORAGE_KEY);$('restoreBackup').disabled=!localStorage.getItem(BACKUP_KEY)}
   function validateImportedRows(rawRows){
     const result={rows:[],errors:[],warnings:[],invalidRows:0,duplicatesInFile:0,existingMatches:0};
@@ -755,9 +765,9 @@ button,input,select{font:inherit}button{cursor:pointer}.skip{position:absolute;l
     data.forEach((r,i)=>{const y=p.t+i*rowH+4,h=Math.max(rowH-8,10),w=r.competition/max*(W-p.l-p.r);svg+='<text x="'+(p.l-10)+'" y="'+(y+h*.72)+'" text-anchor="end" font-size="11" fill="'+COLORS.ink+'">'+esc(short(r.department,15))+'</text><rect x="'+p.l+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+(i<3?COLORS.teal:COLORS.blue)+'"/><text x="'+(p.l+w+8)+'" y="'+(y+h*.72)+'" font-size="11" font-weight="800" fill="'+COLORS.ink+'">'+mult(r.competition)+'</text>'});svg+='</svg>';host.innerHTML=svg;$('rankSummary').textContent='最高：'+data[0].department+' '+mult(data[0].competition)+'；最低（畫面內）：'+data.at(-1).department+' '+mult(data.at(-1).competition);
   }
   function visibleRows(){const details=selectedDetails();const totals=selectedTotals();return [...totals,...details].sort((a,b)=>a.record_type.localeCompare(b.record_type,'zh-Hant')||String(a.department).localeCompare(String(b.department),'zh-Hant'))}
-  function editableCell(row,field,label){return '<td class="num"><input class="inline-number" type="number" min="0" step="1" inputmode="numeric" data-record-id="'+esc(row.record_id)+'" data-field="'+field+'" value="'+Math.round(n(row[field]))+'" aria-label="'+esc((row.department||row.level)+' '+label)+'"></td>'}
+  function editableCell(row,field,label){const value=row[field]==null?'':Math.round(n(row[field]));return '<td class="num"><input class="inline-number" type="number" min="0" step="1" inputmode="numeric" data-record-id="'+esc(row.record_id)+'" data-field="'+field+'" value="'+value+'" placeholder="—" aria-label="'+esc((row.department||row.level)+' '+label)+'"></td>'}
   function renderTable(){
-    const rows=visibleRows();$('detailBody').innerHTML=rows.length?rows.map(r=>{const comp=ratio(n(r.applicants),n(r.quota)),fill=ratio(n(r.adopted),n(r.quota));return '<tr><td>'+esc(r.record_type)+'</td><td>'+r.year+'</td><td>'+esc(r.level)+'</td><td>'+esc(r.channel||'—')+'</td><td>'+esc(r.college)+'</td><td>'+esc(r.department)+'</td>'+editableCell(r,'applicants','報名')+editableCell(r,'quota','名額')+editableCell(r,'admitted','錄取')+editableCell(r,'adopted','註冊報到')+'<td class="num '+(comp>=5?'strong':'')+'">'+mult(comp)+'</td><td class="num '+(fill<.9?'risk':'')+'">'+pct(fill)+'</td><td>'+(r.status==='進行中'?'<span class="pending">進行中</span>':esc(r.status))+'</td></tr>'}).join(''):'<tr><td colspan="13">目前篩選沒有資料。</td></tr>';
+    const rows=visibleRows();$('detailBody').innerHTML=rows.length?rows.map(r=>{const comp=ratio(n(r.applicants),n(r.quota)),fill=ratio(n(r.adopted),n(r.quota));return '<tr><td>'+esc(r.record_type)+'</td><td>'+r.year+'</td><td>'+esc(r.level)+'</td><td>'+esc(r.channel||'—')+'</td><td>'+esc(r.college)+'</td><td>'+esc(r.department)+'</td>'+editableCell(r,'applicants','報名')+editableCell(r,'quota','名額')+editableCell(r,'admitted','錄取')+editableCell(r,'regular_admitted','正取人數')+editableCell(r,'waitlisted','備取人數')+editableCell(r,'adopted','註冊報到')+'<td class="num '+(comp>=5?'strong':'')+'">'+mult(comp)+'</td><td class="num '+(fill<.9?'risk':'')+'">'+pct(fill)+'</td><td>'+(r.status==='進行中'?'<span class="pending">進行中</span>':esc(r.status))+'</td></tr>'}).join(''):'<tr><td colspan="15">目前篩選沒有資料。</td></tr>';
     $('rowCount').textContent='明細 '+rows.length+' 筆｜已編輯 '+Object.keys(inlineEdits).length+' 筆｜自填 '+customRows.length+' 筆';
     $('resetInlineEdits').disabled=!Object.keys(inlineEdits).length;
   }
@@ -774,8 +784,11 @@ button,input,select{font:inherit}button{cursor:pointer}.skip{position:absolute;l
   els.department.addEventListener('change',()=>{state.department=els.department.value;renderAll()});
   $('detailBody').addEventListener('change',event=>{
     const input=event.target.closest('.inline-number');if(!input)return;
-    const value=Number(input.value),field=input.dataset.field;
-    if(!['applicants','quota','admitted','adopted'].includes(field)||input.value.trim()===''||!Number.isFinite(value)||value<0){renderTable();return}
+    const field=input.dataset.field,allowed=['applicants','quota','admitted','regular_admitted','waitlisted','adopted'];
+    if(!allowed.includes(field)){renderTable();return}
+    if(input.value.trim()===''){if(['regular_admitted','waitlisted'].includes(field)){clearInlineEdit(input.dataset.recordId,field);renderAll()}else renderTable();return}
+    const value=Number(input.value);
+    if(!Number.isFinite(value)||value<0){renderTable();return}
     setInlineEdit(input.dataset.recordId,field,Math.round(value));renderAll();
   });
   $('resetInlineEdits').addEventListener('click',()=>{
@@ -806,7 +819,7 @@ button,input,select{font:inherit}button{cursor:pointer}.skip{position:absolute;l
     customRows=backup;localStorage.removeItem(BACKUP_KEY);saveCustomRows();setupControls();renderAll();$('excelStatus').textContent='已還原上次匯入前的 '+customRows.length+' 筆自填資料。';
   });
   $('exportJson').addEventListener('click',()=>download('tnua-admissions-custom.json',JSON.stringify(customRows,null,2),'application/json'));
-  $('exportCsv').addEventListener('click',()=>{const rows=visibleRows(),keys=['record_type','year','level','channel_group','channel','college','department','applicants','quota','admitted','adopted','status','note'];const lines=[keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(r[k]??'').replaceAll('"','""')+'"').join(','))];download('tnua-admissions-filtered.csv','\ufeff'+lines.join('\n'),'text/csv;charset=utf-8')});
+  $('exportCsv').addEventListener('click',()=>{const rows=visibleRows(),keys=['record_type','year','level','channel_group','channel','college','department','applicants','quota','admitted','regular_admitted','waitlisted','adopted','status','note'];const lines=[keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(r[k]??'').replaceAll('"','""')+'"').join(','))];download('tnua-admissions-filtered.csv','\ufeff'+lines.join('\n'),'text/csv;charset=utf-8')});
   function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
   window.__tnuaDashboardTest={
     createWorkbook:XLSX.createWorkbook,
