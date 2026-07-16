@@ -77,6 +77,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
 @media(max-width:1100px){.brandbar-inner{min-height:136px;padding-top:14px;padding-bottom:14px;gap:12px 16px}.meta{margin-top:-5px}}
 @media(max-width:760px){.brandbar-inner{min-height:auto;padding:9px 14px 10px;gap:7px}.brand-logo{width:40px;height:40px;flex-basis:40px;border-radius:10px}.brand-name{font-size:.86rem}.brand-name small{font-size:.51rem;margin-top:1px}.brand-message{padding:7px 0 0}.brand-message h1{font-size:clamp(1.16rem,5vw,1.32rem);line-height:1.2;margin:0 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-message p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;font-size:.69rem;line-height:1.35}.meta{margin-top:0;gap:4px}.badge{padding:3px 6px;font-size:.62rem}.page-tabs{box-sizing:border-box;width:auto!important;max-width:calc(100vw - 24px);overflow:hidden}.page-tabs-inner{width:100%;max-width:100%;min-width:0;overflow:hidden}.brand-nav{display:flex!important;width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;scrollbar-width:none;overscroll-behavior-inline:contain}.brand-nav::-webkit-scrollbar{display:none}.brand-nav a{flex:0 0 66px;min-width:66px;max-width:66px}.statusline{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:8px 2px 18px;font-size:1rem;line-height:1.45}.statusline strong{font-size:1.18rem;line-height:1.35}.statusline>span{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:0;font-size:.94rem}.page-status{font-size:.96rem}.kpis,.report-snapshot,.quota-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}.tool-grid{grid-template-columns:1fr}.tool-card{padding:13px}.tool-controls,.tool-controls.four{grid-template-columns:repeat(2,minmax(0,1fr))}.quality-status-grid,.quality-list{grid-template-columns:repeat(2,minmax(0,1fr))}.comparison-board{grid-template-columns:1fr}.comparison-delta{padding:2px}.report-kpi-row,.scenario-results{grid-template-columns:repeat(2,minmax(0,1fr))}.toolkit-hero{display:block}.tool-card-head{display:block}.tool-card-head .btn{margin-top:8px}.quota-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important}.view-toggle{display:inline-flex}.data-card-grid{display:grid}body[data-detail-view="cards"] .detail-scroll{display:none}body[data-detail-view="table"] #detailCards{display:none}body[data-quota-view="cards"] .quota-detail-scroll{display:none}body[data-quota-view="table"] #quotaDetailCards{display:none}.analysis-reminder{grid-template-columns:auto minmax(0,1fr);padding:13px}.analysis-reminder .btn{grid-column:1/-1;width:100%}.reminder-icon{width:40px;height:40px}.reminder-copy h3{font-size:1.04rem}.alert-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.alert-row{min-height:128px;padding:10px}.alert-row strong{font-size:.78rem}.alert-row small{font-size:.68rem}.alert-row .status-pill{font-size:.64rem;padding:4px 7px}}
 @media print{body.department-report-print *{visibility:hidden!important}body.department-report-print #departmentReportCard,body.department-report-print #departmentReportCard *{visibility:visible!important}body.department-report-print #departmentReportCard{position:absolute;inset:0;width:100%;border:0;box-shadow:none}.page-tabs,.brandbar,.no-print{display:none!important}}
+.detail-table{min-width:2280px}.detail-table thead tr:first-child th{top:0}.detail-table thead tr:nth-child(2) th{top:34px}.detail-table th.detail-group{text-align:center;font-weight:900;letter-spacing:.04em}.detail-table th.detail-group.base{background:#2f5873}.detail-table th.detail-group.release{background:#215f82}.detail-table th.detail-group.waitlist{background:#34746f}.detail-table th.detail-group.arrival{background:#6f5b20}.detail-table .formula-cell.unknown{color:#7a8792;font-weight:800}.detail-table .flow-reference{background-image:linear-gradient(135deg,rgba(40,120,181,.05),rgba(22,138,131,.04))}.flow-help{display:block;margin-top:5px;color:#4d6574;font-size:.72rem;line-height:1.55}.flow-help strong{color:var(--navy)}.flow-state{display:inline-flex;margin-top:4px;border-radius:999px;padding:2px 6px;background:#e7f4f1;color:#116c63;font-size:.63rem;font-weight:900}.flow-state.pending{background:#fff2d3;color:#765600}.data-card-flow{margin:0 0 8px;padding:9px 10px;border:1px solid #d5e3e8;border-radius:9px;background:#f4f9fa}.data-card-flow strong{display:block;color:var(--navy);font-size:.9rem;line-height:1.45}.data-card-flow small{display:block;margin-top:2px;color:var(--muted);font-size:.62rem;line-height:1.4}.data-card-reference{margin:7px 0 0;color:#526878;font-size:.65rem;font-weight:800}@media(max-width:760px){#data-detail .panel-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:8px;margin-top:12px;justify-content:stretch}#data-detail .panel-actions .view-toggle{width:100%;justify-content:center}#data-detail .panel-actions .btn{width:100%;min-width:0;padding:7px 5px;font-size:.72rem}#data-detail .detail-legend{display:grid;grid-template-columns:1fr;width:100%}#data-detail .legend-key{min-width:0;white-space:normal}}
 </style>
 </head>
 <body>
@@ -170,9 +171,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       <div id="rankChart"></div><div class="chart-summary" id="rankSummary"></div>
     </article>
     <article class="panel wide dashboard-page" id="data-detail" data-page="data-detail">
-      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>關鍵數值與備註可直接編輯，變更後會立即更新上方指標與圖表。</p><div class="edit-note">全校備取人數採各招生管道加總；錄取不足額＝招生名額－錄取人數；註冊不足額＝招生名額－註冊報到。編輯內容僅儲存在目前瀏覽器。</div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出目前 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
-      <div class="detail-legend" aria-label="明細表顏色說明"><span class="legend-key"><i class="legend-swatch total" aria-hidden="true"></i>年度總計／全校層級</span><span class="legend-key"><i class="legend-swatch" aria-hidden="true"></i>系所與招生管道明細</span><span class="legend-key"><i class="legend-swatch editable" aria-hidden="true"></i>框線欄位與備註可直接編輯</span></div>
-      <div class="table-wrap detail-scroll"><table class="detail-table"><thead><tr><th class="detail-level">資料層級</th><th>學年度</th><th>學制</th><th>招生管道</th><th>學院</th><th class="detail-department">系所</th><th class="num">報名</th><th class="num">名額</th><th class="num">錄取</th><th class="num">備取人數</th><th class="num">錄取不足額</th><th class="num">名額回流</th><th class="num">註冊報到</th><th class="num">註冊不足額</th><th class="num">競爭倍率</th><th class="num">報到率</th><th>狀態</th><th class="detail-note">備註</th></tr></thead><tbody id="detailBody"></tbody></table></div>
+      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>新增名額流動欄位後，可分開記錄放榜前回流、放榜後回流與實際遞補。</p><div class="edit-note">放榜實際名額＝核定名額＋放榜前轉入－放榜前轉出；最終可用名額＝放榜實際名額＋放榜後轉入－放榜後轉出；累計錄取人次＝正取公告＋實際遞補；註冊不足額＝最終可用名額－註冊報到。<span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認沒有回流才填 0；「原表名額轉出」未區分放榜前後，只供核對，不會自動代入公式。請切換到個別招生管道後填寫回流欄位。編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出目前 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
+      <div class="detail-legend" aria-label="明細表顏色說明"><span class="legend-key"><i class="legend-swatch total" aria-hidden="true"></i>年度總計／全校層級</span><span class="legend-key"><i class="legend-swatch" aria-hidden="true"></i>系所與招生管道明細</span><span class="legend-key"><i class="legend-swatch editable" aria-hidden="true"></i>框線欄位與備註可直接編輯</span><span class="legend-key">—／待補＝資料未知，不當成 0</span></div>
+      <div class="table-wrap detail-scroll"><table class="detail-table"><thead><tr><th class="detail-level" rowspan="2">資料層級</th><th rowspan="2">學年度</th><th rowspan="2">學制</th><th rowspan="2">招生管道</th><th rowspan="2">學院</th><th class="detail-department" rowspan="2">系所</th><th class="detail-group base" colspan="2">基礎資料</th><th class="detail-group release" colspan="6">放榜階段</th><th class="detail-group waitlist" colspan="6">遞補階段</th><th class="detail-group arrival" colspan="2">註冊到位</th><th class="num" rowspan="2">競爭倍率</th><th class="num" rowspan="2">報到率</th><th rowspan="2">狀態</th><th class="detail-note" rowspan="2">備註</th></tr><tr><th class="num">報名</th><th class="num">核定名額</th><th class="num">放榜前轉入</th><th class="num">放榜前轉出</th><th class="num">放榜實際名額</th><th class="num">正取公告</th><th class="num">放榜不足額</th><th class="num">備取名單</th><th class="num">放榜後轉入</th><th class="num">放榜後轉出</th><th class="num">最終可用名額</th><th class="num">實際遞補</th><th class="num">累計錄取人次</th><th class="num">原表名額轉出</th><th class="num">註冊報到</th><th class="num">註冊不足額</th></tr></thead><tbody id="detailBody"></tbody></table></div>
       <div class="data-card-grid" id="detailCards" aria-live="polite"></div>
     </article>
     <article class="panel wide dashboard-page" data-page="data-detail">
@@ -356,8 +357,10 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const INPUT_HEADERS = HEADERS.slice(0, 14);
   const DETAIL_HEADERS = [
     '資料ID', '資料層級', '學年度', '學制', '招生管道類別', '招生管道', '學院', '系所',
-    '報名人數', '招生名額', '錄取人數', '備取人數', '錄取不足額', '名額回流', '註冊報到人數',
-    '註冊不足額', '競爭倍率', '報到率', '資料狀態', '是否納入', '備註',
+    '報名人數', '核定招生名額', '放榜前轉入', '放榜前轉出', '放榜實際名額', '正取公告人數',
+    '放榜不足額', '備取名單人數', '放榜後轉入', '放榜後轉出', '最終可用名額', '實際遞補錄取',
+    '累計錄取人次', '原表名額轉出', '註冊報到人數', '註冊不足額', '競爭倍率', '報到率',
+    '資料狀態', '是否納入', '備註',
   ];
   const IMPORT_HEADERS = [...new Set([...INPUT_HEADERS, ...DETAIL_HEADERS])];
   const LEVELS = ['學士班', '七年一貫制', '學士後學士（歷史）', '研究所總計', '碩士班', '碩士在職專班', '博士班'];
@@ -368,8 +371,12 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     ['正式註冊', '正式註冊'], ['正式註冊人數', '正式註冊'], ['資料狀態', '資料狀態'], ['狀態', '資料狀態'],
     ['是否納入', '是否納入'], ['納入', '是否納入'], ['備註', '備註'],
     ['招生管道類別', '招生管道類別'], ['招生管道群組', '招生管道類別'], ['招生管道', '招生管道'],
-    ['備取人數', '備取人數'], ['名額回流', '名額回流'], ['註冊報到人數', '註冊報到人數'],
-    ['錄取不足額', '錄取不足額'], ['註冊不足額', '註冊不足額'], ['競爭倍率', '競爭倍率'], ['報到率', '報到率'],
+    ['招生名額', '招生名額'], ['核定招生名額', '核定招生名額'], ['錄取人數', '錄取人數'], ['正取公告人數', '正取公告人數'],
+    ['備取人數', '備取人數'], ['備取名單人數', '備取名單人數'], ['名額回流', '名額回流'], ['原表名額轉出', '原表名額轉出'],
+    ['放榜前轉入', '放榜前轉入'], ['放榜前轉出', '放榜前轉出'], ['放榜後轉入', '放榜後轉入'], ['放榜後轉出', '放榜後轉出'],
+    ['放榜實際名額', '放榜實際名額'], ['最終可用名額', '最終可用名額'], ['實際遞補錄取', '實際遞補錄取'], ['累計錄取人次', '累計錄取人次'],
+    ['錄取不足額', '錄取不足額'], ['放榜不足額', '放榜不足額'], ['註冊報到人數', '註冊報到人數'],
+    ['註冊不足額', '註冊不足額'], ['競爭倍率', '競爭倍率'], ['報到率', '報到率'],
   ]);
 
   function xmlEsc(value) {
@@ -644,42 +651,55 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     const applicants = Number(row.applicants) || 0;
     const admitted = Number(row.admitted) || 0;
     const adopted = Number(row.adopted) || 0;
+    const optionalNumber = value => value === '' || value == null || !Number.isFinite(Number(value)) ? null : Number(value);
+    const preIn = optionalNumber(row.pre_return_in);
+    const preOut = optionalNumber(row.pre_return_out);
+    const postIn = optionalNumber(row.post_return_in);
+    const postOut = optionalNumber(row.post_return_out);
+    const waitlistAdmitted = optionalNumber(row.waitlist_admitted);
+    const releaseQuota = preIn == null || preOut == null ? null : quota + preIn - preOut;
+    const finalQuota = releaseQuota == null || postIn == null || postOut == null ? null : releaseQuota + postIn - postOut;
+    const cumulativeAdmitted = waitlistAdmitted == null ? null : admitted + waitlistAdmitted;
     return [
       row.record_id || '', row.record_type || '', row.year == null ? '' : Number(row.year), row.level || '',
       row.channel_group || '', row.channel || '', row.college || '', row.department || '', applicants, quota,
-      admitted, row.waitlisted == null ? '' : Number(row.waitlisted), quota - admitted,
-      row.quota_returned == null ? '' : Number(row.quota_returned), adopted, quota - adopted,
-      quota ? applicants / quota : 0, quota ? adopted / quota : 0, row.status || '已完成', row.include === '否' ? '否' : '是', row.note || '',
+      preIn ?? '', preOut ?? '', releaseQuota ?? '', admitted, releaseQuota == null ? '' : releaseQuota - admitted,
+      row.waitlisted == null ? '' : Number(row.waitlisted), postIn ?? '', postOut ?? '', finalQuota ?? '',
+      waitlistAdmitted ?? '', cumulativeAdmitted ?? '', row.quota_returned == null ? '' : Number(row.quota_returned),
+      adopted, finalQuota == null ? '' : finalQuota - adopted,
+      quota ? applicants / quota : 0, (finalQuota ?? quota) ? adopted / (finalQuota ?? quota) : 0, row.status || '已完成', row.include === '否' ? '否' : '是', row.note || '',
     ];
   }
 
   function detailSheetXml(rows) {
     const sourceRows = (Array.isArray(rows) && rows.length ? rows : [{}]).map(detailValues);
     const lastRow = sourceRows.length + 3;
-    const widths = [22, 18, 10, 20, 17, 22, 18, 30, 12, 12, 12, 12, 14, 12, 15, 14, 12, 11, 12, 11, 34];
+    const lastColumn = columnName(DETAIL_HEADERS.length - 1);
+    const widths = [22, 18, 10, 20, 17, 22, 18, 30, 12, 14, 13, 13, 15, 15, 14, 15, 13, 13, 15, 15, 15, 15, 15, 14, 12, 11, 12, 11, 34];
     const cols = widths.map((width, index) => `<col min="${index + 1}" max="${index + 1}" width="${width}" customWidth="1"/>`).join('');
     const dataRows = sourceRows.map((values, rowIndex) => {
       const rowNumber = rowIndex + 4;
       const cells = values.map((value, index) => {
-        const style = index === 16 ? 7 : index === 17 ? 9 : ((index === 2 || (index >= 8 && index <= 15)) ? 8 : (index === 20 ? 11 : 5));
+        const style = index === 24 ? 7 : index === 25 ? 9 : ((index === 2 || (index >= 8 && index <= 23)) ? 8 : (index === 28 ? 11 : 5));
         return inlineCell(`${columnName(index)}${rowNumber}`, value, style);
       }).join('');
       return `<row r="${rowNumber}" ht="31" customHeight="1">${cells}</row>`;
     }).join('');
     return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <dimension ref="A1:U${lastRow}"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane xSplit="8" ySplit="3" topLeftCell="I4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews>
+  <dimension ref="A1:${lastColumn}${lastRow}"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane xSplit="8" ySplit="3" topLeftCell="I4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews>
   <sheetFormatPr defaultRowHeight="20"/><cols>${cols}</cols><sheetData>
   <row r="1" ht="34" customHeight="1">${inlineCell('A1', '國立臺北藝術大學｜精確資料明細', 1)}</row>
-  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '依儀表板目前篩選匯出；不足額與比率已依畫面口徑計算。', 2)}</row>
+  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '空白回流欄代表未知；確認沒有回流請填 0。放榜與註冊不足額依名額流動口徑計算。', 2)}</row>
   <row r="3" ht="34" customHeight="1">${DETAIL_HEADERS.map((header, index) => inlineCell(`${columnName(index)}3`, header, 4)).join('')}</row>${dataRows}</sheetData>
-  <mergeCells count="2"><mergeCell ref="A1:U1"/><mergeCell ref="A2:U2"/></mergeCells><pageMargins left="0.2" right="0.2" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><tableParts count="1"><tablePart r:id="rId1"/></tableParts>
+  <mergeCells count="2"><mergeCell ref="A1:${lastColumn}1"/><mergeCell ref="A2:${lastColumn}2"/></mergeCells><pageMargins left="0.2" right="0.2" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><tableParts count="1"><tablePart r:id="rId1"/></tableParts>
 </worksheet>`;
   }
 
   function detailTableXml(lastRow) {
+    const lastColumn = columnName(DETAIL_HEADERS.length - 1);
     return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="1" name="AdmissionsDetailTable" displayName="AdmissionsDetailTable" ref="A3:U${lastRow}" totalsRowShown="0"><autoFilter ref="A3:U${lastRow}"/><tableColumns count="21">${DETAIL_HEADERS.map((header, index) => `<tableColumn id="${index + 1}" name="${xmlEsc(header)}"/>`).join('')}</tableColumns><tableStyleInfo name="TableStyleMedium2" showFirstColumn="0" showLastColumn="0" showRowStripes="1" showColumnStripes="0"/></table>`;
+<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="1" name="AdmissionsDetailTable" displayName="AdmissionsDetailTable" ref="A3:${lastColumn}${lastRow}" totalsRowShown="0"><autoFilter ref="A3:${lastColumn}${lastRow}"/><tableColumns count="${DETAIL_HEADERS.length}">${DETAIL_HEADERS.map((header, index) => `<tableColumn id="${index + 1}" name="${xmlEsc(header)}"/>`).join('')}</tableColumns><tableStyleInfo name="TableStyleMedium2" showFirstColumn="0" showLastColumn="0" showRowStripes="1" showColumnStripes="0"/></table>`;
   }
 
   function createDetailWorkbook(rows) {
@@ -864,7 +884,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const QUOTA_DETAIL_EXTERNAL_CHANNEL_ORDER = ['單獨招生原住民','繁星推薦原住民','申請入學青年生涯領航計畫','身心障礙甄試','新住民','海外僑生','大陸學生'];
   const QUOTA_DETAIL_CHANNEL_ORDER = [...QUOTA_DETAIL_INTERNAL_CHANNEL_ORDER,...QUOTA_DETAIL_EXTERNAL_CHANNEL_ORDER,'申請入學原住民','原住民','外國學生','其他'];
   const DETAIL_EXPORT_COLUMNS = [
-    ['資料ID','record_id'],['資料層級','record_type'],['學年度','year'],['學制','level'],['招生管道類別','channel_group'],['招生管道','channel'],['學院','college'],['系所','department'],['報名人數','applicants'],['招生名額','quota'],['錄取人數','admitted'],['備取人數','waitlisted'],['錄取不足額','admission_shortfall'],['名額回流','quota_returned'],['註冊報到人數','adopted'],['註冊不足額','registration_shortfall'],['競爭倍率','competition'],['報到率','fill'],['資料狀態','status'],['是否納入','include'],['備註','note'],
+    ['資料ID','record_id'],['資料層級','record_type'],['學年度','year'],['學制','level'],['招生管道類別','channel_group'],['招生管道','channel'],['學院','college'],['系所','department'],['報名人數','applicants'],['核定招生名額','quota'],['放榜前轉入','pre_return_in'],['放榜前轉出','pre_return_out'],['放榜實際名額','release_quota'],['正取公告人數','admitted'],['放榜不足額','admission_shortfall'],['備取名單人數','waitlisted'],['放榜後轉入','post_return_in'],['放榜後轉出','post_return_out'],['最終可用名額','final_quota'],['實際遞補錄取','waitlist_admitted'],['累計錄取人次','cumulative_admitted'],['原表名額轉出','quota_returned'],['註冊報到人數','adopted'],['註冊不足額','registration_shortfall'],['競爭倍率','competition'],['報到率','fill'],['資料狀態','status'],['是否納入','include'],['備註','note'],
   ];
   const COLLEGE_ORDER = ['音樂學院','美術學院','戲劇學院','舞蹈學院','電影與新媒體學院','文化資源學院','人文學院','音樂與影像跨域學士學位學程'];
   const COLLEGE_COLOR_CLASS = {'音樂學院':'music','美術學院':'fine-arts','戲劇學院':'theatre','舞蹈學院':'dance','電影與新媒體學院':'film-media','文化資源學院':'cultural-resources','人文學院':'humanities','音樂與影像跨域學士學位學程':'interdisciplinary'};
@@ -882,7 +902,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   if(!Array.isArray(customRows))customRows=[];const legacyRows=customRows.some(row=>row.level===LEGACY_LEVEL);if(legacyRows){customRows=customRows.map(row=>row.level===LEGACY_LEVEL?{...row,level:'學士班'}:row);localStorage.setItem(STORAGE_KEY,JSON.stringify(customRows))}
   let inlineEdits = safeParse(localStorage.getItem(INLINE_EDIT_KEY), {});
   if(!inlineEdits||Array.isArray(inlineEdits)||typeof inlineEdits!=='object')inlineEdits={};
-  const legacyField=['regular','admitted'].join('_'),computedFields=[legacyField,'admission_shortfall','registration_shortfall'];let removedLegacyEdit=false;for(const [id,changes] of Object.entries(inlineEdits)){if(changes)for(const field of computedFields)if(Object.hasOwn(changes,field)){delete changes[field];removedLegacyEdit=true}if(!changes||!Object.keys(changes).length)delete inlineEdits[id]}if(removedLegacyEdit){if(Object.keys(inlineEdits).length)localStorage.setItem(INLINE_EDIT_KEY,JSON.stringify(inlineEdits));else localStorage.removeItem(INLINE_EDIT_KEY)}
+  const legacyField=['regular','admitted'].join('_'),computedFields=[legacyField,'admission_shortfall','registration_shortfall','release_quota','final_quota','cumulative_admitted'];let removedLegacyEdit=false;for(const [id,changes] of Object.entries(inlineEdits)){if(changes)for(const field of computedFields)if(Object.hasOwn(changes,field)){delete changes[field];removedLegacyEdit=true}if(!changes||!Object.keys(changes).length)delete inlineEdits[id]}if(removedLegacyEdit){if(Object.keys(inlineEdits).length)localStorage.setItem(INLINE_EDIT_KEY,JSON.stringify(inlineEdits));else localStorage.removeItem(INLINE_EDIT_KEY)}
   let pendingImport = null;
   const params = new URLSearchParams(location.search);
   const saved = safeParse(localStorage.getItem(FILTER_KEY), {});
@@ -933,6 +953,12 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
   function nullable(v){return v === '' || v == null ? null : n(v)}
+  function hasNumber(v){return v!==''&&v!=null&&Number.isFinite(Number(v))}
+  function flowMetrics(row){
+    const quota=n(row.quota),admitted=n(row.admitted),adopted=n(row.adopted),preIn=nullable(row.pre_return_in),preOut=nullable(row.pre_return_out),postIn=nullable(row.post_return_in),postOut=nullable(row.post_return_out),waitlistAdmitted=nullable(row.waitlist_admitted);
+    const preComplete=preIn!=null&&preOut!=null,releaseQuota=preComplete?quota+preIn-preOut:null,postComplete=postIn!=null&&postOut!=null,finalQuota=releaseQuota!=null&&postComplete?releaseQuota+postIn-postOut:null,cumulativeAdmitted=waitlistAdmitted!=null?admitted+waitlistAdmitted:null;
+    return {preIn,preOut,postIn,postOut,waitlistAdmitted,preComplete,postComplete,complete:preComplete&&postComplete,hasFlow:[preIn,preOut,postIn,postOut].some(value=>value!=null),releaseQuota,finalQuota,cumulativeAdmitted,admissionShortfall:releaseQuota==null?null:releaseQuota-admitted,registrationShortfall:finalQuota==null?null:finalQuota-adopted};
+  }
   function fmt(v){return Number.isFinite(v)?Math.round(v).toLocaleString('zh-TW'):'—'}
   function pct(v){return Number.isFinite(v)?(v*100).toFixed(1)+'%':'—'}
   function mult(v){return Number.isFinite(v)?v.toFixed(2)+'x':'—'}
@@ -986,10 +1012,15 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       const college=cleanText(raw['學院'])||(isDetail?'':'全校');
       const department=cleanText(raw['系所'])||(isDetail?'':'全校');if(isDetail&&!department)issues.push('明細資料必須填寫系所');
       const applicants=importNumber(raw['報名人數'],'報名人數',true,issues);
-      const quota=importNumber(raw['招生名額'],'招生名額',true,issues);
-      const admitted=importNumber(raw['錄取人數'],'錄取人數',false,issues);
-      const waitlisted=importNumber(raw['備取人數'],'備取人數',false,issues);
-      const quotaReturned=importNumber(raw['名額回流'],'名額回流',false,issues);
+      const quota=importNumber(raw['核定招生名額']??raw['招生名額'],'核定招生名額',true,issues);
+      const admitted=importNumber(raw['正取公告人數']??raw['錄取人數'],'正取公告人數',false,issues);
+      const waitlisted=importNumber(raw['備取名單人數']??raw['備取人數'],'備取名單人數',false,issues);
+      const preReturnIn=importNumber(raw['放榜前轉入'],'放榜前轉入',false,issues);
+      const preReturnOut=importNumber(raw['放榜前轉出'],'放榜前轉出',false,issues);
+      const postReturnIn=importNumber(raw['放榜後轉入'],'放榜後轉入',false,issues);
+      const postReturnOut=importNumber(raw['放榜後轉出'],'放榜後轉出',false,issues);
+      const waitlistAdmitted=importNumber(raw['實際遞補錄取'],'實際遞補錄取',false,issues);
+      const quotaReturned=importNumber(raw['原表名額轉出']??raw['名額回流'],'原表名額轉出',false,issues);
       const adoptedDirect=importNumber(raw['註冊報到人數'],'註冊報到人數',false,issues);
       const online=importNumber(raw['最終線上報到'],'最終線上報到',false,issues);
       const registered=importNumber(raw['正式註冊'],'正式註冊',false,issues);
@@ -997,7 +1028,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       const include=cleanText(raw['是否納入'])||'是';if(!['是','否'].includes(include))issues.push('是否納入須為是或否');
       const sourceId=cleanText(raw['資料ID']);
       const adopted=adoptedDirect??(status==='進行中'?(online??0):(registered??online??0));
-      const row={record_id:sourceId||('CUSTOM-IMPORT-'+stamp+'-'+rowNumber),record_type:recordType,year,level,channel_group:channelGroup,channel,college:college||'全校',department:department||'全校',applicants,quota,admitted:admitted??0,waitlisted:waitlisted??0,quota_returned:quotaReturned??0,online_final:online,registered,adopted,status,include,source:'檔案匯入',note:cleanText(raw['備註']),_hadSourceId:!!sourceId,_sourceRow:rowNumber};
+      const row={record_id:sourceId||('CUSTOM-IMPORT-'+stamp+'-'+rowNumber),record_type:recordType,year,level,channel_group:channelGroup,channel,college:college||'全校',department:department||'全校',applicants,quota,admitted:admitted??0,waitlisted,pre_return_in:preReturnIn,pre_return_out:preReturnOut,post_return_in:postReturnIn,post_return_out:postReturnOut,waitlist_admitted:waitlistAdmitted,quota_returned:quotaReturned,online_final:online,registered,adopted,status,include,source:'檔案匯入',note:cleanText(raw['備註']),_hadSourceId:!!sourceId,_sourceRow:rowNumber};
       const keys=identityKeys(row);const duplicate=keys.some(key=>seen.has(key));if(duplicate){issues.push('與檔案內其他資料重複');result.duplicatesInFile++}keys.forEach(key=>seen.add(key));
       const matchedKey=keys.find(key=>existing.has(key));if(matchedKey)matchedExisting.add(matchedKey);
       if(!issues.length){
@@ -1043,7 +1074,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function exportDetailExcel(rows){
     try{const data=XLSX.createDetailWorkbook(rows);const date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes('北藝大招生精確資料明細_'+date+'.xlsx',data);$('excelStatus').textContent='已匯出目前篩選的 '+rows.length+' 筆精確資料明細 Excel。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
   }
-  const CSV_HEADER_ALIASES={record_id:'資料ID',record_type:'資料層級',year:'學年度',level:'學制',channel_group:'招生管道類別',channel:'招生管道',college:'學院',department:'系所',applicants:'報名人數',quota:'招生名額',admitted:'錄取人數',waitlisted:'備取人數',quota_returned:'名額回流',adopted:'註冊報到人數',online_final:'最終線上報到',registered:'正式註冊',status:'資料狀態',include:'是否納入',note:'備註'};
+  const CSV_HEADER_ALIASES={record_id:'資料ID',record_type:'資料層級',year:'學年度',level:'學制',channel_group:'招生管道類別',channel:'招生管道',college:'學院',department:'系所',applicants:'報名人數',quota:'核定招生名額',admitted:'正取公告人數',waitlisted:'備取名單人數',pre_return_in:'放榜前轉入',pre_return_out:'放榜前轉出',post_return_in:'放榜後轉入',post_return_out:'放榜後轉出',waitlist_admitted:'實際遞補錄取',quota_returned:'原表名額轉出',adopted:'註冊報到人數',online_final:'最終線上報到',registered:'正式註冊',status:'資料狀態',include:'是否納入',note:'備註'};
   function csvHeaderName(value){const label=cleanText(value).replace(/^﻿/,'');return CSV_HEADER_ALIASES[label.toLowerCase()]||label}
   function parseCsvText(text){
     const input=String(text||'').replace(/^﻿/,'');const matrix=[];let row=[],field='',quoted=false;const CR=String.fromCharCode(13),LF=String.fromCharCode(10);
@@ -1062,10 +1093,14 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     return {rows:matrix.map((values,index)=>{const output={_rowNumber:index+2};headers.forEach((header,column)=>{output[header]=values[column]??''});return output})};
   }
   function detailExportValue(row,key){
-    if(key==='admission_shortfall')return n(row.quota)-n(row.admitted);
-    if(key==='registration_shortfall')return n(row.quota)-n(row.adopted);
+    const flow=flowMetrics(row);
+    if(key==='release_quota')return flow.releaseQuota??'';
+    if(key==='final_quota')return flow.finalQuota??'';
+    if(key==='cumulative_admitted')return flow.cumulativeAdmitted??'';
+    if(key==='admission_shortfall')return flow.admissionShortfall??'';
+    if(key==='registration_shortfall')return flow.registrationShortfall??'';
     if(key==='competition')return row.quota?Number((n(row.applicants)/n(row.quota)).toFixed(4)):'';
-    if(key==='fill')return row.quota?Number((n(row.adopted)/n(row.quota)).toFixed(4)):'';
+    if(key==='fill'){const denominator=flow.finalQuota??n(row.quota);return denominator?Number((n(row.adopted)/denominator).toFixed(4)):''}
     if(key==='status')return row.status||'已完成';if(key==='include')return row.include==='否'?'否':'是';return row[key]??'';
   }
   function csvCell(value){return '"'+String(value??'').replaceAll('"','""')+'"'}
@@ -1081,7 +1116,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function allChannelAnnual(){return combinedRows(MODEL.channel_annual_totals||[],'招生管道年度總計')}
   function allChannelDetails(){return combinedRows(MODEL.channel_details||[],'招生管道明細')}
   function detailPool(){return state.channel==='全部'?allDetails():allChannelDetails().filter(r=>r.channel===state.channel)}
-  function selectedDetails(){return detailPool().filter(r=>r.year===state.year&&r.level===state.level&&(state.college==='全部'||r.college===state.college)&&(state.department==='全部'||r.department===state.department))}
+  function departmentFlowRollup(row){const channels=allChannelDetails().filter(candidate=>candidate.year===row.year&&candidate.level===row.level&&canonicalDepartment(candidate.department)===canonicalDepartment(row.department));if(!channels.length)return row;return {...row,pre_return_in:completeOptionalSum(channels,'pre_return_in'),pre_return_out:completeOptionalSum(channels,'pre_return_out'),post_return_in:completeOptionalSum(channels,'post_return_in'),post_return_out:completeOptionalSum(channels,'post_return_out'),waitlist_admitted:completeOptionalSum(channels,'waitlist_admitted'),quota_returned:optionalSum(channels,'quota_returned'),_flowRollup:true}}
+  function selectedDetails(){const rows=detailPool().filter(r=>r.year===state.year&&r.level===state.level&&(state.college==='全部'||r.college===state.college)&&(state.department==='全部'||r.department===state.department));return state.channel==='全部'?rows.map(departmentFlowRollup):rows}
   function campusTotalWithDerivedFields(row){
     const channelRows=allChannelAnnual().filter(candidate=>candidate.year===row.year&&candidate.level===row.level&&(!row.channel||candidate.channel===row.channel));
     return {...row,waitlisted:channelRows.length?sum(channelRows,'waitlisted'):n(row.waitlisted),admission_shortfall:n(row.quota)-n(row.admitted),registration_shortfall:n(row.quota)-n(row.adopted)};
@@ -1151,6 +1187,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     $('caveatText').textContent=state.channel!=='全部'?'招生管道資料依各年度原始欄位呈現；不足額依名額與錄取／註冊報到即時計算。':(k.pending?'115學年度研究所正式註冊尚待完成，本頁暫採最終線上報到；不足額將隨數值即時計算。':'全校備取採招生管道加總；錄取與註冊不足額依目前數值即時計算。');
   }
   function optionalSum(rows,key){const values=rows.map(row=>row[key]).filter(value=>value!=null&&Number.isFinite(Number(value)));return values.length?values.reduce((total,value)=>total+Number(value),0):null}
+  function completeOptionalSum(rows,key){return rows.length&&rows.every(row=>hasNumber(row[key]))?rows.reduce((total,row)=>total+Number(row[key]),0):null}
   function mean(values){const usable=values.filter(Number.isFinite);return usable.length?usable.reduce((total,value)=>total+value,0)/usable.length:NaN}
   function metricsFor(row){const applicants=n(row.applicants),quota=n(row.quota),admitted=n(row.admitted),adopted=n(row.adopted);return {applicants,quota,admitted,adopted,competition:ratio(applicants,quota),admitRate:ratio(admitted,applicants),fill:ratio(adopted,quota),vacancy:Math.max(quota-adopted,0)}}
   function aggregateDepartmentRows(rows){
@@ -1235,7 +1272,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       {label:'較前期報名變化',value:applicantChange,detail:'本期 '+fmt(current.applicants)+' 人'+(previous?'；前期 '+previousRow.year+' 學年度 '+fmt(previous.applicants)+' 人':'；尚無可比前期'),tone:applicantTone},
       {label:'報到穩定度',value:pct(current.fill),detail:'註冊報到 '+fmt(current.adopted)+'／名額 '+fmt(current.quota)+'；缺額 '+fmt(current.vacancy)+' 名',tone:fillTone},
       {label:'缺額／錄取不足額',value:fmt(current.vacancy)+'／'+(shortfall==null?'—':fmt(shortfall)),detail:shortfall==null?'目前缺少名額或錄取資料':'錄取不足額＝招生名額－錄取人數；負數代表超額錄取',tone:gapTone},
-      {label:'備取／名額回流',value:(waitlisted==null?'—':fmt(waitlisted))+'／'+(returned==null?'—':fmt(returned)),detail:campusScope?'全校備取依各招生管道加總':'依目前篩選明細加總；未提供者留白',tone:reserveTone},
+      {label:'備取名單／原表名額轉出',value:(waitlisted==null?'—':fmt(waitlisted))+'／'+(returned==null?'—':fmt(returned)),detail:campusScope?'全校備取依各招生管道加總；原表轉出尚未區分時點':'原表轉出只供核對；請在精確資料明細拆分放榜前／後',tone:reserveTone},
     ];
     $('reportSnapshot').innerHTML=cards.map(card=>'<article class="report-stat '+card.tone+'"><div class="label">'+esc(card.label)+'</div><div class="value">'+esc(card.value)+'</div><div class="detail">'+esc(card.detail)+'</div></article>').join('');
     const averages={};['applicants','competition','admitRate','fill','vacancy'].forEach(key=>averages[key]=mean(lastThree.map(row=>metricsFor(row)[key])));
@@ -1254,7 +1291,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     if(previous&&previous.applicants>0&&(current.applicants-previous.applicants)/previous.applicants<=-.1)add('high','針對報名下滑拆解來源','報名較 '+previousRow.year+' 學年度 '+signedRate(current.applicants,previous.applicants)+'；按招生管道與系所找出降幅最大項目，設定下一期回升目標。');
     else if(previous&&previous.applicants>0&&current.applicants<previous.applicants)add('medium','持續觀察報名降幅','報名較前期 '+signedRate(current.applicants,previous.applicants)+'；先辨識是單一系所波動或整體管道轉弱。');
     if(shortfall!=null&&shortfall>0)add('high','優先處理錄取不足額','招生名額減錄取人數後仍有 '+fmt(shortfall)+' 名不足額；檢視甄審門檻、報考資格與名額配置，並依規定確認可流回名額。');
-    if(returned!=null&&returned>0)add('medium','提早納入回流名額規劃','目前可見名額回流 '+fmt(returned)+' 名；在單獨招生或一般考試簡章與核定時程前確認可承接量。');
+    if(returned!=null&&returned>0)add('medium','拆分原表名額轉出的發生時點','目前原表可見名額轉出 '+fmt(returned)+' 名；請在精確資料明細分別登錄放榜前與放榜後轉出，並同步填入承接管道的轉入。');
     if(waitlisted!=null&&waitlisted>0&&Number.isFinite(current.fill)&&current.fill<.95)add('medium','提高備取轉換效率','目前備取 '+fmt(waitlisted)+' 人；建立即時遞補順位與聯繫紀錄，縮短缺額發生到遞補通知的時間。');
     if(!actions.length)add('low','維持穩定並把資源投向成長','目前未出現明顯缺額或大幅下滑；持續追蹤高競爭系所的來源品質，並複製有效招生活動。');
     const order={high:0,medium:1,low:2},labels={high:'優先',medium:'追蹤',low:'維持'};actions.sort((a,b)=>order[a.priority]-order[b.priority]);
@@ -1430,19 +1467,21 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function automaticCampusTotal(details){
     const sourceRows=details.filter(row=>row.college!=='全校'&&row.department!=='全校');if(!sourceRows.length)return [];
     const status=sourceRows.some(row=>row.status==='進行中')?'進行中':sourceRows.every(row=>row.status==='預估')?'預估':'已完成';
-    return [{record_id:'AUTO-CAMPUS-'+state.year+'-'+state.level+'-'+state.channel,record_type:state.channel==='全部'?'年度總計':'招生管道年度總計',year:state.year,level:state.level,channel_group:state.channel==='全部'?'':sourceRows[0]?.channel_group||'',channel:state.channel==='全部'?'':state.channel,college:'全校',department:'全校',applicants:sum(sourceRows,'applicants'),quota:sum(sourceRows,'quota'),admitted:sum(sourceRows,'admitted'),waitlisted:optionalSum(sourceRows,'waitlisted'),admission_shortfall:sum(sourceRows,'quota')-sum(sourceRows,'admitted'),quota_returned:optionalSum(sourceRows,'quota_returned'),adopted:sum(sourceRows,'adopted'),registration_shortfall:sum(sourceRows,'quota')-sum(sourceRows,'adopted'),online_final:sum(sourceRows,'adopted'),registered:status==='進行中'?null:sum(sourceRows,'adopted'),status,include:'是',source:'下方明細自動加總',note:'由下方 '+sourceRows.length+' 筆明細自動加總',_automaticCampusTotal:true}];
+    return [{record_id:'AUTO-CAMPUS-'+state.year+'-'+state.level+'-'+state.channel,record_type:state.channel==='全部'?'年度總計':'招生管道年度總計',year:state.year,level:state.level,channel_group:state.channel==='全部'?'':sourceRows[0]?.channel_group||'',channel:state.channel==='全部'?'':state.channel,college:'全校',department:'全校',applicants:sum(sourceRows,'applicants'),quota:sum(sourceRows,'quota'),pre_return_in:completeOptionalSum(sourceRows,'pre_return_in'),pre_return_out:completeOptionalSum(sourceRows,'pre_return_out'),post_return_in:completeOptionalSum(sourceRows,'post_return_in'),post_return_out:completeOptionalSum(sourceRows,'post_return_out'),admitted:sum(sourceRows,'admitted'),waitlisted:optionalSum(sourceRows,'waitlisted'),waitlist_admitted:completeOptionalSum(sourceRows,'waitlist_admitted'),quota_returned:optionalSum(sourceRows,'quota_returned'),adopted:sum(sourceRows,'adopted'),online_final:sum(sourceRows,'adopted'),registered:status==='進行中'?null:sum(sourceRows,'adopted'),status,include:'是',source:'下方明細自動加總',note:'由下方 '+sourceRows.length+' 筆明細自動加總；回流欄須全部完成才顯示總計',_automaticCampusTotal:true}];
   }
   function visibleRows(){const details=selectedDetails(),totals=details.length?automaticCampusTotal(details):selectedTotals();return [...totals,...details].sort((a,b)=>Number(isHighestScope(b))-Number(isHighestScope(a))||compareColleges(a.college,b.college)||compareDepartments(a.department,b.department,state.level)||String(a.record_type).localeCompare(String(b.record_type),'zh-Hant'))}
-  function editableCell(row,field,label){if(field==='quota_returned'&&!FLOWBACK_CHANNELS.includes(row.channel))return '<td class="num">—</td>';const value=row[field]==null?'':Math.round(n(row[field]));return '<td class="num"><input class="inline-number" type="number" min="0" step="1" inputmode="numeric" data-record-id="'+esc(row.record_id)+'" data-field="'+field+'" value="'+value+'" placeholder="—" aria-label="'+esc((row.department||row.level)+' '+label)+'"></td>'}
-  function readonlyNumberCell(value,label){return '<td class="num formula-cell" title="'+esc(label+'（由下方明細自動加總）')+'">'+(value==null?'—':fmt(n(value)))+'</td>'}
-  function readonlyFlowbackCell(row){return FLOWBACK_CHANNELS.includes(row.channel)?readonlyNumberCell(row.quota_returned,'全校名額回流'):'<td class="num formula-cell" title="此招生管道沒有名額回流欄位">—</td>'}
-  function formulaCell(value,label){const numeric=n(value),tone=numeric>0?' risk':numeric<0?' strong':'';return '<td class="num formula-cell'+tone+'" title="'+esc(label+'（自動計算）')+'">'+fmt(numeric)+'</td>'}
+  function editableCell(row,field,label){if(field==='quota_returned'&&!FLOWBACK_CHANNELS.includes(row.channel))return '<td class="num flow-reference">—</td>';const value=row[field]==null?'':Math.round(n(row[field]));return '<td class="num'+(field==='quota_returned'?' flow-reference':'')+'"><input class="inline-number" type="number" min="0" step="1" inputmode="numeric" data-record-id="'+esc(row.record_id)+'" data-field="'+field+'" value="'+value+'" placeholder="未知" aria-label="'+esc((row.department||row.level)+' '+label)+'"></td>'}
+  function readonlyNumberCell(value,label,extraClass=''){return '<td class="num formula-cell '+extraClass+'" title="'+esc(label+'（由下方明細自動加總）')+'">'+(value==null?'—':fmt(n(value)))+'</td>'}
+  function flowFieldCell(row,field,label,highest){return !highest&&row.record_type==='招生管道明細'?editableCell(row,field,label):readonlyNumberCell(row[field],label)}
+  function originalFlowCell(row,highest){if(highest||row._flowRollup)return readonlyNumberCell(row.quota_returned,'原表名額轉出','flow-reference');return FLOWBACK_CHANNELS.includes(row.channel)?editableCell(row,'quota_returned','原表名額轉出'):'<td class="num formula-cell flow-reference" title="此招生管道的原表沒有名額轉出欄位">—</td>'}
+  function formulaCell(value,label){if(value==null)return '<td class="num formula-cell unknown" title="'+esc(label+'：回流欄尚未填妥')+'">待補</td>';const numeric=n(value),tone=numeric>0?' risk':numeric<0?' strong':'';return '<td class="num formula-cell'+tone+'" title="'+esc(label+'（自動計算）')+'">'+fmt(numeric)+'</td>'}
   function noteCell(row){return '<td class="detail-note"><textarea class="inline-note" rows="1" maxlength="500" data-record-id="'+esc(row.record_id)+'" aria-label="'+esc((row.department||row.level)+' 備註')+'">'+esc(row.note||'')+'</textarea></td>'}
   function readonlyTotalNote(row){return '<td class="detail-note"><span class="scope-chip total">'+esc(row.note||'由下方明細自動加總')+'</span></td>'}
   function updateRowCount(count){$('rowCount').textContent='明細 '+count+' 筆｜已編輯 '+Object.keys(inlineEdits).length+' 筆｜自填 '+customRows.length+' 筆'}
-  function renderDetailCards(rows){$('detailCards').innerHTML=rows.length?rows.map(row=>{const comp=ratio(n(row.applicants),n(row.quota)),fill=ratio(n(row.adopted),n(row.quota)),metrics=[['報名',fmt(row.applicants)],['名額',fmt(row.quota)],['錄取',fmt(row.admitted)],['註冊報到',fmt(row.adopted)],['競爭倍率',mult(comp)],['報到率',pct(fill)]];return '<article class="data-card"><h4>'+esc(row.department||'全校')+'</h4><p class="data-card-meta">'+row.year+' 學年度｜'+esc(row.level)+(row.channel?'｜'+esc(row.channel):'')+'｜'+esc(row.status||'')+'</p><div class="data-card-metrics">'+metrics.map(metric=>'<div class="data-card-metric"><span>'+metric[0]+'</span><strong>'+metric[1]+'</strong></div>').join('')+'</div></article>'}).join(''):'<div class="tool-empty">目前篩選沒有資料。</div>'}
+  function flowDisplay(value){return value==null?'待補':fmt(n(value))}
+  function renderDetailCards(rows){$('detailCards').innerHTML=rows.length?rows.map(row=>{const flow=flowMetrics(row),comp=ratio(n(row.applicants),n(row.quota)),fillQuota=flow.finalQuota??n(row.quota),fill=ratio(n(row.adopted),fillQuota),metrics=[['報名',fmt(row.applicants)],['正取公告',fmt(row.admitted)],['備取名單',row.waitlisted==null?'待補':fmt(n(row.waitlisted))],['實際遞補',flowDisplay(flow.waitlistAdmitted)],['累計錄取',flowDisplay(flow.cumulativeAdmitted)],['註冊報到',fmt(row.adopted)],['競爭倍率',mult(comp)],['報到率',pct(fill)]],reference=row.quota_returned==null?'':'<p class="data-card-reference">原表名額轉出 '+fmt(n(row.quota_returned))+' 名（尚未自動拆分前／後時點）</p>';return '<article class="data-card"><h4>'+esc(row.department||'全校')+'</h4><p class="data-card-meta">'+row.year+' 學年度｜'+esc(row.level)+(row.channel?'｜'+esc(row.channel):'')+'｜'+esc(row.status||'')+'</p><div class="data-card-flow"><strong>'+fmt(n(row.quota))+' → '+flowDisplay(flow.releaseQuota)+' → '+flowDisplay(flow.finalQuota)+'</strong><small>核定名額 → 放榜實際名額 → 最終可用名額</small>'+reference+'</div><div class="data-card-metrics">'+metrics.map(metric=>'<div class="data-card-metric"><span>'+metric[0]+'</span><strong>'+metric[1]+'</strong></div>').join('')+'</div><span class="flow-state '+(flow.complete?'':'pending')+'">'+(flow.complete?'回流資料已計入':'回流資料待補')+'</span></article>'}).join(''):'<div class="tool-empty">目前篩選沒有資料。</div>'}
   function renderTable(){
-    const rows=visibleRows();$('detailBody').innerHTML=rows.length?rows.map(r=>{const comp=ratio(n(r.applicants),n(r.quota)),fill=ratio(n(r.adopted),n(r.quota)),highest=isHighestScope(r),college=collegeChip(r.college),department=r.department==='全校'?'<span class="campus-chip">全校</span>':esc(r.department),applicantsCell=highest?readonlyNumberCell(r.applicants,'全校報名人數'):editableCell(r,'applicants','報名'),quotaCell=highest?readonlyNumberCell(r.quota,'全校招生名額'):editableCell(r,'quota','名額'),admittedCell=highest?readonlyNumberCell(r.admitted,'全校錄取人數'):editableCell(r,'admitted','錄取'),waitlistedCell=highest?readonlyNumberCell(r.waitlisted,'全校備取人數'):editableCell(r,'waitlisted','備取人數'),flowbackCell=highest?readonlyFlowbackCell(r):editableCell(r,'quota_returned','名額回流'),adoptedCell=highest?readonlyNumberCell(r.adopted,'全校註冊報到人數'):editableCell(r,'adopted','註冊報到'),note=highest?readonlyTotalNote(r):noteCell(r);return '<tr'+(highest?' class="row-total" data-total-source="details"':'')+'><td class="detail-level"><span class="scope-chip '+(highest?'total':'')+'"><span aria-hidden="true">'+(highest?'◆':'•')+'</span>'+esc(r.record_type)+'</span></td><td>'+r.year+'</td><td>'+esc(r.level)+'</td><td>'+esc(r.channel||'—')+'</td><td>'+college+'</td><td class="detail-department">'+department+'</td>'+applicantsCell+quotaCell+admittedCell+waitlistedCell+formulaCell(n(r.quota)-n(r.admitted),'錄取不足額')+flowbackCell+adoptedCell+formulaCell(n(r.quota)-n(r.adopted),'註冊不足額')+'<td class="num '+(comp>=5?'strong':'')+'">'+mult(comp)+'</td><td class="num '+(fill<.9?'risk':'')+'">'+pct(fill)+'</td><td>'+(r.status==='進行中'?'<span class="pending">進行中</span>':esc(r.status))+'</td>'+note+'</tr>'}).join(''):'<tr><td colspan="18">目前篩選沒有資料。</td></tr>';
+    const rows=visibleRows();$('detailBody').innerHTML=rows.length?rows.map(r=>{const flow=flowMetrics(r),comp=ratio(n(r.applicants),n(r.quota)),fillQuota=flow.finalQuota??n(r.quota),fill=ratio(n(r.adopted),fillQuota),highest=isHighestScope(r),college=collegeChip(r.college),department=r.department==='全校'?'<span class="campus-chip">全校</span>':esc(r.department),applicantsCell=highest?readonlyNumberCell(r.applicants,'全校報名人數'):editableCell(r,'applicants','報名'),quotaCell=highest?readonlyNumberCell(r.quota,'全校核定招生名額'):editableCell(r,'quota','核定招生名額'),preInCell=flowFieldCell(r,'pre_return_in','放榜前轉入',highest),preOutCell=flowFieldCell(r,'pre_return_out','放榜前轉出',highest),admittedCell=highest?readonlyNumberCell(r.admitted,'全校正取公告人數'):editableCell(r,'admitted','正取公告人數'),waitlistedCell=highest?readonlyNumberCell(r.waitlisted,'全校備取名單人數'):editableCell(r,'waitlisted','備取名單人數'),postInCell=flowFieldCell(r,'post_return_in','放榜後轉入',highest),postOutCell=flowFieldCell(r,'post_return_out','放榜後轉出',highest),waitlistAdmittedCell=flowFieldCell(r,'waitlist_admitted','實際遞補錄取',highest),originalFlow=originalFlowCell(r,highest),adoptedCell=highest?readonlyNumberCell(r.adopted,'全校註冊報到人數'):editableCell(r,'adopted','註冊報到'),note=highest?readonlyTotalNote(r):noteCell(r),status=(r.status==='進行中'?'<span class="pending">進行中</span>':esc(r.status))+'<br><span class="flow-state '+(flow.complete?'':'pending')+'">'+(flow.complete?'回流已計入':'回流待補')+'</span>';return '<tr'+(highest?' class="row-total" data-total-source="details"':'')+'><td class="detail-level"><span class="scope-chip '+(highest?'total':'')+'"><span aria-hidden="true">'+(highest?'◆':'•')+'</span>'+esc(r.record_type)+'</span></td><td>'+r.year+'</td><td>'+esc(r.level)+'</td><td>'+esc(r.channel||'—')+'</td><td>'+college+'</td><td class="detail-department">'+department+'</td>'+applicantsCell+quotaCell+preInCell+preOutCell+formulaCell(flow.releaseQuota,'放榜實際名額')+admittedCell+formulaCell(flow.admissionShortfall,'放榜不足額')+waitlistedCell+postInCell+postOutCell+formulaCell(flow.finalQuota,'最終可用名額')+waitlistAdmittedCell+formulaCell(flow.cumulativeAdmitted,'累計錄取人次')+originalFlow+adoptedCell+formulaCell(flow.registrationShortfall,'註冊不足額')+'<td class="num '+(comp>=5?'strong':'')+'">'+mult(comp)+'</td><td class="num '+(fill<.9?'risk':'')+'">'+pct(fill)+'</td><td>'+status+'</td>'+note+'</tr>'}).join(''):'<tr><td colspan="26">目前篩選沒有資料。</td></tr>';
     updateRowCount(rows.length);
     $('resetInlineEdits').disabled=!Object.keys(inlineEdits).length;
     renderDetailCards(rows);applyViewModes();
@@ -1474,21 +1513,40 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function pruneQualityActions(issues){const activeIds=new Set(issues.map(issue=>issue.id)),before=Object.keys(qualityActions).length;Object.keys(qualityActions).forEach(id=>{if(!activeIds.has(id)||!['fixed','ignored'].includes(qualityActions[id]?.status))delete qualityActions[id]});if(Object.keys(qualityActions).length!==before)saveQualityActions()}
   function setQualityAction(id,status){if(!id||!['fixed','ignored'].includes(status))return;const current=qualityActions[id]?.status;if(current===status)delete qualityActions[id];else qualityActions[id]={status,updatedAt:new Date().toISOString()};saveQualityActions();renderQualityCenter()}
   function dataQualityIssues(){
-    const rows=withInlineEdits([...officialRows(),...customRows]).filter(row=>row.include!=='否'),calculation=[],logic=[],reconciliation=[],seen=new Map(),numeric=['applicants','quota','admitted','waitlisted','quota_returned','adopted'],metricLabels={applicants:'報名人數',quota:'招生名額',admitted:'錄取人數',adopted:'註冊報到'};
-    const hasNumber=value=>value!==''&&value!=null&&Number.isFinite(Number(value));
+    const rows=withInlineEdits([...officialRows(),...customRows]).filter(row=>row.include!=='否'),calculation=[],logic=[],reconciliation=[],seen=new Map(),explained=new Set(),numeric=['applicants','quota','admitted','waitlisted','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted','quota_returned','adopted'],metricLabels={applicants:'報名人數',quota:'核定招生名額',admitted:'正取公告人數',waitlisted:'備取名單人數',pre_return_in:'放榜前轉入',pre_return_out:'放榜前轉出',post_return_in:'放榜後轉入',post_return_out:'放榜後轉出',waitlist_admitted:'實際遞補錄取',quota_returned:'原表名額轉出',adopted:'註冊報到'};
     const rowContext=row=>[row.year+' 學年度',row.level,row.channel,row.department&&row.department!=='全校'?row.department:'全校'].filter(Boolean).join('｜');
     const add=(bucket,category,tone,title,context,detail)=>{const issue={category,tone,title,context,detail};issue.id=qualityIssueId(issue);bucket.push(issue)};
     rows.forEach(row=>{
-      const key=naturalKey(row),context=rowContext(row);
+      const key=naturalKey(row),context=rowContext(row),channelDetail=row.record_type==='招生管道明細',flow=flowMetrics(row),rowId=row.record_id||context;
       if(seen.has(key))add(logic,'邏輯異常','bad','發現重複資料鍵',context,'與 '+seen.get(key)+' 使用相同的年度、學制、管道與系所組合。');else seen.set(key,row.record_id||context);
       numeric.forEach(field=>{if(hasNumber(row[field])&&Number(row[field])<0)add(logic,'邏輯異常','bad','原始欄位出現負數',context,(metricLabels[field]||field)+' 為 '+fmt(Number(row[field]))+'。')});
       if(String(row.record_type||'').includes('明細')&&(!row.department||row.department==='全校'))add(logic,'邏輯異常','warn','明細缺少系所名稱',context,'資料識別碼：'+(row.record_id||'未提供'));
-      if(hasNumber(row.admission_shortfall)){const expected=n(row.quota)-n(row.admitted),stored=Number(row.admission_shortfall);if(stored!==expected)add(calculation,'計算錯誤','bad','錄取不足額公式不一致',context,'原值 '+fmt(stored)+'；依「招生名額 '+fmt(n(row.quota))+'－錄取人數 '+fmt(n(row.admitted))+'」應為 '+fmt(expected)+'。')}
-      if(hasNumber(row.registration_shortfall)){const expected=n(row.quota)-n(row.adopted),stored=Number(row.registration_shortfall);if(stored!==expected)add(calculation,'計算錯誤','bad','註冊不足額公式不一致',context,'原值 '+fmt(stored)+'；依「招生名額 '+fmt(n(row.quota))+'－註冊報到 '+fmt(n(row.adopted))+'」應為 '+fmt(expected)+'。')}
-      if(n(row.adopted)>n(row.admitted)&&(n(row.admitted)>0||n(row.adopted)>0))add(logic,'邏輯異常','warn','註冊報到高於錄取人數',context,'錄取 '+fmt(n(row.admitted))+'、註冊報到 '+fmt(n(row.adopted))+'；請確認錄取欄是否未包含備取遞補。');
-      if(hasNumber(row.quota)&&n(row.quota)===0&&(n(row.admitted)>0||n(row.adopted)>0))add(logic,'邏輯異常','warn','零名額但有錄取或報到',context,'招生名額為 0，錄取 '+fmt(n(row.admitted))+'、註冊報到 '+fmt(n(row.adopted))+'。');
+      if(channelDetail){
+        if(n(row.quota_returned)>0&&!hasNumber(row.pre_return_out)&&!hasNumber(row.post_return_out))add(logic,'回流資料待補','warn','原表名額轉出尚未拆分時點',context,'原表記載轉出 '+fmt(n(row.quota_returned))+' 名；請分別填入放榜前轉出與放榜後轉出，空白會保留為未知。');
+        if(n(row.quota_returned)>0&&hasNumber(row.pre_return_out)&&hasNumber(row.post_return_out)&&n(row.pre_return_out)+n(row.post_return_out)!==n(row.quota_returned))add(reconciliation,'加總差異','info','名額轉出拆分與原表不一致',context,'放榜前轉出 '+fmt(n(row.pre_return_out))+'＋放榜後轉出 '+fmt(n(row.post_return_out))+'＝'+fmt(n(row.pre_return_out)+n(row.post_return_out))+'，原表為 '+fmt(n(row.quota_returned))+'。');
+        if(flow.releaseQuota!=null&&flow.releaseQuota<0)add(calculation,'計算錯誤','bad','放榜實際名額小於 0',context,'核定 '+fmt(n(row.quota))+'＋轉入 '+fmt(flow.preIn)+'－轉出 '+fmt(flow.preOut)+'＝'+fmt(flow.releaseQuota)+'。');
+        if(n(row.admitted)>n(row.quota)){
+          if(flow.releaseQuota==null)add(logic,'回流資料待補','warn','正取公告超過核定名額，待補放榜前回流',context,'核定 '+fmt(n(row.quota))+'、正取公告 '+fmt(n(row.admitted))+'；請填放榜前轉入／轉出後再判斷。');
+          else if(n(row.admitted)>flow.releaseQuota)add(calculation,'計算錯誤','bad','正取公告超過放榜實際名額',context,'放榜實際名額 '+fmt(flow.releaseQuota)+'、正取公告 '+fmt(n(row.admitted))+'，仍超出 '+fmt(n(row.admitted)-flow.releaseQuota)+' 名。');
+          else explained.add(rowId);
+        }
+        if(flow.finalQuota!=null&&flow.finalQuota<0)add(calculation,'計算錯誤','bad','最終可用名額小於 0',context,'放榜實際名額 '+fmt(flow.releaseQuota)+'＋放榜後轉入 '+fmt(flow.postIn)+'－轉出 '+fmt(flow.postOut)+'＝'+fmt(flow.finalQuota)+'。');
+        if(n(row.adopted)>n(row.quota)){
+          if(flow.finalQuota==null)add(logic,'回流資料待補','warn','註冊報到超過核定名額，待補完整回流',context,'核定 '+fmt(n(row.quota))+'、註冊報到 '+fmt(n(row.adopted))+'；請完成放榜前後轉入／轉出。');
+          else if(n(row.adopted)>flow.finalQuota)add(calculation,'計算錯誤','bad','註冊報到超過最終可用名額',context,'最終可用名額 '+fmt(flow.finalQuota)+'、註冊報到 '+fmt(n(row.adopted))+'。');
+          else explained.add(rowId);
+        }
+        if(flow.waitlistAdmitted!=null&&row.waitlisted!=null&&flow.waitlistAdmitted>n(row.waitlisted))add(logic,'邏輯異常','warn','實際遞補高於備取名單人數',context,'備取名單 '+fmt(n(row.waitlisted))+'、實際遞補 '+fmt(flow.waitlistAdmitted)+'。');
+        if(n(row.adopted)>n(row.admitted)&&(n(row.admitted)>0||n(row.adopted)>0)){
+          if(flow.cumulativeAdmitted==null)add(logic,'回流資料待補','warn','註冊高於正取公告，待補實際遞補',context,'正取公告 '+fmt(n(row.admitted))+'、註冊報到 '+fmt(n(row.adopted))+'；請填實際遞補錄取人次。');
+          else if(n(row.adopted)>flow.cumulativeAdmitted)add(logic,'邏輯異常','warn','註冊報到高於累計錄取人次',context,'累計錄取 '+fmt(flow.cumulativeAdmitted)+'、註冊報到 '+fmt(n(row.adopted))+'。');
+          else explained.add(rowId);
+        }
+      }
+      if(hasNumber(row.quota)&&n(row.quota)===0&&(n(row.admitted)>0||n(row.adopted)>0)&&(!channelDetail||flow.releaseQuota==null))add(logic,'邏輯異常','warn','零名額但有錄取或報到',context,'核定招生名額為 0，正取公告 '+fmt(n(row.admitted))+'、註冊報到 '+fmt(n(row.adopted))+'；若為回流承接請補登名額流動。');
       if(n(row.applicants)>0&&n(row.admitted)>n(row.applicants))add(logic,'邏輯異常','warn','錄取人數高於報名人數',context,'報名 '+fmt(n(row.applicants))+'、錄取 '+fmt(n(row.admitted))+'。');
     });
+    const flowGroups=new Map();rows.filter(row=>row.record_type==='招生管道明細').forEach(row=>{const key=[row.year,row.level,canonicalDepartment(row.department)].join('|'),current=flowGroups.get(key)||{sample:row,rows:[]};current.rows.push(row);flowGroups.set(key,current)});flowGroups.forEach(group=>{[['放榜前','pre_return_in','pre_return_out'],['放榜後','post_return_in','post_return_out']].forEach(([stage,inField,outField])=>{const touched=group.rows.filter(row=>hasNumber(row[inField])||hasNumber(row[outField]));if(!touched.length)return;const inbound=sum(touched,inField),outbound=sum(touched,outField);if(inbound!==outbound)add(reconciliation,'加總差異','info',stage+'名額流動未平衡',rowContext(group.sample),stage+'轉入合計 '+fmt(inbound)+'、轉出合計 '+fmt(outbound)+'（差 '+(inbound-outbound>=0?'+':'')+fmt(inbound-outbound)+'）；請確認來源與承接管道都有登錄。')})});
     const metrics=['applicants','quota','admitted','adopted'];
     const aggregate=(source,keyFor)=>{const grouped=new Map();source.forEach(row=>{const key=keyFor(row),current=grouped.get(key)||{sample:row,values:Object.fromEntries(metrics.map(field=>[field,0]))};metrics.forEach(field=>{current.values[field]+=n(row[field])});grouped.set(key,current)});return grouped};
     const addReconciliation=(title,totalLabel,detailLabel,totalRows,detailRows,keyFor)=>{const detailGroups=aggregate(detailRows,keyFor);totalRows.forEach(total=>{const group=detailGroups.get(keyFor(total));if(!group)return;const mismatches=metrics.map(field=>({field,total:n(total[field]),detail:group.values[field]})).filter(item=>item.total!==item.detail);if(!mismatches.length)return;add(reconciliation,'加總差異','info',title,rowContext(total),mismatches.map(item=>(metricLabels[item.field]||item.field)+'：'+totalLabel+' '+fmt(item.total)+'、'+detailLabel+' '+fmt(item.detail)+'（差 '+(item.total-item.detail>=0?'+':'')+fmt(item.total-item.detail)+'）').join('；'))})};
@@ -1497,9 +1555,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     const quotaDetailGroups=aggregate((MODEL.quota_detail?.records||[]).filter(row=>row.scope==='總量內名額'),row=>row.year+'|'+row.level);(MODEL.quota_adjustments?.totals||[]).forEach(total=>{const group=quotaDetailGroups.get(total.year+'|'+total.level);if(group&&n(total.quota)!==group.values.quota)add(reconciliation,'加總差異','info','兩份招生名額資料的總量內名額不同',total.year+' 學年度｜'+total.level,'名額調整資料 '+fmt(n(total.quota))+'、名額明細合計 '+fmt(group.values.quota)+'（差 '+(n(total.quota)-group.values.quota>=0?'+':'')+fmt(n(total.quota)-group.values.quota)+'）；可能是七年一貫制或資料口徑不同，請人工確認。')});
     const issues=qualityExpanded?[...calculation,...logic,...reconciliation]:[...calculation.slice(0,8),...logic.slice(0,8),...reconciliation.slice(0,8)];
     if(!issues.length)issues.push({category:'檢查結果',tone:'good',title:'未發現需立即處理的資料問題',context:'目前資料庫',detail:'公式、邏輯與加總檢核均未觸發提醒。'});
-    return {rows:rows.length,calculation,logic,reconciliation,issues};
+    return {rows:rows.length,calculation,logic,reconciliation,issues,explained:explained.size};
   }
-  function renderQualityCenter(){const result=dataQualityIssues(),allIssues=[...result.calculation,...result.logic,...result.reconciliation];pruneQualityActions(allIssues);const pendingFor=issues=>issues.filter(issue=>qualityActionFor(issue)==='pending').length,cards=[['檢查資料列',result.rows,'',0],['計算錯誤',result.calculation.length,'bad',pendingFor(result.calculation)],['邏輯異常',result.logic.length,'warn',pendingFor(result.logic)],['加總差異',result.reconciliation.length,'info',pendingFor(result.reconciliation)]];$('qualityStatus').innerHTML=cards.map(item=>'<div class="quality-card '+(item[1]?item[2]:'')+'"><span>'+item[0]+'</span><strong>'+fmt(item[1])+'</strong><span class="status-pill '+(item[3]?item[2]:'')+'">'+(item[0]==='檢查資料列'?'已檢查':item[3]?'待處理 '+fmt(item[3]):item[1]?'已全部處理':'正常')+'</span></div>').join('');const total=allIssues.length,fixed=allIssues.filter(issue=>qualityActionFor(issue)==='fixed').length,ignored=allIssues.filter(issue=>qualityActionFor(issue)==='ignored').length,pending=total-fixed-ignored,hasHidden=total>result.issues.length;$('qualitySummary').innerHTML='<span class="status-pill '+(pending?'warn':'')+'">待處理 '+fmt(pending)+'</span><span class="status-pill">已修正 '+fmt(fixed)+'</span><span class="status-pill neutral">已忽略 '+fmt(ignored)+'</span><span>標記只記錄處理進度，不會修改原始數據。</span>'+(hasHidden||qualityExpanded?'<button class="btn small secondary" type="button" data-quality-toggle="1">'+(qualityExpanded?'收合提醒':'顯示全部 '+fmt(total)+' 則')+'</button>':'');$('qualityList').innerHTML=result.issues.map(issue=>{if(!issue.id)return '<div class="quality-item '+issue.tone+'"><span class="quality-type">'+esc(issue.category)+'</span><strong>'+esc(issue.title)+'</strong><span class="quality-context">'+esc(issue.context)+'</span><small>'+esc(issue.detail)+'</small></div>';const status=qualityActionFor(issue),statusLabel=status==='fixed'?'已修正':status==='ignored'?'已忽略':'待處理',statusTone=status==='fixed'?'':status==='ignored'?'neutral':issue.tone;return '<div class="quality-item '+issue.tone+' is-'+status+'"><div class="quality-item-head"><span class="quality-type">'+esc(issue.category)+'</span><span class="status-pill '+statusTone+'">'+statusLabel+'</span></div><strong>'+esc(issue.title)+'</strong><span class="quality-context">'+esc(issue.context)+'</span><small>'+esc(issue.detail)+'</small><div class="quality-actions"><button class="quality-action fixed '+(status==='fixed'?'active':'')+'" type="button" data-quality-id="'+esc(issue.id)+'" data-quality-action="fixed" aria-pressed="'+String(status==='fixed')+'" title="'+(status==='fixed'?'再按一次恢復為待處理':'標記為已修正')+'">'+(status==='fixed'?'✓ 已修正':'已修正')+'</button><button class="quality-action ignored '+(status==='ignored'?'active':'')+'" type="button" data-quality-id="'+esc(issue.id)+'" data-quality-action="ignored" aria-pressed="'+String(status==='ignored')+'" title="'+(status==='ignored'?'再按一次恢復為待處理':'標記為忽略')+'">'+(status==='ignored'?'✓ 已忽略':'忽略')+'</button></div></div>'}).join('')}
+  function renderQualityCenter(){const result=dataQualityIssues(),allIssues=[...result.calculation,...result.logic,...result.reconciliation];pruneQualityActions(allIssues);const pendingFor=issues=>issues.filter(issue=>qualityActionFor(issue)==='pending').length,cards=[['檢查資料列',result.rows,'',0],['計算錯誤',result.calculation.length,'bad',pendingFor(result.calculation)],['邏輯異常',result.logic.length,'warn',pendingFor(result.logic)],['加總差異',result.reconciliation.length,'info',pendingFor(result.reconciliation)]];$('qualityStatus').innerHTML=cards.map(item=>'<div class="quality-card '+(item[1]?item[2]:'')+'"><span>'+item[0]+'</span><strong>'+fmt(item[1])+'</strong><span class="status-pill '+(item[3]?item[2]:'')+'">'+(item[0]==='檢查資料列'?'已檢查':item[3]?'待處理 '+fmt(item[3]):item[1]?'已全部處理':'正常')+'</span></div>').join('');const total=allIssues.length,fixed=allIssues.filter(issue=>qualityActionFor(issue)==='fixed').length,ignored=allIssues.filter(issue=>qualityActionFor(issue)==='ignored').length,pending=total-fixed-ignored,hasHidden=total>result.issues.length;$('qualitySummary').innerHTML='<span class="status-pill '+(pending?'warn':'')+'">待處理 '+fmt(pending)+'</span><span class="status-pill">回流已合理解釋 '+fmt(result.explained)+'</span><span class="status-pill">已修正 '+fmt(fixed)+'</span><span class="status-pill neutral">已忽略 '+fmt(ignored)+'</span><span>標記只記錄處理進度，不會修改原始數據。</span>'+(hasHidden||qualityExpanded?'<button class="btn small secondary" type="button" data-quality-toggle="1">'+(qualityExpanded?'收合提醒':'顯示全部 '+fmt(total)+' 則')+'</button>':'');$('qualityList').innerHTML=result.issues.map(issue=>{if(!issue.id)return '<div class="quality-item '+issue.tone+'"><span class="quality-type">'+esc(issue.category)+'</span><strong>'+esc(issue.title)+'</strong><span class="quality-context">'+esc(issue.context)+'</span><small>'+esc(issue.detail)+'</small></div>';const status=qualityActionFor(issue),statusLabel=status==='fixed'?'已修正':status==='ignored'?'已忽略':'待處理',statusTone=status==='fixed'?'':status==='ignored'?'neutral':issue.tone;return '<div class="quality-item '+issue.tone+' is-'+status+'"><div class="quality-item-head"><span class="quality-type">'+esc(issue.category)+'</span><span class="status-pill '+statusTone+'">'+statusLabel+'</span></div><strong>'+esc(issue.title)+'</strong><span class="quality-context">'+esc(issue.context)+'</span><small>'+esc(issue.detail)+'</small><div class="quality-actions"><button class="quality-action fixed '+(status==='fixed'?'active':'')+'" type="button" data-quality-id="'+esc(issue.id)+'" data-quality-action="fixed" aria-pressed="'+String(status==='fixed')+'" title="'+(status==='fixed'?'再按一次恢復為待處理':'標記為已修正')+'">'+(status==='fixed'?'✓ 已修正':'已修正')+'</button><button class="quality-action ignored '+(status==='ignored'?'active':'')+'" type="button" data-quality-id="'+esc(issue.id)+'" data-quality-action="ignored" aria-pressed="'+String(status==='ignored')+'" title="'+(status==='ignored'?'再按一次恢復為待處理':'標記為忽略')+'">'+(status==='ignored'?'✓ 已忽略':'忽略')+'</button></div></div>'}).join('')}
   function toolkitRow(level,year,department){return toolkitRows(level).find(row=>row.year===Number(year)&&row.department===department)}
   function comparisonSide(label,row){if(!row)return '<div class="comparison-side"><h4>'+label+'</h4><div class="tool-empty">沒有可比較資料</div></div>';const metrics=[['報名',fmt(row.applicants)],['名額',fmt(row.quota)],['錄取',fmt(row.admitted)],['註冊報到',fmt(row.adopted)],['競爭倍率',mult(row.competition)],['報到率',pct(row.fill)]];return '<div class="comparison-side"><h4>'+label+'｜'+row.year+'｜'+esc(row.department)+'</h4><div class="comparison-metrics">'+metrics.map(metric=>'<div class="comparison-metric"><span>'+metric[0]+'</span><strong>'+metric[1]+'</strong></div>').join('')+'</div></div>'}
   function renderComparison(){const a=toolkitRow(toolState.compareLevel,toolState.compareYearA,toolState.compareDepartmentA),b=toolkitRow(toolState.compareLevel,toolState.compareYearB,toolState.compareDepartmentB);const applicantDelta=a&&b?n(b.applicants)-n(a.applicants):NaN,quotaDelta=a&&b?n(b.quota)-n(a.quota):NaN;$('comparisonBoard').innerHTML=comparisonSide('比較 A',a)+'<div class="comparison-delta"><div><span>B－A</span><strong>'+(!Number.isFinite(applicantDelta)?'—':(applicantDelta>=0?'+':'')+fmt(applicantDelta))+'</strong><span>報名差<br>名額 '+(!Number.isFinite(quotaDelta)?'—':(quotaDelta>=0?'+':'')+fmt(quotaDelta))+'</span></div></div>'+comparisonSide('比較 B',b)}
@@ -1571,9 +1629,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   $('detailBody').addEventListener('change',event=>{
     const note=event.target.closest('.inline-note');if(note){setInlineEdit(note.dataset.recordId,'note',note.value.trim());updateRowCount(visibleRows().length);return}
     const input=event.target.closest('.inline-number');if(!input)return;
-    const field=input.dataset.field,allowed=['applicants','quota','admitted','waitlisted','quota_returned','adopted'];
+    const field=input.dataset.field,allowed=['applicants','quota','admitted','waitlisted','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted','quota_returned','adopted'];
     if(!allowed.includes(field)){renderTable();return}
-    if(input.value.trim()===''){if(['waitlisted','quota_returned'].includes(field)){clearInlineEdit(input.dataset.recordId,field);renderAll()}else renderTable();return}
+    if(input.value.trim()===''){if(['waitlisted','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted','quota_returned'].includes(field)){clearInlineEdit(input.dataset.recordId,field);renderAll()}else renderTable();return}
     const value=Number(input.value);
     if(!Number.isFinite(value)||value<0){renderTable();return}
     setInlineEdit(input.dataset.recordId,field,Math.round(value));renderAll();
