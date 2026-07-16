@@ -40,7 +40,7 @@ table{min-width:1460px}
 @media(max-width:430px){.report-snapshot{grid-template-columns:1fr}.report-head-note{white-space:normal;margin-top:8px}}
 @media(max-width:760px){body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}.brandbar-inner{min-height:auto;padding:14px 16px 16px;grid-template-columns:1fr;gap:12px}.brand-logo{width:44px;height:44px;flex-basis:44px;border-radius:11px}.brand-name{font-size:.9rem}.brand-name small{font-size:.55rem}.brand-message{border-left:0;border-top:1px solid rgba(255,255,255,.2);padding:11px 0 0}.brand-message h1{font-size:1.55rem;margin-bottom:.3rem}.brand-message p{font-size:.78rem}.meta{grid-column:1;max-width:none;justify-content:flex-start;margin-top:0;gap:6px}.page-tabs{position:fixed;top:auto;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));z-index:60;border:1px solid rgba(204,213,221,.95);border-radius:18px;box-shadow:0 14px 38px rgba(20,33,61,.24);padding:6px}.page-tabs-inner{padding:0}.brand-nav{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}.brand-nav a{min-width:0;flex-direction:column;gap:2px;padding:5px 2px;border-radius:12px;font-size:.68rem;line-height:1.2}.nav-icon{width:23px;height:23px}.detail-legend{align-items:flex-start}.detail-table th:first-child,.detail-table td:first-child{min-width:118px}.title-icon{width:27px;height:27px}}
 @media(max-width:760px){.vacancy-breakdown-head{align-items:flex-start;flex-direction:column}.vacancy-total{align-self:flex-start}.vacancy-list{display:grid;grid-template-columns:1fr;width:100%}.vacancy-item{justify-content:space-between}}
-.dashboard-page[hidden],#analysisPages[hidden]{display:none!important}.page-tabs{background:rgba(35,79,109,.98);border-bottom-color:#49728f}.brand-nav{width:100%;justify-content:center}.brand-nav a{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:.92rem;font-weight:600}.brand-nav a.active,.brand-nav a[aria-current="page"]{background:#fff;color:var(--navy)}.brand-nav a.active .nav-icon,.brand-nav a[aria-current="page"] .nav-icon{background:#dce9ef;color:var(--navy)}.dashboard-page{scroll-margin-top:112px}.page-status{font-size:.74rem;color:var(--muted);font-weight:800}.detail-level{display:none!important}.detail-note{min-width:240px;white-space:normal!important;line-height:1.45}
+.dashboard-page[hidden],#analysisPages[hidden]{display:none!important}.page-tabs{background:rgba(35,79,109,.98);border-bottom-color:#49728f}.brand-nav{width:100%;justify-content:center}.brand-nav a{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:.92rem;font-weight:600}.brand-nav a.active,.brand-nav a[aria-current="page"]{background:#fff;color:var(--navy)}.brand-nav a.active .nav-icon,.brand-nav a[aria-current="page"] .nav-icon{background:#dce9ef;color:var(--navy)}.dashboard-page{scroll-margin-top:112px}.page-status{font-size:.74rem;color:var(--muted);font-weight:800}.detail-level{display:none!important}.detail-note{min-width:260px;white-space:normal!important;line-height:1.45}.inline-note{display:block;width:100%;min-width:240px;min-height:58px;border:1px solid #9eb8c9;border-radius:8px;padding:7px 8px;background:#fff;color:var(--ink);font:inherit;line-height:1.45;resize:vertical}.inline-note:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(40,120,181,.16);outline:none}.formula-cell{font-weight:900}
 @media(max-width:760px){.brand-nav a{font-size:.75rem}.detail-table th.detail-department,.detail-table td.detail-department{position:sticky;left:0;min-width:180px;max-width:220px;white-space:normal}.detail-table th.detail-department{z-index:6;background:var(--navy)}.detail-table td.detail-department{z-index:3;box-shadow:7px 0 10px -10px rgba(20,33,61,.65)}.detail-table tbody tr:nth-child(odd):not(.row-total) td.detail-department{background:#fff}.detail-table tbody tr:nth-child(even):not(.row-total) td.detail-department{background:#f7fafb}.detail-table tbody tr.row-total td.detail-department{background:#dff0f2!important}}
 .trend-stats{display:grid;grid-template-columns:repeat(5,minmax(115px,1fr));gap:8px;margin-top:12px}.trend-stat{border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#f8fafb}.trend-stat .label{font-size:.7rem;color:var(--muted);font-weight:900}.trend-stat .value{margin:3px 0 1px;font-size:1.05rem;font-weight:900;color:var(--ink)}.trend-stat .detail{font-size:.68rem;color:var(--muted)}@media(max-width:760px){.trend-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
@@ -108,9 +108,9 @@ table{min-width:1460px}
       <div id="rankChart"></div><div class="chart-summary" id="rankSummary"></div>
     </article>
     <article class="panel wide dashboard-page" id="data-detail" data-page="data-detail">
-      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>關鍵數值可直接編輯，變更後會立即更新上方指標與圖表。</p><div class="edit-note">備取、錄取不足額及指定管道的名額回流均依原始 Excel 擷取；原表未提供時留白。錄取不足額保留原表負數。編輯內容僅儲存在目前瀏覽器。</div></div><div class="panel-actions"><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button></div></div>
-      <div class="detail-legend" aria-label="明細表顏色說明"><span class="legend-key"><i class="legend-swatch total" aria-hidden="true"></i>年度總計／全校層級</span><span class="legend-key"><i class="legend-swatch" aria-hidden="true"></i>系所與招生管道明細</span><span class="legend-key"><i class="legend-swatch editable" aria-hidden="true"></i>框線欄位可直接編輯</span></div>
-      <div class="table-wrap detail-scroll"><table class="detail-table"><thead><tr><th class="detail-level">資料層級</th><th>學年度</th><th>學制</th><th>招生管道</th><th>學院</th><th class="detail-department">系所</th><th class="num">報名</th><th class="num">名額</th><th class="num">錄取</th><th class="num">備取人數</th><th class="num">錄取不足額</th><th class="num">名額回流</th><th class="num">註冊報到</th><th class="num">競爭倍率</th><th class="num">報到率</th><th>狀態</th><th class="detail-note">備註</th></tr></thead><tbody id="detailBody"></tbody></table></div>
+      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>關鍵數值與備註可直接編輯，變更後會立即更新上方指標與圖表。</p><div class="edit-note">全校備取人數採各招生管道加總；錄取不足額＝招生名額－錄取人數；註冊不足額＝招生名額－註冊報到。編輯內容僅儲存在目前瀏覽器。</div></div><div class="panel-actions"><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button></div></div>
+      <div class="detail-legend" aria-label="明細表顏色說明"><span class="legend-key"><i class="legend-swatch total" aria-hidden="true"></i>年度總計／全校層級</span><span class="legend-key"><i class="legend-swatch" aria-hidden="true"></i>系所與招生管道明細</span><span class="legend-key"><i class="legend-swatch editable" aria-hidden="true"></i>框線欄位與備註可直接編輯</span></div>
+      <div class="table-wrap detail-scroll"><table class="detail-table"><thead><tr><th class="detail-level">資料層級</th><th>學年度</th><th>學制</th><th>招生管道</th><th>學院</th><th class="detail-department">系所</th><th class="num">報名</th><th class="num">名額</th><th class="num">錄取</th><th class="num">備取人數</th><th class="num">錄取不足額</th><th class="num">名額回流</th><th class="num">註冊報到</th><th class="num">註冊不足額</th><th class="num">競爭倍率</th><th class="num">報到率</th><th>狀態</th><th class="detail-note">備註</th></tr></thead><tbody id="detailBody"></tbody></table></div>
     </article>
     <article class="panel wide dashboard-page" data-page="data-detail">
       <details class="editor" id="editor"><summary><span class="title-icon" aria-hidden="true">✎</span><span>自行填入／管理資料</span></summary>
@@ -615,7 +615,7 @@ table{min-width:1460px}
   if(!Array.isArray(customRows))customRows=[];const legacyRows=customRows.some(row=>row.level===LEGACY_LEVEL);if(legacyRows){customRows=customRows.map(row=>row.level===LEGACY_LEVEL?{...row,level:'學士班'}:row);localStorage.setItem(STORAGE_KEY,JSON.stringify(customRows))}
   let inlineEdits = safeParse(localStorage.getItem(INLINE_EDIT_KEY), {});
   if(!inlineEdits||Array.isArray(inlineEdits)||typeof inlineEdits!=='object')inlineEdits={};
-  const legacyField=['regular','admitted'].join('_');let removedLegacyEdit=false;for(const [id,changes] of Object.entries(inlineEdits)){if(changes&&Object.hasOwn(changes,legacyField)){delete changes[legacyField];removedLegacyEdit=true}if(!changes||!Object.keys(changes).length)delete inlineEdits[id]}if(removedLegacyEdit){if(Object.keys(inlineEdits).length)localStorage.setItem(INLINE_EDIT_KEY,JSON.stringify(inlineEdits));else localStorage.removeItem(INLINE_EDIT_KEY)}
+  const legacyField=['regular','admitted'].join('_'),computedFields=[legacyField,'admission_shortfall','registration_shortfall'];let removedLegacyEdit=false;for(const [id,changes] of Object.entries(inlineEdits)){if(changes)for(const field of computedFields)if(Object.hasOwn(changes,field)){delete changes[field];removedLegacyEdit=true}if(!changes||!Object.keys(changes).length)delete inlineEdits[id]}if(removedLegacyEdit){if(Object.keys(inlineEdits).length)localStorage.setItem(INLINE_EDIT_KEY,JSON.stringify(inlineEdits));else localStorage.removeItem(INLINE_EDIT_KEY)}
   let pendingImport = null;
   const params = new URLSearchParams(location.search);
   const saved = safeParse(localStorage.getItem(FILTER_KEY), {});
@@ -668,7 +668,8 @@ table{min-width:1460px}
   function setInlineEdit(recordId,field,value){
     const original=originalRowById(recordId);if(!original)return;
     const changes={...(inlineEdits[recordId]||{})};
-    if(original[field]!=null&&value===n(original[field]))delete changes[field];else changes[field]=value;
+    const matchesOriginal=typeof value==='number'?(original[field]!=null&&value===n(original[field])):cleanText(value)===cleanText(original[field]);
+    if(matchesOriginal)delete changes[field];else changes[field]=value;
     if(Object.keys(changes).length)inlineEdits[recordId]=changes;else delete inlineEdits[recordId];
     saveInlineEdits();
   }
@@ -743,7 +744,11 @@ table{min-width:1460px}
   function allChannelDetails(){return withInlineEdits((MODEL.channel_details||[]).filter(r=>r.include!=='否'))}
   function detailPool(){return state.channel==='全部'?allDetails():allChannelDetails().filter(r=>r.channel===state.channel)}
   function selectedDetails(){return detailPool().filter(r=>r.year===state.year&&r.level===state.level&&(state.college==='全部'||r.college===state.college)&&(state.department==='全部'||r.department===state.department))}
-  function selectedTotals(){return (state.channel==='全部'?allAnnual():allChannelAnnual().filter(r=>r.channel===state.channel)).filter(r=>r.year===state.year&&r.level===state.level)}
+  function campusTotalWithDerivedFields(row){
+    const channelRows=allChannelAnnual().filter(candidate=>candidate.year===row.year&&candidate.level===row.level&&(!row.channel||candidate.channel===row.channel));
+    return {...row,waitlisted:channelRows.length?sum(channelRows,'waitlisted'):n(row.waitlisted),admission_shortfall:n(row.quota)-n(row.admitted),registration_shortfall:n(row.quota)-n(row.adopted)};
+  }
+  function selectedTotals(){return (state.channel==='全部'?allAnnual():allChannelAnnual().filter(r=>r.channel===state.channel)).filter(r=>r.year===state.year&&r.level===state.level).map(campusTotalWithDerivedFields)}
 
   function setupControls(){
     const years=[...new Set([...MODEL.annual_totals.map(r=>r.year),...customRows.map(r=>r.year)])].sort((a,b)=>b-a);
@@ -794,7 +799,7 @@ table{min-width:1460px}
       else{title='整體報到穩定，下一步聚焦需求結構變化';text='目前報到率 '+pct(fill)+'、競爭倍率 '+mult(comp)+'；可從系所排名與年度趨勢辨識資源轉移。'}
     }
     $('insightTitle').textContent=title;$('insightText').textContent=text;
-    $('caveatText').textContent=state.channel!=='全部'?'招生管道資料依各年度原始欄位呈現；未分列的年度不另行補估。':(k.pending?'115學年度研究所正式註冊尚待完成，本頁暫採最終線上報到。':'各年度未分列欄位不另行補估；原始表負值照原值呈現。');
+    $('caveatText').textContent=state.channel!=='全部'?'招生管道資料依各年度原始欄位呈現；不足額依名額與錄取／註冊報到即時計算。':(k.pending?'115學年度研究所正式註冊尚待完成，本頁暫採最終線上報到；不足額將隨數值即時計算。':'全校備取採招生管道加總；錄取與註冊不足額依目前數值即時計算。');
   }
   function optionalSum(rows,key){const values=rows.map(row=>row[key]).filter(value=>value!=null&&Number.isFinite(Number(value)));return values.length?values.reduce((total,value)=>total+Number(value),0):null}
   function mean(values){const usable=values.filter(Number.isFinite);return usable.length?usable.reduce((total,value)=>total+value,0)/usable.length:NaN}
@@ -836,7 +841,7 @@ table{min-width:1460px}
   }
   function renderDecisionReport(){
     const k=aggregate(),current=metricsFor(k),history=reportHistory(),upto=history.rows.filter(row=>row.year<=state.year),previousRow=[...upto].reverse().find(row=>row.year<state.year),previous=previousRow?metricsFor(previousRow):null,lastThree=upto.slice(-3),optionalRows=selectedDetails().length?selectedDetails():k.rows;
-    const waitlisted=optionalSum(optionalRows,'waitlisted'),shortfall=optionalSum(optionalRows,'admission_shortfall'),returned=optionalSum(optionalRows,'quota_returned');
+    const campusScope=state.college==='全部'&&state.department==='全部',waitlisted=campusScope?optionalSum(selectedTotals(),'waitlisted'):optionalSum(optionalRows,'waitlisted'),shortfall=optionalRows.length?sum(optionalRows,'quota')-sum(optionalRows,'admitted'):null,returned=optionalSum(optionalRows,'quota_returned');
     const context=[state.year+' 學年度',state.level,state.channel==='全部'?'全部招生管道':state.channel,state.college==='全部'?'全部學院':state.college,state.department==='全部'?'全部系所':state.department].join('｜');
     $('reportScope').textContent=context+'；本期數值採目前篩選，歷史比較採可取得的相同範圍。';
     renderVacancyBreakdown();
@@ -845,8 +850,8 @@ table{min-width:1460px}
     const cards=[
       {label:'較前期報名變化',value:applicantChange,detail:'本期 '+fmt(current.applicants)+' 人'+(previous?'；前期 '+previousRow.year+' 學年度 '+fmt(previous.applicants)+' 人':'；尚無可比前期'),tone:applicantTone},
       {label:'報到穩定度',value:pct(current.fill),detail:'註冊報到 '+fmt(current.adopted)+'／名額 '+fmt(current.quota)+'；缺額 '+fmt(current.vacancy)+' 名',tone:fillTone},
-      {label:'缺額／錄取不足額',value:fmt(current.vacancy)+'／'+(shortfall==null?'—':fmt(shortfall)),detail:shortfall==null?'原始 Excel 未分列錄取不足額':'錄取不足額保留 Excel 原值；負數代表超額錄取',tone:gapTone},
-      {label:'備取／名額回流',value:(waitlisted==null?'—':fmt(waitlisted))+'／'+(returned==null?'—':fmt(returned)),detail:'依原始 Excel 可取得欄位加總；未提供者留白',tone:reserveTone},
+      {label:'缺額／錄取不足額',value:fmt(current.vacancy)+'／'+(shortfall==null?'—':fmt(shortfall)),detail:shortfall==null?'目前缺少名額或錄取資料':'錄取不足額＝招生名額－錄取人數；負數代表超額錄取',tone:gapTone},
+      {label:'備取／名額回流',value:(waitlisted==null?'—':fmt(waitlisted))+'／'+(returned==null?'—':fmt(returned)),detail:campusScope?'全校備取依各招生管道加總':'依目前篩選明細加總；未提供者留白',tone:reserveTone},
     ];
     $('reportSnapshot').innerHTML=cards.map(card=>'<article class="report-stat '+card.tone+'"><div class="label">'+esc(card.label)+'</div><div class="value">'+esc(card.value)+'</div><div class="detail">'+esc(card.detail)+'</div></article>').join('');
     const averages={};['applicants','competition','admitRate','fill','vacancy'].forEach(key=>averages[key]=mean(lastThree.map(row=>metricsFor(row)[key])));
@@ -864,14 +869,14 @@ table{min-width:1460px}
     if(Number.isFinite(current.competition)&&current.competition<2)add('high','強化低競爭管道的有效觸及','競爭倍率僅 '+mult(current.competition)+'；優先檢查目標學生輪廓、宣傳來源與報名頁轉換，避免只增加曝光而未增加報名。');
     if(previous&&previous.applicants>0&&(current.applicants-previous.applicants)/previous.applicants<=-.1)add('high','針對報名下滑拆解來源','報名較 '+previousRow.year+' 學年度 '+signedRate(current.applicants,previous.applicants)+'；按招生管道與系所找出降幅最大項目，設定下一期回升目標。');
     else if(previous&&previous.applicants>0&&current.applicants<previous.applicants)add('medium','持續觀察報名降幅','報名較前期 '+signedRate(current.applicants,previous.applicants)+'；先辨識是單一系所波動或整體管道轉弱。');
-    if(shortfall!=null&&shortfall>0)add('high','優先處理錄取不足額','Excel 顯示錄取不足額 '+fmt(shortfall)+' 名；檢視甄審門檻、報考資格與名額配置，並依規定確認可流回名額。');
+    if(shortfall!=null&&shortfall>0)add('high','優先處理錄取不足額','招生名額減錄取人數後仍有 '+fmt(shortfall)+' 名不足額；檢視甄審門檻、報考資格與名額配置，並依規定確認可流回名額。');
     if(returned!=null&&returned>0)add('medium','提早納入回流名額規劃','目前可見名額回流 '+fmt(returned)+' 名；在單獨招生或一般考試簡章與核定時程前確認可承接量。');
     if(waitlisted!=null&&waitlisted>0&&Number.isFinite(current.fill)&&current.fill<.95)add('medium','提高備取轉換效率','目前備取 '+fmt(waitlisted)+' 人；建立即時遞補順位與聯繫紀錄，縮短缺額發生到遞補通知的時間。');
     if(!actions.length)add('low','維持穩定並把資源投向成長','目前未出現明顯缺額或大幅下滑；持續追蹤高競爭系所的來源品質，並複製有效招生活動。');
     const order={high:0,medium:1,low:2},labels={high:'優先',medium:'追蹤',low:'維持'};actions.sort((a,b)=>order[a.priority]-order[b.priority]);
     $('reportActions').innerHTML=actions.slice(0,4).map(action=>'<article class="report-action"><strong><span class="priority '+action.priority+'">'+labels[action.priority]+'</span>'+esc(action.title)+'</strong><p>'+esc(action.body)+'</p></article>').join('');
     const periodText=lastThree.length?lastThree.map(row=>row.year).join('、')+' 學年度':'無可比年度';
-    $('reportNote').textContent='比較基準：'+history.basis+'；近 3 期為 '+periodText+'。'+(history.fallback?'目前學院／系所缺少至少 2 期可比資料，因此歷史欄改採全校基準。':'')+' 未提供的備取、錄取不足額或名額回流欄位不補估；建議供資源排序參考，不取代招生規章與正式核定。';
+    $('reportNote').textContent='比較基準：'+history.basis+'；近 3 期為 '+periodText+'。'+(history.fallback?'目前學院／系所缺少至少 2 期可比資料，因此歷史欄改採全校基準。':'')+' 全校備取採招生管道加總；錄取與註冊不足額依目前名額、錄取及註冊報到數計算。建議供資源排序參考，不取代招生規章與正式核定。';
   }
   function svgBase(title,desc,width=720,height=330,style=''){return '<svg class="chart" viewBox="0 0 '+width+' '+height+'" role="img" aria-labelledby="ct cd"'+(style?' style="'+style+'"':'')+'><title id="ct">'+esc(title)+'</title><desc id="cd">'+esc(desc)+'</desc>'}
   function trendSeries(){
@@ -908,10 +913,14 @@ table{min-width:1460px}
   }
   function isHighestScope(row){return String(row.record_type||'').includes('年度總計')||row.college==='全校'||row.department==='全校'}
   function visibleRows(){const details=selectedDetails();const totals=selectedTotals();return [...totals,...details].sort((a,b)=>Number(isHighestScope(b))-Number(isHighestScope(a))||compareColleges(a.college,b.college)||compareDepartments(a.department,b.department,state.level)||String(a.record_type).localeCompare(String(b.record_type),'zh-Hant'))}
-  function editableCell(row,field,label){if(field==='quota_returned'&&!FLOWBACK_CHANNELS.includes(row.channel))return '<td class="num">—</td>';const value=row[field]==null?'':Math.round(n(row[field])),minAttr=field==='admission_shortfall'?'':' min="0"';return '<td class="num"><input class="inline-number" type="number"'+minAttr+' step="1" inputmode="numeric" data-record-id="'+esc(row.record_id)+'" data-field="'+field+'" value="'+value+'" placeholder="—" aria-label="'+esc((row.department||row.level)+' '+label)+'"></td>'}
+  function editableCell(row,field,label){if(field==='quota_returned'&&!FLOWBACK_CHANNELS.includes(row.channel))return '<td class="num">—</td>';const value=row[field]==null?'':Math.round(n(row[field]));return '<td class="num"><input class="inline-number" type="number" min="0" step="1" inputmode="numeric" data-record-id="'+esc(row.record_id)+'" data-field="'+field+'" value="'+value+'" placeholder="—" aria-label="'+esc((row.department||row.level)+' '+label)+'"></td>'}
+  function readonlyNumberCell(value,label){return '<td class="num formula-cell" title="'+esc(label+'（自動彙整）')+'">'+fmt(n(value))+'</td>'}
+  function formulaCell(value,label){const numeric=n(value),tone=numeric>0?' risk':numeric<0?' strong':'';return '<td class="num formula-cell'+tone+'" title="'+esc(label+'（自動計算）')+'">'+fmt(numeric)+'</td>'}
+  function noteCell(row){return '<td class="detail-note"><textarea class="inline-note" rows="2" maxlength="500" data-record-id="'+esc(row.record_id)+'" aria-label="'+esc((row.department||row.level)+' 備註')+'">'+esc(row.note||'')+'</textarea></td>'}
+  function updateRowCount(count){$('rowCount').textContent='明細 '+count+' 筆｜已編輯 '+Object.keys(inlineEdits).length+' 筆｜自填 '+customRows.length+' 筆'}
   function renderTable(){
-    const rows=visibleRows();$('detailBody').innerHTML=rows.length?rows.map(r=>{const comp=ratio(n(r.applicants),n(r.quota)),fill=ratio(n(r.adopted),n(r.quota)),highest=isHighestScope(r),college=collegeChip(r.college),department=r.department==='全校'?'<span class="campus-chip">全校</span>':esc(r.department);return '<tr'+(highest?' class="row-total"':'')+'><td class="detail-level"><span class="scope-chip '+(highest?'total':'')+'"><span aria-hidden="true">'+(highest?'◆':'•')+'</span>'+esc(r.record_type)+'</span></td><td>'+r.year+'</td><td>'+esc(r.level)+'</td><td>'+esc(r.channel||'—')+'</td><td>'+college+'</td><td class="detail-department">'+department+'</td>'+editableCell(r,'applicants','報名')+editableCell(r,'quota','名額')+editableCell(r,'admitted','錄取')+editableCell(r,'waitlisted','備取人數')+editableCell(r,'admission_shortfall','錄取不足額')+editableCell(r,'quota_returned','名額回流')+editableCell(r,'adopted','註冊報到')+'<td class="num '+(comp>=5?'strong':'')+'">'+mult(comp)+'</td><td class="num '+(fill<.9?'risk':'')+'">'+pct(fill)+'</td><td>'+(r.status==='進行中'?'<span class="pending">進行中</span>':esc(r.status))+'</td><td class="detail-note">'+esc(r.note||'—')+'</td></tr>'}).join(''):'<tr><td colspan="17">目前篩選沒有資料。</td></tr>';
-    $('rowCount').textContent='明細 '+rows.length+' 筆｜已編輯 '+Object.keys(inlineEdits).length+' 筆｜自填 '+customRows.length+' 筆';
+    const rows=visibleRows();$('detailBody').innerHTML=rows.length?rows.map(r=>{const comp=ratio(n(r.applicants),n(r.quota)),fill=ratio(n(r.adopted),n(r.quota)),highest=isHighestScope(r),college=collegeChip(r.college),department=r.department==='全校'?'<span class="campus-chip">全校</span>':esc(r.department),waitlistedCell=highest?readonlyNumberCell(r.waitlisted,'全校備取人數'):editableCell(r,'waitlisted','備取人數');return '<tr'+(highest?' class="row-total"':'')+'><td class="detail-level"><span class="scope-chip '+(highest?'total':'')+'"><span aria-hidden="true">'+(highest?'◆':'•')+'</span>'+esc(r.record_type)+'</span></td><td>'+r.year+'</td><td>'+esc(r.level)+'</td><td>'+esc(r.channel||'—')+'</td><td>'+college+'</td><td class="detail-department">'+department+'</td>'+editableCell(r,'applicants','報名')+editableCell(r,'quota','名額')+editableCell(r,'admitted','錄取')+waitlistedCell+formulaCell(n(r.quota)-n(r.admitted),'錄取不足額')+editableCell(r,'quota_returned','名額回流')+editableCell(r,'adopted','註冊報到')+formulaCell(n(r.quota)-n(r.adopted),'註冊不足額')+'<td class="num '+(comp>=5?'strong':'')+'">'+mult(comp)+'</td><td class="num '+(fill<.9?'risk':'')+'">'+pct(fill)+'</td><td>'+(r.status==='進行中'?'<span class="pending">進行中</span>':esc(r.status))+'</td>'+noteCell(r)+'</tr>'}).join(''):'<tr><td colspan="18">目前篩選沒有資料。</td></tr>';
+    updateRowCount(rows.length);
     $('resetInlineEdits').disabled=!Object.keys(inlineEdits).length;
   }
   function renderCustomList(){
@@ -929,12 +938,13 @@ table{min-width:1460px}
   els.college.addEventListener('change',()=>{state.college=els.college.value;state.department='全部';renderAll()});
   els.department.addEventListener('change',()=>{state.department=els.department.value;renderAll()});
   $('detailBody').addEventListener('change',event=>{
+    const note=event.target.closest('.inline-note');if(note){setInlineEdit(note.dataset.recordId,'note',note.value.trim());updateRowCount(visibleRows().length);return}
     const input=event.target.closest('.inline-number');if(!input)return;
-    const field=input.dataset.field,allowed=['applicants','quota','admitted','waitlisted','admission_shortfall','quota_returned','adopted'];
+    const field=input.dataset.field,allowed=['applicants','quota','admitted','waitlisted','quota_returned','adopted'];
     if(!allowed.includes(field)){renderTable();return}
-    if(input.value.trim()===''){if(['waitlisted','admission_shortfall','quota_returned'].includes(field)){clearInlineEdit(input.dataset.recordId,field);renderAll()}else renderTable();return}
+    if(input.value.trim()===''){if(['waitlisted','quota_returned'].includes(field)){clearInlineEdit(input.dataset.recordId,field);renderAll()}else renderTable();return}
     const value=Number(input.value);
-    if(!Number.isFinite(value)||(value<0&&field!=='admission_shortfall')){renderTable();return}
+    if(!Number.isFinite(value)||value<0){renderTable();return}
     setInlineEdit(input.dataset.recordId,field,Math.round(value));renderAll();
   });
   $('resetInlineEdits').addEventListener('click',()=>{
@@ -965,7 +975,7 @@ table{min-width:1460px}
     customRows=backup;localStorage.removeItem(BACKUP_KEY);saveCustomRows();setupControls();renderAll();$('excelStatus').textContent='已還原上次匯入前的 '+customRows.length+' 筆自填資料。';
   });
   $('exportJson').addEventListener('click',()=>download('tnua-admissions-custom.json',JSON.stringify(customRows,null,2),'application/json'));
-  $('exportCsv').addEventListener('click',()=>{const rows=visibleRows(),keys=['record_type','year','level','channel_group','channel','college','department','applicants','quota','admitted','waitlisted','admission_shortfall','quota_returned','adopted','status','note'];const lines=[keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(r[k]??'').replaceAll('"','""')+'"').join(','))];download('tnua-admissions-filtered.csv','\ufeff'+lines.join('\n'),'text/csv;charset=utf-8')});
+  $('exportCsv').addEventListener('click',()=>{const rows=visibleRows(),keys=['record_type','year','level','channel_group','channel','college','department','applicants','quota','admitted','waitlisted','admission_shortfall','quota_returned','adopted','registration_shortfall','status','note'],cell=(row,key)=>key==='admission_shortfall'?n(row.quota)-n(row.admitted):key==='registration_shortfall'?n(row.quota)-n(row.adopted):row[key];const lines=[keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(cell(r,k)??'').replaceAll('"','""')+'"').join(','))];download('tnua-admissions-filtered.csv','\ufeff'+lines.join('\n'),'text/csv;charset=utf-8')});
   function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
   window.__tnuaDashboardTest={
     createWorkbook:XLSX.createWorkbook,
