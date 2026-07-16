@@ -1,6 +1,6 @@
 {
-  "name": "國立臺北藝術大學招生互動儀表板",
-  "short_name": "北藝大招生",
+  "name": "招生儀表板",
+  "short_name": "招生儀表板",
   "description": "國立臺北藝術大學招生資料查詢與趨勢分析",
   "lang": "zh-Hant",
   "start_url": "./",
