@@ -171,7 +171,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       <div id="rankChart"></div><div class="chart-summary" id="rankSummary"></div>
     </article>
     <article class="panel wide dashboard-page" id="data-detail" data-page="data-detail">
-      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才顯示流用出；甄試入學／繁星推薦顯示流用出；申請入學顯示第一、第二階段通過、分發與放棄報到；四技二專顯示分發與放棄報到；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；學士班單獨招生的放榜前／後流用入，分別由同系所特殊選才與繁星推薦的放榜前／後流用出加總帶入；碩士班、博士班一般考試則由同系所甄試入學帶入。承接管道若沒有對應來源管道，兩個流用入欄鎖定為「—」，計算時視為 0。實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。</span><span class="flow-help"><strong>全部招生管道：</strong>學士班的報名、名額、錄取、備取與註冊報到，只加總單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學；碩士班、博士班則加總甄試入學與一般考試。這些彙總列均為系統衍生欄位，不開放填寫。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出目前 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
+      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程；匯出與匯入均以全部學年度、全部學制及全部招生管道為範圍。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才顯示流用出；甄試入學／繁星推薦顯示流用出；申請入學顯示第一、第二階段通過、分發與放棄報到；四技二專顯示分發與放棄報到；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；學士班單獨招生的放榜前／後流用入，分別由同系所特殊選才與繁星推薦的放榜前／後流用出加總帶入；碩士班、博士班一般考試則由同系所甄試入學帶入。承接管道若沒有對應來源管道，兩個流用入欄鎖定為「—」，計算時視為 0。實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。</span><span class="flow-help"><strong>全部招生管道：</strong>學士班的報名、名額、錄取、備取與註冊報到，只加總單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學；碩士班、博士班則加總甄試入學與一般考試。這些彙總列均為系統衍生欄位，不開放填寫。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出全部 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出全部 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入全部 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
       <div class="detail-legend" aria-label="明細表顏色說明"><span class="legend-key"><i class="legend-swatch total" aria-hidden="true"></i>年度總計／全校層級</span><span class="legend-key"><i class="legend-swatch" aria-hidden="true"></i>系所與招生管道明細</span><span class="legend-key"><i class="legend-swatch editable" aria-hidden="true"></i>框線欄位與備註可直接編輯</span><span class="legend-key">—／待補＝資料未知，不當成 0</span></div>
       <div class="table-wrap detail-scroll"><table class="detail-table"><thead id="detailHead"></thead><tbody id="detailBody"></tbody></table></div>
       <div class="data-card-grid" id="detailCards" aria-live="polite"></div>
@@ -182,15 +182,15 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
           <p>新增與匯入資料只保存在這台裝置的瀏覽器中，不會改寫原始官方 Excel。若選「年度總計」，會更新 KPI 與趨勢；選「系所明細」，會更新排名與明細表。</p>
           <section class="excel-card" aria-labelledby="excelToolsTitle">
             <div class="excel-head">
-              <div><h3 id="excelToolsTitle" class="title-with-icon"><span class="mini-title-icon" aria-hidden="true">▣</span><span>Excel 批次維護</span></h3><p>可下載空白範本，或匯出目前自填資料後在 Excel 編輯；選檔後會先檢查，不會立即覆蓋。</p></div>
+              <div><h3 id="excelToolsTitle" class="title-with-icon"><span class="mini-title-icon" aria-hidden="true">▣</span><span>Excel 全量批次維護</span></h3><p>可下載空白範本，或一次匯出全部學年度、學制、招生管道與系所資料後在 Excel 編輯；選檔後會先檢查整份檔案，不會立即覆蓋。</p></div>
               <div class="excel-actions">
-                <button class="btn secondary" id="downloadTemplate" type="button">下載空白 Excel 範本</button>
-                <button class="btn" id="exportXlsx" type="button">匯出目前自填 Excel</button>
-                <button class="btn gold" id="chooseImport" type="button">選擇 Excel 匯入</button>
+                <button class="btn secondary" id="downloadTemplate" type="button">下載全量 Excel 空白範本</button>
+                <button class="btn" id="exportXlsx" type="button">匯出全部 Excel</button>
+                <button class="btn gold" id="chooseImport" type="button">匯入全部 Excel</button>
                 <input class="sr-only" id="importFile" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
               </div>
             </div>
-            <p class="excel-status" id="excelStatus" role="status" aria-live="polite">支援 .xlsx；建議保留「填寫資料」工作表與原欄位名稱。</p>
+            <p class="excel-status" id="excelStatus" role="status" aria-live="polite">支援全量 .xlsx／CSV；請保留資料 ID、資料層級及原欄位名稱，以便一次批次更新。</p>
             <div class="import-review" id="importReview" hidden>
               <h4 class="title-with-icon"><span class="mini-title-icon" aria-hidden="true">↥</span><span id="importReviewTitle">匯入預覽</span></h4>
               <div class="import-stats" id="importStats"></div>
@@ -584,7 +584,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       ['', '系所明細', 116, '學士班', '音樂學院', '音樂學系', 210, 38, 45, 36, '', '進行中', '是', '示例資料，請勿直接匯入'],
     ];
     const steps = [
-      ['1', '從儀表板下載空白範本，或匯出目前自填資料後接續編輯。'],
+      ['1', '從儀表板下載空白範本，或一次匯出全部學年度與招生管道資料後接續編輯。'],
       ['2', '只編輯「填寫資料」工作表的黃色欄位；不要改名或刪除標題欄。'],
       ['3', '確認「資料檢查」顯示可匯入；公式欄無須手動修改。'],
       ['4', '回到儀表板選擇 Excel，檢查預覽，再決定合併更新或取代既有。'],
@@ -717,7 +717,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
 
   function createDetailWorkbook(rows) {
-    const normalizedRows = Array.isArray(rows) ? rows.slice(0, 5000) : [];
+    const normalizedRows = Array.isArray(rows) ? rows : [];
     const lastRow = Math.max(4, normalizedRows.length + 3);
     const now = new Date().toISOString();
     const files = [
@@ -1123,7 +1123,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     return output;
   }
   function renderImportPreview(fileName,validation){
-    pendingImport={fileName,...validation};$('importReview').hidden=false;$('importReviewTitle').textContent='匯入預覽｜'+fileName;
+    pendingImport={fileName,...validation};$('importReview').hidden=false;$('importReviewTitle').textContent='全量匯入預覽｜'+fileName;
     $('importStats').innerHTML='<span class="stat-chip good">有效 '+validation.rows.length+' 筆</span><span class="stat-chip '+(validation.invalidRows?'bad':'good')+'">錯誤 '+validation.invalidRows+' 筆</span><span class="stat-chip warn">將更新既有 '+validation.existingMatches+' 筆</span><span class="stat-chip">提醒 '+validation.warnings.length+' 則</span>';
     const issues=[...validation.errors,...validation.warnings].slice(0,12);$('importIssues').innerHTML=issues.map(item=>'<li>'+esc(item)+'</li>').join('');$('importIssues').hidden=!issues.length;
     const blocked=validation.invalidRows>0||validation.rows.length===0;$('mergeImport').disabled=blocked;$('replaceImport').disabled=blocked;
@@ -1138,7 +1138,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     localStorage.setItem(BACKUP_KEY,JSON.stringify(customRows));
     customRows=mode==='replace'?pendingImport.rows.map(importedRowForStorage):mergeImportedRows(customRows,pendingImport.rows);
     const first=customRows.find(row=>row.include!=='否')||customRows[0];if(first){state.year=first.year;state.level=first.level;state.college='全部'}
-    const message=(mode==='replace'?'已取代':'已合併')+'：目前共有 '+customRows.length+' 筆自填資料；匯入前版本可用「還原上次匯入前」復原。';
+    const message='全量批次'+(mode==='replace'?'取代':'合併')+'完成：目前共有 '+customRows.length+' 筆自填資料；匯入前版本可用「還原上次匯入前」復原。';
     saveCustomRows();pendingImport=null;$('importReview').hidden=true;resetImportInputs();setupControls();renderAll();$('excelStatus').textContent=message;
   }
   function downloadBytes(name,data){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),700)}
@@ -1146,7 +1146,10 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     try{const data=XLSX.createWorkbook(rows);const date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes(blank?'北藝大招生自填資料空白範本.xlsx':'北藝大招生自填資料_'+date+'.xlsx',data);$('excelStatus').textContent=blank?'已下載美化空白範本。':'已匯出 '+rows.length+' 筆自填資料；可在 Excel 完成後再匯入。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
   }
   function exportDetailExcel(rows){
-    try{const data=XLSX.createDetailWorkbook(rows);const date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes('北藝大招生精確資料明細_'+date+'.xlsx',data);$('excelStatus').textContent='已匯出目前篩選的 '+rows.length+' 筆精確資料明細 Excel。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
+    try{const data=XLSX.createDetailWorkbook(rows);const date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes('北藝大招生全量資料_'+date+'.xlsx',data);$('excelStatus').textContent='已匯出全部學年度與招生管道，共 '+rows.length+' 筆 Excel 資料。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
+  }
+  function exportDetailTemplate(){
+    try{const data=XLSX.createDetailWorkbook([]);downloadBytes('北藝大招生全量資料空白範本.xlsx',data);$('excelStatus').textContent='已下載含完整招生管道欄位的全量 Excel 空白範本。'}catch(error){$('excelStatus').textContent='Excel 範本下載失敗：'+error.message}
   }
   const CSV_HEADER_ALIASES={record_id:'資料ID',record_type:'資料層級',year:'學年度',level:'學制',channel_group:'招生管道類別',channel:'招生管道',college:'學院',department:'系所',applicants:'報名人數',quota:'核定招生名額',first_stage_passed:'第一階段通過人數',second_stage_passed:'第二階段通過人數',distributed:'分發人數',admitted:'正取公告人數',waitlisted:'備取人數',abandoned:'放棄報到人數',pre_return_in:'放榜前流用入',pre_return_out:'放榜前流用出',post_return_in:'放榜後流用入',post_return_out:'放榜後流用出',waitlist_admitted:'實際遞補錄取',quota_returned:'總流用出',adopted:'註冊報到人數',online_final:'最終線上報到',registered:'正式註冊',status:'資料狀態',include:'是否納入',note:'備註','備取名單人數':'備取人數','第一階段通過':'第一階段通過人數','第二階段通過':'第二階段通過人數','分發':'分發人數','放棄報到':'放棄報到人數','放榜前轉入':'放榜前流用入','放榜前轉出':'放榜前流用出','放榜後轉入':'放榜後流用入','放榜後轉出':'放榜後流用出','原表名額流用出':'總流用出','原表流用出':'總流用出','原表名額轉出':'總流用出','名額回流':'總流用出'};
   function csvHeaderName(value){const label=cleanText(value).replace(/^﻿/,'');return CSV_HEADER_ALIASES[label.toLowerCase()]||label}
@@ -1181,14 +1184,14 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     if(key==='status')return row.status||'已完成';if(key==='include')return row.include==='否'?'否':'是';return row[key]??'';
   }
   function csvCell(value){return '"'+String(value??'').replaceAll('"','""')+'"'}
-  function exportDetailCsv(rows){const headers=DETAIL_EXPORT_COLUMNS.map(column=>column[0]),lines=[headers.map(csvCell).join(','),...rows.map(row=>DETAIL_EXPORT_COLUMNS.map(column=>csvCell(detailExportValue(row,column[1]))).join(','))],date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');download('北藝大招生精確資料明細_'+date+'.csv',String.fromCharCode(0xFEFF)+lines.join(String.fromCharCode(13,10)),'text/csv;charset=utf-8');$('excelStatus').textContent='已匯出目前篩選的 '+rows.length+' 筆精確資料明細 CSV。'}
+  function exportDetailCsv(rows){const headers=DETAIL_EXPORT_COLUMNS.map(column=>column[0]),lines=[headers.map(csvCell).join(','),...rows.map(row=>DETAIL_EXPORT_COLUMNS.map(column=>csvCell(detailExportValue(row,column[1]))).join(','))],date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');download('北藝大招生全量資料_'+date+'.csv',String.fromCharCode(0xFEFF)+lines.join(String.fromCharCode(13,10)),'text/csv;charset=utf-8');$('excelStatus').textContent='已匯出全部學年度與招生管道，共 '+rows.length+' 筆 CSV 資料。'}
   function sum(rows,key){return rows.reduce((a,r)=>a+n(r[key]),0)}
   function ratio(a,b){return b?a/b:NaN}
   function totalFlowOutValue(row){return hasNumber(row.pre_return_out)&&hasNumber(row.post_return_out)?n(row.pre_return_out)+n(row.post_return_out):null}
   function optionalTotalFlowOut(rows){const values=rows.map(totalFlowOutValue).filter(value=>value!=null);return values.length?values.reduce((total,value)=>total+value,0):null}
-  function combinedRows(original,type){
+  function combinedRows(original,type,includeExcluded=false){
     const imported=customRows.filter(row=>row.record_type===type),overrides=new Map(imported.map(row=>[row.record_id,row]));
-    return withInlineEdits([...original.map(row=>overrides.get(row.record_id)||row),...imported.filter(row=>!original.some(source=>source.record_id===row.record_id))].filter(row=>row.include!=='否'));
+    return withInlineEdits([...original.map(row=>overrides.get(row.record_id)||row),...imported.filter(row=>!original.some(source=>source.record_id===row.record_id))].filter(row=>includeExcluded||row.include!=='否'));
   }
   function allAnnual(){return combinedRows(MODEL.annual_totals,'年度總計')}
   function allDetails(){return combinedRows(MODEL.department_details,'系所明細')}
@@ -1227,7 +1230,11 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       return {...row,pre_return_in:completeOptionalSum(sources,'pre_return_out'),post_return_in:completeOptionalSum(sources,'post_return_out'),_undergraduateFlowLink:'selection',_undergraduateFlowSourceCount:sources.length};
     });
   }
-  function allChannelDetails(){return linkUndergraduateSingleFlows(linkGraduateExamFlows(combinedRows(MODEL.channel_details||[],'招生管道明細')))}
+  function linkedChannelDetails(includeExcluded=false){return linkUndergraduateSingleFlows(linkGraduateExamFlows(combinedRows(MODEL.channel_details||[],'招生管道明細',includeExcluded)))}
+  function allChannelDetails(){return linkedChannelDetails(false)}
+  const EXCHANGE_RECORD_TYPE_ORDER=['年度總計','系所明細','招生管道年度總計','招生管道明細'];
+  function compareExchangeRows(a,b){return n(a.year)-n(b.year)||orderIndex(LEVELS,a.level)-orderIndex(LEVELS,b.level)||orderIndex(EXCHANGE_RECORD_TYPE_ORDER,a.record_type)-orderIndex(EXCHANGE_RECORD_TYPE_ORDER,b.record_type)||compareColleges(a.college,b.college)||cleanText(a.department).localeCompare(cleanText(b.department),'zh-Hant')||cleanText(a.channel).localeCompare(cleanText(b.channel),'zh-Hant')||cleanText(a.record_id).localeCompare(cleanText(b.record_id),'zh-Hant')}
+  function allExchangeRows(){return [...combinedRows(MODEL.annual_totals,'年度總計',true),...combinedRows(MODEL.department_details,'系所明細',true),...combinedRows(MODEL.channel_annual_totals||[],'招生管道年度總計',true),...linkedChannelDetails(true)].sort(compareExchangeRows)}
   function detailPool(){const rows=state.channel==='全部'?allDetails():allChannelDetails().filter(r=>r.channel===state.channel);return state.level===GRADUATE_TOTAL_LEVEL?graduateTotalDetailRows(rows):rows}
   function departmentChannelRows(row){const level=row._sourceLevel||row.level;return allChannelDetails().filter(candidate=>candidate.year===row.year&&candidate.level===level&&canonicalDepartment(candidate.department)===canonicalDepartment(row.department))}
   function standaloneFlowRow(row){return row.record_type==='系所明細'&&!departmentChannelRows(row).length}
@@ -1821,14 +1828,14 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   $('customForm').addEventListener('submit',e=>{e.preventDefault();const status=$('fStatus').value,online=nullable($('fOnline').value),registered=nullable($('fRegistered').value);const row={record_id:'CUSTOM-'+Date.now(),record_type:$('fType').value,year:Number($('fYear').value),level:$('fLevel').value,college:$('fCollege').value.trim()||'全校',department:$('fDepartment').value.trim()||'全校',applicants:n($('fApplicants').value),quota:n($('fQuota').value),admitted:n($('fAdmitted').value),online_final:online,registered,adopted:status==='進行中'?(online??0):(registered??online??0),status,include:'是',source:'自行填入',note:$('fNote').value.trim()};customRows.push(row);saveCustomRows();state.year=row.year;state.level=row.level;state.college='全部';setupControls();renderAll();e.target.reset();$('fYear').value=row.year;$('fLevel').value=row.level;$('fCollege').value='全校';$('fDepartment').value='全校'});
   $('customList').addEventListener('click',e=>{const id=e.target?.dataset?.delete;if(!id)return;customRows=customRows.filter(r=>r.record_id!==id);saveCustomRows();setupControls();renderAll()});
   $('clearCustom').addEventListener('click',()=>{if(!customRows.length||confirm('確定清除全部自行填入資料？')){customRows=[];saveCustomRows();setupControls();renderAll()}});
-  $('downloadTemplate').addEventListener('click',()=>exportExcel([],true));
-  $('exportXlsx').addEventListener('click',()=>exportExcel(customRows,false));
-  $('exportDetailXlsx').addEventListener('click',()=>exportDetailExcel(visibleRows()));
+  $('downloadTemplate').addEventListener('click',exportDetailTemplate);
+  $('exportXlsx').addEventListener('click',()=>exportDetailExcel(allExchangeRows()));
+  $('exportDetailXlsx').addEventListener('click',()=>exportDetailExcel(allExchangeRows()));
   $('chooseImport').addEventListener('click',()=>$('importFile').click());
   $('importFile').addEventListener('change',async event=>{
     const file=event.target.files?.[0];if(!file)return;
     if(file.size>15*1024*1024){$('excelStatus').textContent='檔案超過 15 MB，請拆分後再匯入。';event.target.value='';return}
-    $('chooseImport').disabled=true;$('excelStatus').textContent='正在讀取 '+file.name+'…';$('importReview').hidden=true;
+    $('chooseImport').disabled=true;$('excelStatus').textContent='正在讀取全部 Excel 資料：'+file.name+'…';$('importReview').hidden=true;
     try{const parsed=await XLSX.parseWorkbook(await file.arrayBuffer());renderImportPreview(file.name,validateImportedRows(parsed.rows))}
     catch(error){pendingImport=null;$('importReview').hidden=true;$('excelStatus').textContent='Excel 匯入失敗：'+error.message;event.target.value=''}
     finally{$('chooseImport').disabled=false}
@@ -1837,7 +1844,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   $('detailCsvFile').addEventListener('change',async event=>{
     const file=event.target.files?.[0];if(!file)return;
     if(file.size>8*1024*1024){$('excelStatus').textContent='CSV 超過 8 MB，請拆分後再匯入。';event.target.value='';return}
-    $('importDetailCsv').disabled=true;$('excelStatus').textContent='正在讀取 '+file.name+'…';$('importReview').hidden=true;
+    $('importDetailCsv').disabled=true;$('excelStatus').textContent='正在讀取全部 CSV 資料：'+file.name+'…';$('importReview').hidden=true;
     try{const parsed=parseCsvText(await file.text());$('editor').open=true;renderImportPreview(file.name,validateImportedRows(parsed.rows));setTimeout(()=>$('importReview').scrollIntoView({behavior:'smooth',block:'center'}),50)}
     catch(error){pendingImport=null;$('importReview').hidden=true;$('excelStatus').textContent='CSV 匯入失敗：'+error.message;event.target.value=''}
     finally{$('importDetailCsv').disabled=false}
@@ -1851,7 +1858,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     customRows=backup;localStorage.removeItem(BACKUP_KEY);saveCustomRows();setupControls();renderAll();$('excelStatus').textContent='已還原上次匯入前的 '+customRows.length+' 筆自填資料。';
   });
   $('exportJson').addEventListener('click',()=>download('tnua-admissions-custom.json',JSON.stringify(customRows,null,2),'application/json'));
-  $('exportCsv').addEventListener('click',()=>exportDetailCsv(visibleRows()));
+  $('exportCsv').addEventListener('click',()=>exportDetailCsv(allExchangeRows()));
   function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
   window.__tnuaDashboardTest={
     createWorkbook:XLSX.createWorkbook,
@@ -1859,6 +1866,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     parseWorkbook:XLSX.parseWorkbook,
     parseCsvText,
     validateImportedRows,
+    allExchangeRows,
     roundTrip:async()=>{const sample={record_id:'TEST-001',record_type:'系所明細',year:116,level:'學士班',college:'音樂學院',department:'音樂學系',applicants:210,quota:38,admitted:45,online_final:36,registered:null,status:'進行中',include:'是',note:'round-trip test'};const data=XLSX.createWorkbook([sample]);const parsed=await XLSX.parseWorkbook(data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength));const validation=validateImportedRows(parsed.rows);const csv=parseCsvText('資料ID,資料層級,學年度,學制,學院,系所,報名人數,招生名額,錄取人數,註冊報到人數,資料狀態,是否納入,備註'+String.fromCharCode(10)+'CSV-001,系所明細,116,學士班,音樂學院,音樂學系,210,38,45,36,進行中,是,"換行'+String.fromCharCode(10)+'備註"');const csvValidation=validateImportedRows(csv.rows);return {bytes:data.length,parsedRows:parsed.rows.length,validRows:validation.rows.length,invalidRows:validation.invalidRows,department:validation.rows[0]?.department,csvRows:csv.rows.length,csvValidRows:csvValidation.rows.length,csvNote:csvValidation.rows[0]?.note}}
   };
   showPage(activePage);setupQuotaControls();setupControls();renderAll();
