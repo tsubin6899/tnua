@@ -1002,7 +1002,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     if(/原住民|身心障礙|海外僑生|港澳|大陸學生|陸生|新住民|防疫|離島|領航|外國學生/.test(channel))return 'external';
     return 'common';
   }
-  function detailProfile(channel=state.channel,level=state.level){const key=detailProfileKey(channel,level),fields=DETAIL_PROFILE_FIELDS[key]||DETAIL_PROFILE_FIELDS.common,external=key==='external';return {key,fields,hasFlow:['inbound','special','outbound','star'].includes(key),quotaLabel:external?'外加名額':'招生名額'}}
+  function detailProfile(channel=state.channel,level=state.level){const key=detailProfileKey(channel,level),baseFields=DETAIL_PROFILE_FIELDS[key]||DETAIL_PROFILE_FIELDS.common,hideAdmissionShortfall=channel==='全部'&&['學士班','碩士班','博士班'].includes(level),fields=hideAdmissionShortfall?baseFields.filter(field=>field!=='admission_shortfall'):baseFields,external=key==='external';return {key,fields,hasFlow:['inbound','special','outbound','star'].includes(key),quotaLabel:external?'外加名額':'招生名額'}}
   function flowMetrics(row){
     const quota=n(row.quota),admitted=n(row.admitted),adopted=n(row.adopted),preIn=nullable(row.pre_return_in),preOut=nullable(row.pre_return_out),postIn=nullable(row.post_return_in),postOut=nullable(row.post_return_out),waitlistAdmitted=nullable(row.waitlist_admitted);
     const preComplete=preIn!=null&&preOut!=null,releaseQuota=preComplete?quota+preIn-preOut:null,postComplete=postIn!=null&&postOut!=null,finalQuota=releaseQuota!=null&&postComplete?releaseQuota+postIn-postOut:null,cumulativeAdmitted=waitlistAdmitted!=null?admitted+waitlistAdmitted:null;
