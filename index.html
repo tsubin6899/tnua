@@ -171,7 +171,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       <div id="rankChart"></div><div class="chart-summary" id="rankSummary"></div>
     </article>
     <article class="panel wide dashboard-page" id="data-detail" data-page="data-detail">
-      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才顯示第一、第二階段通過與流用出；甄試入學／繁星推薦顯示流用出；申請入學顯示第一階段通過、分發與放棄報到；四技二專顯示分發與放棄報到；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；學士班單獨招生的放榜前／後流用入，分別由同系所特殊選才與繁星推薦的放榜前／後流用出加總帶入；碩士班、博士班一般考試則由同系所甄試入學帶入。承接管道若沒有對應來源管道，兩個流用入欄鎖定為「—」，計算時視為 0。實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。</span><span class="flow-help"><strong>全部招生管道：</strong>學士班的報名、名額、錄取、備取與註冊報到，只加總單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學；碩士班、博士班則加總甄試入學與一般考試。這些彙總列均為系統衍生欄位，不開放填寫。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出目前 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
+      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才顯示流用出；甄試入學／繁星推薦顯示流用出；申請入學顯示第一、第二階段通過、分發與放棄報到；四技二專顯示分發與放棄報到；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；學士班單獨招生的放榜前／後流用入，分別由同系所特殊選才與繁星推薦的放榜前／後流用出加總帶入；碩士班、博士班一般考試則由同系所甄試入學帶入。承接管道若沒有對應來源管道，兩個流用入欄鎖定為「—」，計算時視為 0。實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。</span><span class="flow-help"><strong>全部招生管道：</strong>學士班的報名、名額、錄取、備取與註冊報到，只加總單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學；碩士班、博士班則加總甄試入學與一般考試。這些彙總列均為系統衍生欄位，不開放填寫。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出目前 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
       <div class="detail-legend" aria-label="明細表顏色說明"><span class="legend-key"><i class="legend-swatch total" aria-hidden="true"></i>年度總計／全校層級</span><span class="legend-key"><i class="legend-swatch" aria-hidden="true"></i>系所與招生管道明細</span><span class="legend-key"><i class="legend-swatch editable" aria-hidden="true"></i>框線欄位與備註可直接編輯</span><span class="legend-key">—／待補＝資料未知，不當成 0</span></div>
       <div class="table-wrap detail-scroll"><table class="detail-table"><thead id="detailHead"></thead><tbody id="detailBody"></tbody></table></div>
       <div class="data-card-grid" id="detailCards" aria-live="polite"></div>
@@ -676,7 +676,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     return [
       row.record_id || '', row.record_type || '', row.year == null ? '' : Number(row.year), row.level || '',
       row.channel_group || '', row.channel || '', row.college || '', row.department || '', applicants, quota,
-      row.first_stage_passed == null ? '' : Number(row.first_stage_passed), row.level === '學士班' && channel === '特殊選才' && row.second_stage_passed != null ? Number(row.second_stage_passed) : '', row.distributed == null ? '' : Number(row.distributed),
+      row.level === '學士班' && channel === '申請入學' && row.first_stage_passed != null ? Number(row.first_stage_passed) : '', row.level === '學士班' && channel === '申請入學' && row.second_stage_passed != null ? Number(row.second_stage_passed) : '', row.distributed == null ? '' : Number(row.distributed),
       preIn ?? '', preOut ?? '', releaseQuota ?? '', admitted, quota - admitted,
       row.waitlisted == null ? '' : Number(row.waitlisted), ['特殊選才', '繁星推薦', '甄試入學'].includes(channel) || row.abandoned == null ? '' : Number(row.abandoned), postIn ?? '', postOut ?? '', finalQuota ?? '',
       waitlistAdmitted ?? '', cumulativeAdmitted ?? '', totalOut ?? '',
@@ -704,7 +704,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   <dimension ref="A1:${lastColumn}${lastRow}"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane xSplit="8" ySplit="3" topLeftCell="I4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews>
   <sheetFormatPr defaultRowHeight="20"/><cols>${cols}</cols><sheetData>
   <row r="1" ht="34" customHeight="1">${inlineCell('A1', '國立臺北藝術大學｜精確資料明細', 1)}</row>
-  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '總流用出＝放榜前流用出＋放榜後流用出；實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。學士班單獨招生流用入由同系所特殊選才與繁星推薦流用出加總帶入；碩士班、博士班一般考試由同系所甄試帶入；無來源管道時以 0 計算。學士班特殊選才新增第二階段通過；特殊選才、繁星推薦與甄試入學不使用放棄報到。全部招生管道彙總列由指定管道明細自動計算並鎖定，其中碩士班、博士班加總甄試入學與一般考試。錄取缺額與報到缺額亦由系統計算。', 2)}</row>
+  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '總流用出＝放榜前流用出＋放榜後流用出；實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。學士班單獨招生流用入由同系所特殊選才與繁星推薦流用出加總帶入；碩士班、博士班一般考試由同系所甄試帶入；無來源管道時以 0 計算。學士班申請入學使用第一、第二階段通過；特殊選才不使用階段通過欄位，特殊選才、繁星推薦與甄試入學不使用放棄報到。全部招生管道彙總列由指定管道明細自動計算並鎖定，其中碩士班、博士班加總甄試入學與一般考試。錄取缺額與報到缺額亦由系統計算。', 2)}</row>
   <row r="3" ht="34" customHeight="1">${DETAIL_HEADERS.map((header, index) => inlineCell(`${columnName(index)}3`, header, 4)).join('')}</row>${dataRows}</sheetData>
   <mergeCells count="2"><mergeCell ref="A1:${lastColumn}1"/><mergeCell ref="A2:${lastColumn}2"/></mergeCells><pageMargins left="0.2" right="0.2" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><tableParts count="1"><tablePart r:id="rId1"/></tableParts>
 </worksheet>`;
@@ -913,9 +913,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   };
   const DETAIL_PROFILE_FIELDS = {
     common:['applicants','quota','admitted','waitlisted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
-    special:['applicants','quota','first_stage_passed','second_stage_passed','pre_return_out','post_return_out','quota_returned','admitted','waitlisted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
+    special:['applicants','quota','pre_return_out','post_return_out','quota_returned','admitted','waitlisted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
     outbound:['applicants','quota','pre_return_out','post_return_out','quota_returned','admitted','waitlisted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
-    application:['applicants','quota','first_stage_passed','distributed','abandoned','admitted','waitlisted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
+    application:['applicants','quota','first_stage_passed','second_stage_passed','distributed','abandoned','admitted','waitlisted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
     inbound:['applicants','quota','pre_return_in','release_quota','post_return_in','final_quota','admitted','waitlisted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
     external:['applicants','quota','admitted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
     standalone:['applicants','quota','admitted','admission_shortfall','adopted','registration_shortfall','competition','fill','status','note'],
@@ -1073,7 +1073,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       const applicants=importNumber(raw['報名人數'],'報名人數',true,issues);
       const quota=importNumber(raw['核定招生名額']??raw['招生名額'],'核定招生名額',true,issues);
       const firstStagePassed=importNumber(raw['第一階段通過人數']??raw['第一階段通過'],'第一階段通過人數',false,issues);
-      const secondStagePassed=level==='學士班'&&channel==='特殊選才'?importNumber(raw['第二階段通過人數']??raw['第二階段通過'],'第二階段通過人數',false,issues):null;
+      const secondStagePassed=level==='學士班'&&channel==='申請入學'?importNumber(raw['第二階段通過人數']??raw['第二階段通過'],'第二階段通過人數',false,issues):null;
       const distributed=importNumber(raw['分發人數']??raw['分發'],'分發人數',false,issues);
       const admitted=importNumber(raw['正取公告人數']??raw['錄取人數'],'正取公告人數',false,issues);
       const waitlisted=importNumber(raw['備取名單人數']??raw['備取人數'],'備取名單人數',false,issues);
@@ -1157,7 +1157,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function detailExportValue(row,key){
     const flow=detailFlowMetrics(row);
-    if(key==='second_stage_passed'&&(row.level!=='學士班'||row.channel!=='特殊選才'))return '';
+    if(['first_stage_passed','second_stage_passed'].includes(key)&&(row.level!=='學士班'||row.channel!=='申請入學'))return '';
     if(key==='abandoned'&&['特殊選才','繁星推薦','甄試入學'].includes(row.channel))return '';
     if(key==='release_quota')return flow.releaseQuota??'';
     if(key==='final_quota')return flow.finalQuota??'';
@@ -1694,8 +1694,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
           else explained.add(rowId);
         }
       }
-      if(flowProfile==='special'&&hasNumber(row.first_stage_passed)&&hasNumber(row.second_stage_passed)&&n(row.second_stage_passed)>n(row.first_stage_passed))add(logic,'邏輯異常','warn','第二階段通過高於第一階段通過',context,'第一階段通過 '+fmt(n(row.first_stage_passed))+'、第二階段通過 '+fmt(n(row.second_stage_passed))+'。');
-      if(flowProfile==='application'&&hasNumber(row.first_stage_passed)&&hasNumber(row.distributed)&&n(row.distributed)>n(row.first_stage_passed))add(logic,'邏輯異常','warn','分發人數高於第一階段通過人數',context,'第一階段通過 '+fmt(n(row.first_stage_passed))+'、分發 '+fmt(n(row.distributed))+'。');
+      if(flowProfile==='application'&&hasNumber(row.first_stage_passed)&&hasNumber(row.second_stage_passed)&&n(row.second_stage_passed)>n(row.first_stage_passed))add(logic,'邏輯異常','warn','第二階段通過高於第一階段通過',context,'第一階段通過 '+fmt(n(row.first_stage_passed))+'、第二階段通過 '+fmt(n(row.second_stage_passed))+'。');
+      if(flowProfile==='application'&&hasNumber(row.second_stage_passed)&&hasNumber(row.distributed)&&n(row.distributed)>n(row.second_stage_passed))add(logic,'邏輯異常','warn','分發人數高於第二階段通過人數',context,'第二階段通過 '+fmt(n(row.second_stage_passed))+'、分發 '+fmt(n(row.distributed))+'。');
       if(['application','fourtech'].includes(flowProfile)&&hasNumber(row.distributed)&&hasNumber(row.abandoned)&&n(row.abandoned)>n(row.distributed))add(logic,'邏輯異常','warn','放棄報到高於分發人數',context,'分發 '+fmt(n(row.distributed))+'、放棄報到 '+fmt(n(row.abandoned))+'。');
       if(hasNumber(row.quota)&&n(row.quota)===0&&(n(row.admitted)>0||n(row.adopted)>0)&&(!flowInputDetail||flow.releaseQuota==null))add(logic,'邏輯異常','warn','零名額但有錄取或報到',context,'核定招生名額為 0，正取公告 '+fmt(n(row.admitted))+'、註冊報到 '+fmt(n(row.adopted))+'；若為流用承接請補登名額流動。');
       if(n(row.applicants)>0&&n(row.admitted)>n(row.applicants))add(logic,'邏輯異常','warn','錄取人數高於報名人數',context,'報名 '+fmt(n(row.applicants))+'、錄取 '+fmt(n(row.admitted))+'。');
@@ -1785,7 +1785,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     const input=event.target.closest('.inline-number');if(!input)return;
     const field=input.dataset.field,allowed=['applicants','quota','first_stage_passed','distributed','admitted','waitlisted','abandoned','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted','adopted'];
     if(!allowed.includes(field)){renderTable();return}
-    if(input.value.trim()===''){if(['first_stage_passed','distributed','waitlisted','abandoned','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted'].includes(field)){clearInlineEdit(input.dataset.recordId,field);renderAll()}else renderTable();return}
+    if(input.value.trim()===''){if(['first_stage_passed','second_stage_passed','distributed','waitlisted','abandoned','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted'].includes(field)){clearInlineEdit(input.dataset.recordId,field);renderAll()}else renderTable();return}
     const value=Number(input.value);
     if(!Number.isFinite(value)||value<0){renderTable();return}
     setInlineEdit(input.dataset.recordId,field,Math.round(value));renderAll();
