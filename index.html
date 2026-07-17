@@ -931,6 +931,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const COLLEGE_COLOR_CLASS = {'音樂學院':'music','美術學院':'fine-arts','戲劇學院':'theatre','舞蹈學院':'dance','電影與新媒體學院':'film-media','文化資源學院':'cultural-resources','人文學院':'humanities','音樂與影像跨域學士學位學程':'interdisciplinary'};
   const UNDERGRAD_DEPARTMENT_ORDER = ['音樂學系','傳統音樂學系','美術學系','戲劇學系','劇場設計學系','舞蹈學系','電影創作學系','新媒體藝術學系','動畫學系','音樂與影像跨域學士學位學程'];
   const GRADUATE_DEPARTMENT_ORDER = ['音樂學系碩士班','音樂學系碩士在職專班','音樂學系博士班','管絃與擊樂研究所','音樂學研究所','傳統音樂學系碩士班','美術學系碩士班','美術學系碩士在職專班','美術學系博士班','藝術跨域研究所','戲劇學系碩士班','戲劇學系博士班','劇場藝術創作研究所','劇場設計學系碩士班','舞蹈學系碩士班','舞蹈學系博士班','電影創作學系碩士班','新媒體藝術學系碩士班','動畫學系碩士班','文化資產與藝術創新博士班','建築與文化資產研究所','藝術行政與管理研究所','領導與決策高階經理人藝術碩士在職專班','藝術創意研究國際碩士學位學程','博物館研究所','藝術與人文教育研究所','藝術與人文教育研究所碩士在職專班','文學跨域創作研究所'];
+  const SPLIT_DEPARTMENT_PARENT_NAMES = ['傳統音樂學系碩士班','美術學系碩士班','電影創作學系碩士班'];
   const ORDERED_DEPARTMENT_NAMES = [...UNDERGRAD_DEPARTMENT_ORDER,...GRADUATE_DEPARTMENT_ORDER].sort((a,b)=>b.length-a.length);
   const COLORS = {ink:'#14213d',blue:'#2878b5',teal:'#168a83',gold:'#d5a021',red:'#c5534d',purple:'#6b4fa1',line:'#ccd5dd',muted:'#667085',panel:'#edf1f4'};
   const COLLEGE_CHART_COLORS = {'音樂學院':'#6b4fa1','美術學院':'#c64b4b','戲劇學院':'#9a6700','舞蹈學院':'#4a9bc3','電影與新媒體學院':'#168a83','文化資源學院':'#3d7c50','人文學院':'#7a5138','音樂與影像跨域學士學位學程':'#b44f7c'};
@@ -1031,7 +1032,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function cleanText(v){return String(v??'').trim()}
   function orderIndex(list,value){const index=list.indexOf(value);return index<0?list.length:index}
   function canonicalCollege(value){return value==='舞蹈學系'?'舞蹈學院':value==='跨域學程'?'音樂與影像跨域學士學位學程':value}
-  function canonicalDepartment(value){const text=String(value||'').trim();if(text.startsWith('舞蹈研究所博士班'))return '舞蹈學系博士班';if(text.startsWith('舞蹈研究所'))return '舞蹈學系碩士班';if(text.startsWith('文創產業國際藝術碩士學位學程')||text.startsWith('文創產業國際藝術學位學程'))return '藝術創意研究國際碩士學位學程';const matched=ORDERED_DEPARTMENT_NAMES.find(name=>text===name||text.startsWith(name+'(')||text.startsWith(name+'（')||text.startsWith(name+' ')||text.startsWith(name+'※'));return matched||text}
+  function canonicalDepartment(value){const text=String(value||'').trim();if(text.startsWith('舞蹈研究所博士班'))return '舞蹈學系博士班';if(text.startsWith('舞蹈研究所'))return '舞蹈學系碩士班';if(text.startsWith('文創產業國際藝術碩士學位學程')||text.startsWith('文創產業國際藝術學位學程'))return '藝術創意研究國際碩士學位學程';const splitParent=SPLIT_DEPARTMENT_PARENT_NAMES.find(name=>text===name||text.startsWith(name+'(')||text.startsWith(name+'（'));if(splitParent)return splitParent;const matched=ORDERED_DEPARTMENT_NAMES.find(name=>text===name||text.startsWith(name+'(')||text.startsWith(name+'（')||text.startsWith(name+' ')||text.startsWith(name+'※'));return matched||text}
   function sameDepartment(left,right){return canonicalDepartment(left)===canonicalDepartment(right)}
   function departmentMatchesFilter(value,selected=state.department){return selected==='全部'||sameDepartment(value,selected)}
   function compareColleges(a,b){const left=canonicalCollege(a),right=canonicalCollege(b);return orderIndex(COLLEGE_ORDER,left)-orderIndex(COLLEGE_ORDER,right)||String(left).localeCompare(String(right),'zh-Hant')}
