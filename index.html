@@ -888,8 +888,13 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const PAGE_IDS = ['overview','report','trends','toolkit','quota-adjustments','quota-archive','data-detail'];
   const PAGE_TITLES = {overview:'總覽',report:'決策報告',trends:'趨勢',toolkit:'分析工具','quota-adjustments':'名額調整','quota-archive':'名額資料','data-detail':'資料明細'};
   let activePage = PAGE_IDS.includes(location.hash.slice(1))?location.hash.slice(1):'overview';
-  const LEVELS = ['學士班','七年一貫制','學士後學士（歷史）','研究所總計','碩士班','碩士在職專班','博士班'];
+  const GRADUATE_TOTAL_LEVEL = '研究所（總和）';
+  const GRADUATE_COMPONENT_LEVELS = new Set(['碩士班','碩士在職專班','博士班']);
+  const GRADUATE_TOTAL_CHANNEL_OPTIONS = [{name:'甄試入學',group:'總量內'},{name:'一般考試',group:'總量內'},{name:'海外僑生及港澳生',label:'海外僑生與港澳生',group:'總量外'},{name:'大陸學生',group:'總量外'}];
+  const GRADUATE_TOTAL_CHANNELS = new Set(GRADUATE_TOTAL_CHANNEL_OPTIONS.map(item=>item.name));
+  const LEVELS = ['學士班','七年一貫制','學士後學士（歷史）',GRADUATE_TOTAL_LEVEL,'研究所總計','碩士班','碩士在職專班','博士班'];
   const FILTER_LEVELS = LEVELS.filter(level=>level!=='研究所總計');
+  const INPUT_LEVELS = LEVELS.filter(level=>level!==GRADUATE_TOTAL_LEVEL);
   const QUOTA_LEVELS = ['學士班','碩士班','碩士在職專班','博士班'];
   const QUOTA_LEVEL_CLASS = {'學士班':'level-undergraduate','碩士班':'level-master','碩士在職專班':'level-inservice','博士班':'level-doctoral'};
   const QUOTA_CATEGORY_LABELS = {new:'新增',increase:'增加',decrease:'減少',restructure:'整併／停招',policy:'教育部／政策',other:'其他調整'};
@@ -1002,7 +1007,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     if(/原住民|身心障礙|海外僑生|港澳|大陸學生|陸生|新住民|防疫|離島|領航|外國學生/.test(channel))return 'external';
     return 'common';
   }
-  function detailProfile(channel=state.channel,level=state.level){const key=detailProfileKey(channel,level),baseFields=DETAIL_PROFILE_FIELDS[key]||DETAIL_PROFILE_FIELDS.common,hideAdmissionShortfall=channel==='全部'&&['學士班','碩士班','博士班'].includes(level),fields=hideAdmissionShortfall?baseFields.filter(field=>field!=='admission_shortfall'):baseFields,external=key==='external';return {key,fields,hasFlow:['inbound','special','outbound','star'].includes(key),quotaLabel:external?'外加名額':'招生名額'}}
+  function detailProfile(channel=state.channel,level=state.level){const key=detailProfileKey(channel,level),baseFields=DETAIL_PROFILE_FIELDS[key]||DETAIL_PROFILE_FIELDS.common,hideAdmissionShortfall=channel==='全部'&&['學士班','碩士班','博士班',GRADUATE_TOTAL_LEVEL].includes(level),fields=hideAdmissionShortfall?baseFields.filter(field=>field!=='admission_shortfall'):baseFields,external=key==='external';return {key,fields,hasFlow:['inbound','special','outbound','star'].includes(key),quotaLabel:external?'外加名額':'招生名額'}}
   function flowMetrics(row){
     const quota=n(row.quota),admitted=n(row.admitted),adopted=n(row.adopted),preIn=nullable(row.pre_return_in),preOut=nullable(row.pre_return_out),postIn=nullable(row.post_return_in),postOut=nullable(row.post_return_out),waitlistAdmitted=nullable(row.waitlist_admitted);
     const preComplete=preIn!=null&&preOut!=null,releaseQuota=preComplete?quota+preIn-preOut:null,postComplete=postIn!=null&&postOut!=null,finalQuota=releaseQuota!=null&&postComplete?releaseQuota+postIn-postOut:null,cumulativeAdmitted=waitlistAdmitted!=null?admitted+waitlistAdmitted:null;
@@ -1182,6 +1187,14 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function allAnnual(){return combinedRows(MODEL.annual_totals,'年度總計')}
   function allDetails(){return combinedRows(MODEL.department_details,'系所明細')}
   function allChannelAnnual(){return combinedRows(MODEL.channel_annual_totals||[],'招生管道年度總計')}
+  function graduateTotalDetailRows(rows){return rows.filter(row=>GRADUATE_COMPONENT_LEVELS.has(row.level)).map(row=>{const sourceLevel=row.level;return {...row,level:GRADUATE_TOTAL_LEVEL,_sourceLevel:sourceLevel,_automaticGraduateTotal:true,note:'來源學制：'+sourceLevel+(row.note?'；'+row.note:'')}})}
+  function rowsForDashboardLevel(rows,level=state.level){return level===GRADUATE_TOTAL_LEVEL?graduateTotalDetailRows(rows):rows.filter(row=>row.level===level)}
+  function aggregateGraduateTotalRows(rows,year,channel='全部'){
+    const sources=rows.filter(row=>Number(row.year)===Number(year)&&GRADUATE_COMPONENT_LEVELS.has(row.level)&&(channel==='全部'||row.channel===channel));if(!sources.length)return [];
+    const status=sources.some(row=>row.status==='進行中')?'進行中':sources.every(row=>row.status==='預估')?'預估':'已完成',applicants=sum(sources,'applicants'),quota=sum(sources,'quota'),admitted=sum(sources,'admitted'),adopted=sum(sources,'adopted');
+    return [{record_id:'AUTO-GRADUATE-TOTAL-'+year+'-'+channel,record_type:channel==='全部'?'年度總計':'招生管道年度總計',year:Number(year),level:GRADUATE_TOTAL_LEVEL,channel_group:channel==='全部'?'':sources.find(row=>row.channel_group)?.channel_group||'',channel:channel==='全部'?'':channel,college:'全校',department:'全校',applicants,quota,first_stage_passed:completeOptionalSum(sources,'first_stage_passed'),second_stage_passed:completeOptionalSum(sources,'second_stage_passed'),distributed:completeOptionalSum(sources,'distributed'),pre_return_in:completeOptionalSum(sources,'pre_return_in'),pre_return_out:completeOptionalSum(sources,'pre_return_out'),post_return_in:completeOptionalSum(sources,'post_return_in'),post_return_out:completeOptionalSum(sources,'post_return_out'),admitted,waitlisted:optionalSum(sources,'waitlisted'),abandoned:completeOptionalSum(sources,'abandoned'),waitlist_admitted:completeOptionalSum(sources,'waitlist_admitted'),quota_returned:optionalSum(sources,'quota_returned'),adopted,online_final:sum(sources,'online_final'),registered:status==='進行中'?null:optionalSum(sources,'registered'),admission_shortfall:quota-admitted,registration_shortfall:quota-adopted,status,include:'是',source:'碩士班、碩士在職專班、博士班直接加總',note:'由碩士班、碩士在職專班、博士班直接加總（唯讀）',_automaticGraduateTotal:true,_automaticGraduateSourceCount:sources.length}];
+  }
+  function annualRowsForState(){const source=state.channel==='全部'?allAnnual():allChannelAnnual().filter(row=>row.channel===state.channel);if(state.level!==GRADUATE_TOTAL_LEVEL)return source.filter(row=>row.level===state.level);const years=[...new Set(source.filter(row=>GRADUATE_COMPONENT_LEVELS.has(row.level)).map(row=>Number(row.year)))];return years.flatMap(year=>aggregateGraduateTotalRows(source,year,state.channel))}
   const LINKED_GRADUATE_LEVELS=new Set(['碩士班','博士班']);
   function graduateFlowKey(row,canonical=false){const department=canonical?canonicalDepartment(row.department):cleanText(row.department);return [row.year,row.level,department].join('|')}
   function linkGraduateExamFlows(rows){
@@ -1207,10 +1220,10 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     });
   }
   function allChannelDetails(){return linkUndergraduateSingleFlows(linkGraduateExamFlows(combinedRows(MODEL.channel_details||[],'招生管道明細')))}
-  function detailPool(){return state.channel==='全部'?allDetails():allChannelDetails().filter(r=>r.channel===state.channel)}
-  function departmentChannelRows(row){return allChannelDetails().filter(candidate=>candidate.year===row.year&&candidate.level===row.level&&canonicalDepartment(candidate.department)===canonicalDepartment(row.department))}
+  function detailPool(){const rows=state.channel==='全部'?allDetails():allChannelDetails().filter(r=>r.channel===state.channel);return state.level===GRADUATE_TOTAL_LEVEL?graduateTotalDetailRows(rows):rows}
+  function departmentChannelRows(row){const level=row._sourceLevel||row.level;return allChannelDetails().filter(candidate=>candidate.year===row.year&&candidate.level===level&&canonicalDepartment(candidate.department)===canonicalDepartment(row.department))}
   function standaloneFlowRow(row){return row.record_type==='系所明細'&&!departmentChannelRows(row).length}
-  function editableFlowRow(row){return !row._automaticChannelRollup&&(row.record_type==='招生管道明細'||standaloneFlowRow(row))}
+  function editableFlowRow(row){return !row._automaticChannelRollup&&!row._automaticGraduateTotal&&(row.record_type==='招生管道明細'||standaloneFlowRow(row))}
   function rollupDepartmentFlows(row,channels){if(!channels.length)return row;return {...row,pre_return_in:completeOptionalSum(channels,'pre_return_in'),pre_return_out:completeOptionalSum(channels,'pre_return_out'),post_return_in:completeOptionalSum(channels,'post_return_in'),post_return_out:completeOptionalSum(channels,'post_return_out'),waitlist_admitted:completeOptionalSum(channels,'waitlist_admitted'),quota_returned:optionalSum(channels,'quota_returned'),_flowRollup:true}}
   function departmentFlowRollup(row){return rollupDepartmentFlows(row,departmentChannelRows(row))}
   const UNDERGRAD_ALL_CHANNELS=new Set(['單獨招生','特殊選才','繁星推薦','申請入學','四技二專甄選入學','四技二專']);
@@ -1242,6 +1255,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     return {...row,waitlisted:channelRows.length?sum(channelRows,'waitlisted'):n(row.waitlisted),admission_shortfall:n(row.quota)-n(row.admitted),registration_shortfall:n(row.quota)-n(row.adopted)};
   }
   function selectedTotals(){
+    if(state.level===GRADUATE_TOTAL_LEVEL)return annualRowsForState().filter(row=>row.year===state.year);
     if(state.channel==='全部'&&['學士班','碩士班','博士班'].includes(state.level)){
       const baseRows=allDetails().filter(row=>row.year===state.year&&row.level===state.level);
       return automaticCampusTotal(automaticAllChannelRollups(baseRows,allChannelDetails(),state.level));
@@ -1250,7 +1264,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
 
   function availableYearsForState(){
-    const rows=state.channel==='全部'?[...allAnnual(),...allDetails()]:[...allChannelAnnual(),...allChannelDetails()].filter(row=>row.channel===state.channel);
+    const rows=[...annualRowsForState(),...detailPool()];
     return [...new Set(rows.filter(row=>row.level===state.level&&Number.isFinite(Number(row.year))).map(row=>Number(row.year)))].sort((a,b)=>b-a);
   }
   function updateYearOptions(){
@@ -1262,7 +1276,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
 
   function setupControls(){
     els.level.innerHTML=FILTER_LEVELS.map(x=>'<option>'+x+'</option>').join('');
-    $('fLevel').innerHTML=LEVELS.map(x=>'<option>'+x+'</option>').join('');
+    $('fLevel').innerHTML=INPUT_LEVELS.map(x=>'<option>'+x+'</option>').join('');
     if(!FILTER_LEVELS.includes(state.level))state.level=FILTER_LEVELS[0];
     els.level.value=state.level;
     updateChannelOptions();
@@ -1272,9 +1286,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     $('trendMetric').value=vizState.heatMetric;$('healthSort').value=vizState.healthSort;$('riskMetric').value=vizState.riskMetric;$('channelMode').value=vizState.channelMode;
   }
   function updateChannelOptions(){
-    const options=MODEL.channel_options?.[state.level]||[];
+    const options=state.level===GRADUATE_TOTAL_LEVEL?GRADUATE_TOTAL_CHANNEL_OPTIONS:(MODEL.channel_options?.[state.level]||[]);
     if(state.channel!=='全部'&&!options.some(item=>item.name===state.channel))state.channel='全部';
-    const groups=['總量內','總量外'].map(group=>{const rows=options.filter(item=>item.group===group);return rows.length?'<optgroup label="'+group+'">'+rows.map(item=>'<option value="'+esc(item.name)+'">'+esc(item.name)+'</option>').join('')+'</optgroup>':''}).join('');
+    const groups=['總量內','總量外'].map(group=>{const rows=options.filter(item=>item.group===group);return rows.length?'<optgroup label="'+group+'">'+rows.map(item=>'<option value="'+esc(item.name)+'">'+esc(item.label||item.name)+'</option>').join('')+'</optgroup>':''}).join('');
     els.channel.innerHTML='<option value="全部">全部招生管道</option>'+groups;els.channel.value=state.channel;els.channel.disabled=!options.length;
   }
   function updateCollegeOptions(){
@@ -1362,7 +1376,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       const grouped=groupedHistory(exact);
       if(grouped.length>=2)return {rows:grouped,basis:'目前學院／系所',fallback:false};
     }
-    const annual=(state.channel==='全部'?allAnnual():allChannelAnnual().filter(row=>row.channel===state.channel)).filter(row=>row.level===state.level).sort((a,b)=>a.year-b.year);
+    const annual=annualRowsForState().sort((a,b)=>a.year-b.year);
     return {rows:[...new Map(annual.map(row=>[row.year,row])).values()],basis:narrowed?'同學制與招生管道的全校':'同學制與招生管道',fallback:narrowed};
   }
   function signedRate(current,reference){if(!Number.isFinite(current)||!Number.isFinite(reference)||reference===0)return '無可比前期';const change=(current-reference)/Math.abs(reference);return (change>=0?'+':'')+(change*100).toFixed(1)+'%'}
@@ -1444,7 +1458,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       const grouped=new Map();detailRows.forEach(row=>{const current=grouped.get(row.year)||{year:row.year,level:state.level,applicants:0,quota:0,admitted:0,adopted:0};current.applicants+=n(row.applicants);current.quota+=n(row.quota);current.admitted+=n(row.admitted);current.adopted+=n(row.adopted);grouped.set(row.year,current)});
       return {data:[...grouped.values()].sort((a,b)=>a.year-b.year),basis:'依篩選後系所明細逐年加總',context};
     }
-    let data=(state.channel==='全部'?allAnnual():allChannelAnnual().filter(row=>row.channel===state.channel)).filter(row=>row.level===state.level&&row.year<=state.year);
+    let data=annualRowsForState().filter(row=>row.year<=state.year);
     const revisedYears=new Set(detailRows.filter(row=>hasInlineEdit(row)||String(row.record_id||'').startsWith('CUSTOM-')).map(row=>row.year));
     revisedYears.forEach(year=>{const rows=detailRows.filter(row=>row.year===year);if(!rows.length)return;const derived={year,level:state.level,applicants:sum(rows,'applicants'),quota:sum(rows,'quota'),admitted:sum(rows,'admitted'),adopted:sum(rows,'adopted')};data=[...data.filter(row=>row.year!==year),derived]});
     data=[...new Map(data.map(row=>[row.year,row])).values()].sort((a,b)=>a.year-b.year);
@@ -1483,7 +1497,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     const missing=departments.length*years.length-values.length;$('heatmapSummary').textContent=departments.length?'共 '+departments.length+' 個系所、'+years.length+' 個學年度；'+missing+' 格無可用資料。所選 '+state.year+' 學年度以金色框標示。':'目前學制或招生管道沒有系所年度明細；空白不補估。';
   }
   function renderChannelComposition(){
-    let rows=allChannelDetails().filter(row=>row.level===state.level&&row.year<=state.year&&(state.channel==='全部'||row.channel===state.channel)&&(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department));const host=$('channelComposition');
+    let rows=rowsForDashboardLevel(allChannelDetails()).filter(row=>row.year<=state.year&&(state.level!==GRADUATE_TOTAL_LEVEL||GRADUATE_TOTAL_CHANNELS.has(row.channel))&&(state.channel==='全部'||row.channel===state.channel)&&(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department));const host=$('channelComposition');
     if(!rows.length){host.innerHTML='<div class="chart-empty">目前篩選沒有招生管道構成資料</div>';$('channelLegend').innerHTML='';$('channelSummary').textContent='招生管道系所明細目前主要涵蓋學士班 100–114 與碩士班 96–115 學年度；其他學制不補估。';return}
     const years=[...new Set(rows.map(row=>row.year))].sort((a,b)=>a-b),channels=[...new Set(rows.map(row=>row.channel))].sort((a,b)=>sum(rows.filter(row=>row.channel===b),'applicants')-sum(rows.filter(row=>row.channel===a),'applicants')),lookup=new Map();rows.forEach(row=>{const key=row.year+'｜'+row.channel;lookup.set(key,(lookup.get(key)||0)+n(row.applicants))});const totals=new Map(years.map(year=>[year,channels.reduce((total,channel)=>total+(lookup.get(year+'｜'+channel)||0),0)])),W=Math.max(720,years.length*62+100),H=360,p={l:58,r:24,t:34,b:48},plotH=H-p.t-p.b,maxTotal=Math.max(...totals.values(),1),barW=Math.min(34,(W-p.l-p.r)/Math.max(years.length,1)*.58),sx=index=>p.l+(index+.5)/years.length*(W-p.l-p.r),valueHeight=(value,total)=>vizState.channelMode==='share'?(total?value/total*plotH:0):value/maxTotal*plotH;
     let svg=svgBase('招生管道構成',state.level+'歷年各招生管道報名人數'+(vizState.channelMode==='share'?'占比':'堆疊'),W,H,'width:'+W+'px;max-width:none');
@@ -1617,7 +1631,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function detailFieldCell(row,key,profile,highest,flow,competition,fill){
     const label=detailHeaderLabel(profile,key);
-    const automatic=highest||row._automaticChannelRollup,reason=row._automaticChannelRollup?'由指定招生管道明細自動加總':'由下方明細自動加總';
+    const automatic=highest||row._automaticChannelRollup||row._automaticGraduateTotal,reason=row._automaticGraduateTotal?'由碩士班、碩士在職專班、博士班直接加總':row._automaticChannelRollup?'由指定招生管道明細自動加總':'由下方明細自動加總';
     if(['applicants','quota','first_stage_passed','second_stage_passed','distributed','admitted','waitlisted','abandoned','adopted'].includes(key))return automatic?readonlyNumberCell(row[key],highest?'全校'+label:label,'',reason):editableCell(row,key,label);
     if(['pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted'].includes(key))return flowFieldCell(row,key,label,highest);
     if(key==='release_quota')return formulaCell(flow.releaseQuota,label);
