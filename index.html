@@ -953,7 +953,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     level: normalizeLevel(params.get('level') || saved.level || '學士班'),
     college: params.get('college') || saved.college || '全部',
     channel: params.get('channel') || saved.channel || '全部',
-    department: params.get('department') || params.get('q') || saved.department || saved.query || '全部',
+    department: canonicalDepartment(params.get('department') || params.get('q') || saved.department || saved.query || '全部'),
   };
   const vizState = {
     heatMetric: ['applicants','quota','admitted','adopted','competition','admitRate','fill','vacancy','yoy'].includes(params.get('metric'))?params.get('metric'):(savedVisual.heatMetric||'fill'),
@@ -969,10 +969,10 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const quotaDetailState = {year:String(MODEL.quota_detail?.years?.at(-1)||116),level:'全部',scope:'全部',college:'全部',department:'全部',channel:'全部'};
   const savedToolkit = safeParse(localStorage.getItem(TOOL_STATE_KEY), {});
   const toolState = {
-    compareLevel:savedToolkit.compareLevel||'學士班',compareYearA:Number(savedToolkit.compareYearA)||114,compareDepartmentA:savedToolkit.compareDepartmentA||'',compareYearB:Number(savedToolkit.compareYearB)||113,compareDepartmentB:savedToolkit.compareDepartmentB||'',
+    compareLevel:savedToolkit.compareLevel||'學士班',compareYearA:Number(savedToolkit.compareYearA)||114,compareDepartmentA:canonicalDepartment(savedToolkit.compareDepartmentA||''),compareYearB:Number(savedToolkit.compareYearB)||113,compareDepartmentB:canonicalDepartment(savedToolkit.compareDepartmentB||''),
     alertLevel:savedToolkit.alertLevel||'學士班',alertFill:Number(savedToolkit.alertFill)||90,alertCompetition:Number(savedToolkit.alertCompetition)||1.2,alertDeclineYears:Number(savedToolkit.alertDeclineYears)||2,alertVacancyYears:Number(savedToolkit.alertVacancyYears)||2,
-    reportLevel:savedToolkit.reportLevel||'學士班',reportYear:Number(savedToolkit.reportYear)||114,reportDepartment:savedToolkit.reportDepartment||'',
-    scenarioLevel:savedToolkit.scenarioLevel||'學士班',scenarioYear:Number(savedToolkit.scenarioYear)||114,scenarioDepartment:savedToolkit.scenarioDepartment||'',scenarioQuotaDelta:Number(savedToolkit.scenarioQuotaDelta)||0,scenarioApplicantsPct:Number(savedToolkit.scenarioApplicantsPct)||0,scenarioFillRate:Number(savedToolkit.scenarioFillRate)||90,
+    reportLevel:savedToolkit.reportLevel||'學士班',reportYear:Number(savedToolkit.reportYear)||114,reportDepartment:canonicalDepartment(savedToolkit.reportDepartment||''),
+    scenarioLevel:savedToolkit.scenarioLevel||'學士班',scenarioYear:Number(savedToolkit.scenarioYear)||114,scenarioDepartment:canonicalDepartment(savedToolkit.scenarioDepartment||''),scenarioQuotaDelta:Number(savedToolkit.scenarioQuotaDelta)||0,scenarioApplicantsPct:Number(savedToolkit.scenarioApplicantsPct)||0,scenarioFillRate:Number(savedToolkit.scenarioFillRate)||90,
   };
   let versionHistory=safeParse(localStorage.getItem(VERSION_KEY),[]);if(!Array.isArray(versionHistory))versionHistory=[];
   let qualityActions=safeParse(localStorage.getItem(QUALITY_ACTION_KEY),{});if(!qualityActions||Array.isArray(qualityActions)||typeof qualityActions!=='object')qualityActions={};let qualityExpanded=false;
@@ -1032,6 +1032,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function orderIndex(list,value){const index=list.indexOf(value);return index<0?list.length:index}
   function canonicalCollege(value){return value==='舞蹈學系'?'舞蹈學院':value==='跨域學程'?'音樂與影像跨域學士學位學程':value}
   function canonicalDepartment(value){const text=String(value||'').trim();if(text.startsWith('舞蹈研究所博士班'))return '舞蹈學系博士班';if(text.startsWith('舞蹈研究所'))return '舞蹈學系碩士班';if(text.startsWith('文創產業國際藝術碩士學位學程')||text.startsWith('文創產業國際藝術學位學程'))return '藝術創意研究國際碩士學位學程';const matched=ORDERED_DEPARTMENT_NAMES.find(name=>text===name||text.startsWith(name+'(')||text.startsWith(name+'（')||text.startsWith(name+' ')||text.startsWith(name+'※'));return matched||text}
+  function sameDepartment(left,right){return canonicalDepartment(left)===canonicalDepartment(right)}
+  function departmentMatchesFilter(value,selected=state.department){return selected==='全部'||sameDepartment(value,selected)}
   function compareColleges(a,b){const left=canonicalCollege(a),right=canonicalCollege(b);return orderIndex(COLLEGE_ORDER,left)-orderIndex(COLLEGE_ORDER,right)||String(left).localeCompare(String(right),'zh-Hant')}
   function compareDepartments(a,b,level=state.level){const order=level==='學士班'?UNDERGRAD_DEPARTMENT_ORDER:GRADUATE_DEPARTMENT_ORDER,left=canonicalDepartment(a),right=canonicalDepartment(b);return orderIndex(order,left)-orderIndex(order,right)||String(left).localeCompare(String(right),'zh-Hant')}
   function quotaDetailCohort(level){return level==='學士班'?0:level==='七年一貫制'?1:2}
@@ -1248,7 +1250,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function selectedDetails(){
     const baseRows=detailPool().filter(row=>row.year===state.year&&row.level===state.level);
     const rows=state.channel==='全部'?automaticAllChannelRollups(baseRows,allChannelDetails(),state.level):baseRows;
-    return rows.filter(row=>(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department));
+    return rows.filter(row=>(state.college==='全部'||row.college===state.college)&&departmentMatchesFilter(row.department));
   }
   function campusTotalWithDerivedFields(row){
     const channelRows=allChannelAnnual().filter(candidate=>candidate.year===row.year&&candidate.level===row.level&&(!row.channel||candidate.channel===row.channel));
@@ -1297,7 +1299,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     els.college.innerHTML='<option>全部</option>'+colleges.map(x=>'<option>'+esc(x)+'</option>').join('');els.college.value=state.college;
   }
   function updateDepartmentOptions(){
-    const departments=[...new Set(detailPool().filter(r=>r.year===state.year&&r.level===state.level&&(state.college==='全部'||r.college===state.college)).map(r=>r.department).filter(Boolean))].sort((a,b)=>compareDepartments(a,b,state.level));
+    const departments=[...new Set(detailPool().filter(r=>r.year===state.year&&r.level===state.level&&(state.college==='全部'||r.college===state.college)).map(r=>canonicalDepartment(r.department)).filter(Boolean))].sort((a,b)=>compareDepartments(a,b,state.level));
+    state.department=canonicalDepartment(state.department);
     if(state.department!=='全部'&&!departments.includes(state.department))state.department='全部';
     els.department.innerHTML='<option>全部</option>'+departments.map(x=>'<option>'+esc(x)+'</option>').join('');els.department.value=state.department;els.department.disabled=!departments.length;
   }
@@ -1331,13 +1334,13 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function metricsFor(row){const applicants=n(row.applicants),quota=n(row.quota),admitted=n(row.admitted),adopted=n(row.adopted);return {applicants,quota,admitted,adopted,competition:ratio(applicants,quota),admitRate:ratio(admitted,applicants),fill:ratio(adopted,quota),vacancy:Math.max(quota-adopted,0)}}
   function aggregateDepartmentRows(rows){
     const grouped=new Map();
-    rows.filter(row=>row.department&&row.department!=='全校').forEach(row=>{const key=row.department,current=grouped.get(key)||{year:row.year,level:row.level,college:row.college,department:row.department,applicants:0,quota:0,admitted:0,adopted:0,pending:false};current.applicants+=n(row.applicants);current.quota+=n(row.quota);current.admitted+=n(row.admitted);current.adopted+=n(row.adopted);current.pending=current.pending||row.status==='進行中';grouped.set(key,current)});
+    rows.filter(row=>row.department&&row.department!=='全校').forEach(row=>{const department=canonicalDepartment(row.department),key=department,current=grouped.get(key)||{year:row.year,level:row.level,college:row.college,department,applicants:0,quota:0,admitted:0,adopted:0,pending:false};current.applicants+=n(row.applicants);current.quota+=n(row.quota);current.admitted+=n(row.admitted);current.adopted+=n(row.adopted);current.pending=current.pending||row.status==='進行中';grouped.set(key,current)});
     return [...grouped.values()].map(row=>({...row,...metricsFor(row)}));
   }
-  function filteredHistoryDetails(){return detailPool().filter(row=>row.level===state.level&&row.year<=state.year&&row.department&&row.department!=='全校'&&(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department))}
+  function filteredHistoryDetails(){return detailPool().filter(row=>row.level===state.level&&row.year<=state.year&&row.department&&row.department!=='全校'&&(state.college==='全部'||row.college===state.college)&&departmentMatchesFilter(row.department))}
   function departmentYearHistory(){
     const grouped=new Map();
-    filteredHistoryDetails().forEach(row=>{const key=row.department+'｜'+row.year,current=grouped.get(key)||{year:row.year,level:row.level,college:row.college,department:row.department,applicants:0,quota:0,admitted:0,adopted:0,pending:false};current.applicants+=n(row.applicants);current.quota+=n(row.quota);current.admitted+=n(row.admitted);current.adopted+=n(row.adopted);current.pending=current.pending||row.status==='進行中';grouped.set(key,current)});
+    filteredHistoryDetails().forEach(row=>{const department=canonicalDepartment(row.department),key=department+'｜'+row.year,current=grouped.get(key)||{year:row.year,level:row.level,college:row.college,department,applicants:0,quota:0,admitted:0,adopted:0,pending:false};current.applicants+=n(row.applicants);current.quota+=n(row.quota);current.admitted+=n(row.admitted);current.adopted+=n(row.adopted);current.pending=current.pending||row.status==='進行中';grouped.set(key,current)});
     return [...grouped.values()].map(row=>({...row,...metricsFor(row)})).sort((a,b)=>compareDepartments(a.department,b.department,state.level)||a.year-b.year);
   }
   function healthSignal(row){
@@ -1372,7 +1375,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function reportHistory(){
     const narrowed=state.college!=='全部'||state.department!=='全部';
     if(narrowed){
-      const exact=detailPool().filter(row=>row.level===state.level&&(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department));
+      const exact=detailPool().filter(row=>row.level===state.level&&(state.college==='全部'||row.college===state.college)&&departmentMatchesFilter(row.department));
       const grouped=groupedHistory(exact);
       if(grouped.length>=2)return {rows:grouped,basis:'目前學院／系所',fallback:false};
     }
@@ -1390,7 +1393,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function departmentVacancies(){
     const grouped=new Map();
-    selectedDetails().forEach(row=>{const department=cleanText(row.department)||'未填系所';if(department==='全校')return;const vacancy=Math.max(n(row.quota)-n(row.adopted),0);if(vacancy<=0)return;const current=grouped.get(department)||{department,vacancy:0};current.vacancy+=vacancy;grouped.set(department,current)});
+    selectedDetails().forEach(row=>{const department=canonicalDepartment(row.department)||'未填系所';if(department==='全校')return;const vacancy=Math.max(n(row.quota)-n(row.adopted),0);if(vacancy<=0)return;const current=grouped.get(department)||{department,vacancy:0};current.vacancy+=vacancy;grouped.set(department,current)});
     return [...grouped.values()].sort((a,b)=>compareDepartments(a.department,b.department,state.level));
   }
   function renderVacancyBreakdown(){
@@ -1453,7 +1456,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function trendSeries(){
     const narrowed=state.college!=='全部'||state.department!=='全部';
     const context=[state.level,state.channel==='全部'?'全部招生管道':state.channel,state.college==='全部'?'全部學院':state.college,state.department==='全部'?'全部系所':state.department,'截至 '+state.year+' 學年度'].join('｜');
-    const detailRows=detailPool().filter(row=>row.level===state.level&&row.year<=state.year&&(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department)&&row.department!=='全校');
+    const detailRows=detailPool().filter(row=>row.level===state.level&&row.year<=state.year&&(state.college==='全部'||row.college===state.college)&&departmentMatchesFilter(row.department)&&row.department!=='全校');
     if(narrowed){
       const grouped=new Map();detailRows.forEach(row=>{const current=grouped.get(row.year)||{year:row.year,level:state.level,applicants:0,quota:0,admitted:0,adopted:0};current.applicants+=n(row.applicants);current.quota+=n(row.quota);current.admitted+=n(row.admitted);current.adopted+=n(row.adopted);grouped.set(row.year,current)});
       return {data:[...grouped.values()].sort((a,b)=>a.year-b.year),basis:'依篩選後系所明細逐年加總',context};
@@ -1497,7 +1500,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     const missing=departments.length*years.length-values.length;$('heatmapSummary').textContent=departments.length?'共 '+departments.length+' 個系所、'+years.length+' 個學年度；'+missing+' 格無可用資料。所選 '+state.year+' 學年度以金色框標示。':'目前學制或招生管道沒有系所年度明細；空白不補估。';
   }
   function renderChannelComposition(){
-    let rows=rowsForDashboardLevel(allChannelDetails()).filter(row=>row.year<=state.year&&(state.level!==GRADUATE_TOTAL_LEVEL||GRADUATE_TOTAL_CHANNELS.has(row.channel))&&(state.channel==='全部'||row.channel===state.channel)&&(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department));const host=$('channelComposition');
+    let rows=rowsForDashboardLevel(allChannelDetails()).filter(row=>row.year<=state.year&&(state.level!==GRADUATE_TOTAL_LEVEL||GRADUATE_TOTAL_CHANNELS.has(row.channel))&&(state.channel==='全部'||row.channel===state.channel)&&(state.college==='全部'||row.college===state.college)&&departmentMatchesFilter(row.department));const host=$('channelComposition');
     if(!rows.length){host.innerHTML='<div class="chart-empty">目前篩選沒有招生管道構成資料</div>';$('channelLegend').innerHTML='';$('channelSummary').textContent='招生管道系所明細目前主要涵蓋學士班 100–114 與碩士班 96–115 學年度；其他學制不補估。';return}
     const years=[...new Set(rows.map(row=>row.year))].sort((a,b)=>a-b),channels=[...new Set(rows.map(row=>row.channel))].sort((a,b)=>sum(rows.filter(row=>row.channel===b),'applicants')-sum(rows.filter(row=>row.channel===a),'applicants')),lookup=new Map();rows.forEach(row=>{const key=row.year+'｜'+row.channel;lookup.set(key,(lookup.get(key)||0)+n(row.applicants))});const totals=new Map(years.map(year=>[year,channels.reduce((total,channel)=>total+(lookup.get(year+'｜'+channel)||0),0)])),W=Math.max(720,years.length*62+100),H=360,p={l:58,r:24,t:34,b:48},plotH=H-p.t-p.b,maxTotal=Math.max(...totals.values(),1),barW=Math.min(34,(W-p.l-p.r)/Math.max(years.length,1)*.58),sx=index=>p.l+(index+.5)/years.length*(W-p.l-p.r),valueHeight=(value,total)=>vizState.channelMode==='share'?(total?value/total*plotH:0):value/maxTotal*plotH;
     let svg=svgBase('招生管道構成',state.level+'歷年各招生管道報名人數'+(vizState.channelMode==='share'?'占比':'堆疊'),W,H,'width:'+W+'px;max-width:none');
