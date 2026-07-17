@@ -1203,12 +1203,14 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function annualRowsForState(){const source=state.channel==='全部'?allAnnual():allChannelAnnual().filter(row=>row.channel===state.channel);if(state.level!==GRADUATE_TOTAL_LEVEL)return source.filter(row=>row.level===state.level);const years=[...new Set(source.filter(row=>GRADUATE_COMPONENT_LEVELS.has(row.level)).map(row=>Number(row.year)))];return years.flatMap(year=>aggregateGraduateTotalRows(source,year,state.channel))}
   const LINKED_GRADUATE_LEVELS=new Set(['碩士班','博士班']);
   function graduateFlowKey(row,canonical=false){const department=canonical?canonicalDepartment(row.department):cleanText(row.department);return [row.year,row.level,department].join('|')}
+  function departmentGroupLabel(value){return cleanText(value).match(/[（(]([^()（）]+)[)）]s*$/)?.[1]?.trim()||''}
   function linkGraduateExamFlows(rows){
     const exact=new Map(),canonical=new Map(),add=(map,key,row)=>map.set(key,[...(map.get(key)||[]),row]);
     rows.filter(row=>row.channel==='甄試入學'&&LINKED_GRADUATE_LEVELS.has(row.level)).forEach(row=>{add(exact,graduateFlowKey(row),row);add(canonical,graduateFlowKey(row,true),row)});
     return rows.map(row=>{
       if(row.channel!=='一般考試'||!LINKED_GRADUATE_LEVELS.has(row.level))return row;
-      const sources=exact.get(graduateFlowKey(row))||canonical.get(graduateFlowKey(row,true))||[];
+      const exactSources=exact.get(graduateFlowKey(row)),targetGroup=departmentGroupLabel(row.department),canonicalSources=canonical.get(graduateFlowKey(row,true))||[];
+      const sources=exactSources||canonicalSources.filter(source=>{const sourceGroup=departmentGroupLabel(source.department);return targetGroup||sourceGroup?targetGroup!==''&&targetGroup===sourceGroup:true});
       if(!sources.length)return {...row,pre_return_in:0,post_return_in:0,_graduateFlowLink:'none',_graduateFlowSourceCount:0};
       return {...row,pre_return_in:completeOptionalSum(sources,'pre_return_out'),post_return_in:completeOptionalSum(sources,'post_return_out'),_graduateFlowLink:'selection',_graduateFlowSourceCount:sources.length};
     });
