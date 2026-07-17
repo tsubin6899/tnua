@@ -358,7 +358,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const DETAIL_HEADERS = [
     '資料ID', '資料層級', '學年度', '學制', '招生管道類別', '招生管道', '學院', '系所',
     '報名人數', '核定招生名額', '第一階段通過人數', '第二階段通過人數', '分發人數', '放榜前流用入', '放榜前流用出', '實際可用名額', '正取公告人數',
-    '錄取缺額', '備取名單人數', '放棄報到人數', '放榜後流用入', '放榜後流用出', '最終可用名額', '實際遞補錄取',
+    '錄取缺額', '備取人數', '放棄報到人數', '放榜後流用入', '放榜後流用出', '最終可用名額', '實際遞補錄取',
     '累計錄取人次', '總流用出', '註冊報到人數', '報到缺額', '競爭倍率', '報到率',
     '資料狀態', '是否納入', '備註',
   ];
@@ -373,7 +373,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     ['招生管道類別', '招生管道類別'], ['招生管道群組', '招生管道類別'], ['招生管道', '招生管道'],
     ['招生名額', '招生名額'], ['核定招生名額', '核定招生名額'], ['錄取人數', '錄取人數'], ['正取公告人數', '正取公告人數'],
     ['第一階段通過', '第一階段通過人數'], ['第一階段通過人數', '第一階段通過人數'], ['第二階段通過', '第二階段通過人數'], ['第二階段通過人數', '第二階段通過人數'], ['分發', '分發人數'], ['分發人數', '分發人數'],
-    ['備取人數', '備取人數'], ['備取名單人數', '備取名單人數'], ['總流用出', '總流用出'], ['名額回流', '總流用出'], ['原表流用出', '總流用出'], ['原表名額流用出', '總流用出'], ['原表名額轉出', '總流用出'],
+    ['備取人數', '備取人數'], ['備取名單人數', '備取人數'], ['總流用出', '總流用出'], ['名額回流', '總流用出'], ['原表流用出', '總流用出'], ['原表名額流用出', '總流用出'], ['原表名額轉出', '總流用出'],
     ['放棄報到', '放棄報到人數'], ['放棄報到人數', '放棄報到人數'],
     ['放榜前流用入', '放榜前流用入'], ['放榜前流用出', '放榜前流用出'], ['放榜後流用入', '放榜後流用入'], ['放榜後流用出', '放榜後流用出'],
     ['放榜前轉入', '放榜前流用入'], ['放榜前轉出', '放榜前流用出'], ['放榜後轉入', '放榜後流用入'], ['放榜後轉出', '放榜後流用出'],
@@ -903,7 +903,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const QUOTA_DETAIL_EXTERNAL_CHANNEL_ORDER = ['單獨招生原住民','繁星推薦原住民','申請入學青年生涯領航計畫','身心障礙甄試','新住民','海外僑生','大陸學生'];
   const QUOTA_DETAIL_CHANNEL_ORDER = [...QUOTA_DETAIL_INTERNAL_CHANNEL_ORDER,...QUOTA_DETAIL_EXTERNAL_CHANNEL_ORDER,'申請入學原住民','原住民','外國學生','其他'];
   const DETAIL_EXPORT_COLUMNS = [
-    ['資料ID','record_id'],['資料層級','record_type'],['學年度','year'],['學制','level'],['招生管道類別','channel_group'],['招生管道','channel'],['學院','college'],['系所','department'],['報名人數','applicants'],['核定招生名額','quota'],['第一階段通過人數','first_stage_passed'],['第二階段通過人數','second_stage_passed'],['分發人數','distributed'],['放榜前流用入','pre_return_in'],['放榜前流用出','pre_return_out'],['實際可用名額','release_quota'],['正取公告人數','admitted'],['錄取缺額','admission_shortfall'],['備取名單人數','waitlisted'],['放棄報到人數','abandoned'],['放榜後流用入','post_return_in'],['放榜後流用出','post_return_out'],['最終可用名額','final_quota'],['實際遞補錄取','waitlist_admitted'],['累計錄取人次','cumulative_admitted'],['總流用出','quota_returned'],['註冊報到人數','adopted'],['報到缺額','registration_shortfall'],['競爭倍率','competition'],['報到率','fill'],['資料狀態','status'],['是否納入','include'],['備註','note'],
+    ['資料ID','record_id'],['資料層級','record_type'],['學年度','year'],['學制','level'],['招生管道類別','channel_group'],['招生管道','channel'],['學院','college'],['系所','department'],['報名人數','applicants'],['核定招生名額','quota'],['第一階段通過人數','first_stage_passed'],['第二階段通過人數','second_stage_passed'],['分發人數','distributed'],['放榜前流用入','pre_return_in'],['放榜前流用出','pre_return_out'],['實際可用名額','release_quota'],['正取公告人數','admitted'],['錄取缺額','admission_shortfall'],['備取人數','waitlisted'],['放棄報到人數','abandoned'],['放榜後流用入','post_return_in'],['放榜後流用出','post_return_out'],['最終可用名額','final_quota'],['實際遞補錄取','waitlist_admitted'],['累計錄取人次','cumulative_admitted'],['總流用出','quota_returned'],['註冊報到人數','adopted'],['報到缺額','registration_shortfall'],['競爭倍率','competition'],['報到率','fill'],['資料狀態','status'],['是否納入','include'],['備註','note'],
   ];
   const DETAIL_FIELD_DEFS = {
     applicants:{label:'報名人數',cardLabel:'報名',group:'base'},quota:{label:'招生名額',cardLabel:'名額',group:'base'},
@@ -912,7 +912,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     pre_return_out:{label:'放榜前流用出',cardLabel:'放榜前流用出',group:'special'},post_return_out:{label:'放榜後流用出',cardLabel:'放榜後流用出',group:'special'},
     release_quota:{label:'實際可用名額',cardLabel:'實際可用名額',group:'special'},final_quota:{label:'最終可用名額',cardLabel:'最終可用名額',group:'special'},waitlist_admitted:{label:'實際遞補錄取',cardLabel:'實際遞補錄取',group:'special'},
     quota_returned:{label:'總流用出',cardLabel:'總流用出',group:'special'},abandoned:{label:'放棄報到',cardLabel:'放棄報到',group:'special'},
-    admitted:{label:'錄取人數',cardLabel:'錄取',group:'outcome'},waitlisted:{label:'備取名單',cardLabel:'備取名單',group:'outcome'},
+    admitted:{label:'錄取人數',cardLabel:'錄取',group:'outcome'},waitlisted:{label:'備取人數',cardLabel:'備取人數',group:'outcome'},
     admission_shortfall:{label:'錄取缺額',cardLabel:'錄取缺額',group:'outcome'},adopted:{label:'註冊報到',cardLabel:'註冊報到',group:'outcome'},registration_shortfall:{label:'報到缺額',cardLabel:'報到缺額',group:'outcome'},
     competition:{label:'競爭倍率',cardLabel:'競爭倍率',group:'metrics'},fill:{label:'報到率',cardLabel:'報到率',group:'metrics'},status:{label:'狀態',cardLabel:'狀態',group:'manage'},note:{label:'備註',cardLabel:'備註',group:'manage'},
   };
@@ -1087,7 +1087,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       const secondStagePassed=level==='學士班'&&channel==='申請入學'?importNumber(raw['第二階段通過人數']??raw['第二階段通過'],'第二階段通過人數',false,issues):null;
       const distributed=importNumber(raw['分發人數']??raw['分發'],'分發人數',false,issues);
       const admitted=importNumber(raw['正取公告人數']??raw['錄取人數'],'正取公告人數',false,issues);
-      const waitlisted=importNumber(raw['備取名單人數']??raw['備取人數'],'備取名單人數',false,issues);
+      const waitlisted=importNumber(raw['備取人數']??raw['備取名單人數'],'備取人數',false,issues);
       const abandoned=['特殊選才','繁星推薦','甄試入學'].includes(channel)?null:importNumber(raw['放棄報到人數']??raw['放棄報到'],'放棄報到人數',false,issues);
       const preReturnIn=importNumber(raw['放榜前流用入']??raw['放榜前轉入'],'放榜前流用入',false,issues);
       const preReturnOut=importNumber(raw['放榜前流用出']??raw['放榜前轉出'],'放榜前流用出',false,issues);
@@ -1148,7 +1148,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function exportDetailExcel(rows){
     try{const data=XLSX.createDetailWorkbook(rows);const date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes('北藝大招生精確資料明細_'+date+'.xlsx',data);$('excelStatus').textContent='已匯出目前篩選的 '+rows.length+' 筆精確資料明細 Excel。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
   }
-  const CSV_HEADER_ALIASES={record_id:'資料ID',record_type:'資料層級',year:'學年度',level:'學制',channel_group:'招生管道類別',channel:'招生管道',college:'學院',department:'系所',applicants:'報名人數',quota:'核定招生名額',first_stage_passed:'第一階段通過人數',second_stage_passed:'第二階段通過人數',distributed:'分發人數',admitted:'正取公告人數',waitlisted:'備取名單人數',abandoned:'放棄報到人數',pre_return_in:'放榜前流用入',pre_return_out:'放榜前流用出',post_return_in:'放榜後流用入',post_return_out:'放榜後流用出',waitlist_admitted:'實際遞補錄取',quota_returned:'總流用出',adopted:'註冊報到人數',online_final:'最終線上報到',registered:'正式註冊',status:'資料狀態',include:'是否納入',note:'備註','第一階段通過':'第一階段通過人數','第二階段通過':'第二階段通過人數','分發':'分發人數','放棄報到':'放棄報到人數','放榜前轉入':'放榜前流用入','放榜前轉出':'放榜前流用出','放榜後轉入':'放榜後流用入','放榜後轉出':'放榜後流用出','原表名額流用出':'總流用出','原表流用出':'總流用出','原表名額轉出':'總流用出','名額回流':'總流用出'};
+  const CSV_HEADER_ALIASES={record_id:'資料ID',record_type:'資料層級',year:'學年度',level:'學制',channel_group:'招生管道類別',channel:'招生管道',college:'學院',department:'系所',applicants:'報名人數',quota:'核定招生名額',first_stage_passed:'第一階段通過人數',second_stage_passed:'第二階段通過人數',distributed:'分發人數',admitted:'正取公告人數',waitlisted:'備取人數',abandoned:'放棄報到人數',pre_return_in:'放榜前流用入',pre_return_out:'放榜前流用出',post_return_in:'放榜後流用入',post_return_out:'放榜後流用出',waitlist_admitted:'實際遞補錄取',quota_returned:'總流用出',adopted:'註冊報到人數',online_final:'最終線上報到',registered:'正式註冊',status:'資料狀態',include:'是否納入',note:'備註','備取名單人數':'備取人數','第一階段通過':'第一階段通過人數','第二階段通過':'第二階段通過人數','分發':'分發人數','放棄報到':'放棄報到人數','放榜前轉入':'放榜前流用入','放榜前轉出':'放榜前流用出','放榜後轉入':'放榜後流用入','放榜後轉出':'放榜後流用出','原表名額流用出':'總流用出','原表流用出':'總流用出','原表名額轉出':'總流用出','名額回流':'總流用出'};
   function csvHeaderName(value){const label=cleanText(value).replace(/^﻿/,'');return CSV_HEADER_ALIASES[label.toLowerCase()]||label}
   function parseCsvText(text){
     const input=String(text||'').replace(/^﻿/,'');const matrix=[];let row=[],field='',quoted=false;const CR=String.fromCharCode(13),LF=String.fromCharCode(10);
@@ -1418,7 +1418,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       {label:'較前期報名變化',value:applicantChange,detail:'本期 '+fmt(current.applicants)+' 人'+(previous?'；前期 '+previousRow.year+' 學年度 '+fmt(previous.applicants)+' 人':'；尚無可比前期'),tone:applicantTone},
       {label:'報到穩定度',value:pct(current.fill),detail:'註冊報到 '+fmt(current.adopted)+'／名額 '+fmt(current.quota)+'；缺額 '+fmt(current.vacancy)+' 名',tone:fillTone},
       {label:'缺額／錄取不足額',value:fmt(current.vacancy)+'／'+(shortfall==null?'—':fmt(shortfall)),detail:shortfall==null?'目前缺少名額或錄取資料':'錄取不足額＝招生名額－錄取人數；負數代表超額錄取',tone:gapTone},
-      {label:'備取名單／總流用出',value:(waitlisted==null?'—':fmt(waitlisted))+'／'+(returned==null?'—':fmt(returned)),detail:campusScope?'全校備取依各招生管道加總；總流用出尚未區分時點':'總流用出只供核對；請在精確資料明細拆分放榜前／後',tone:reserveTone},
+      {label:'備取人數／總流用出',value:(waitlisted==null?'—':fmt(waitlisted))+'／'+(returned==null?'—':fmt(returned)),detail:campusScope?'全校備取依各招生管道加總；總流用出尚未區分時點':'總流用出只供核對；請在精確資料明細拆分放榜前／後',tone:reserveTone},
     ];
     $('reportSnapshot').innerHTML=cards.map(card=>'<article class="report-stat '+card.tone+'"><div class="label">'+esc(card.label)+'</div><div class="value">'+esc(card.value)+'</div><div class="detail">'+esc(card.detail)+'</div></article>').join('');
     const averages={};['applicants','competition','admitRate','fill','vacancy'].forEach(key=>averages[key]=mean(lastThree.map(row=>metricsFor(row)[key])));
@@ -1687,7 +1687,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function pruneQualityActions(issues){const activeIds=new Set(issues.map(issue=>issue.id)),before=Object.keys(qualityActions).length;Object.keys(qualityActions).forEach(id=>{if(!activeIds.has(id)||!['fixed','ignored'].includes(qualityActions[id]?.status))delete qualityActions[id]});if(Object.keys(qualityActions).length!==before)saveQualityActions()}
   function setQualityAction(id,status){if(!id||!['fixed','ignored'].includes(status))return;const current=qualityActions[id]?.status;if(current===status)delete qualityActions[id];else qualityActions[id]={status,updatedAt:new Date().toISOString()};saveQualityActions();renderQualityCenter()}
   function dataQualityIssues(){
-    const rows=withInlineEdits([...officialRows(),...customRows]).filter(row=>row.include!=='否'),calculation=[],logic=[],reconciliation=[],seen=new Map(),explained=new Set(),numeric=['applicants','quota','first_stage_passed','second_stage_passed','distributed','admitted','waitlisted','abandoned','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted','adopted'],metricLabels={applicants:'報名人數',quota:'核定招生名額',first_stage_passed:'第一階段通過人數',second_stage_passed:'第二階段通過人數',distributed:'分發人數',admitted:'正取公告人數',waitlisted:'備取名單人數',abandoned:'放棄報到人數',pre_return_in:'放榜前流用入',pre_return_out:'放榜前流用出',post_return_in:'放榜後流用入',post_return_out:'放榜後流用出',waitlist_admitted:'實際遞補錄取',adopted:'註冊報到'};
+    const rows=withInlineEdits([...officialRows(),...customRows]).filter(row=>row.include!=='否'),calculation=[],logic=[],reconciliation=[],seen=new Map(),explained=new Set(),numeric=['applicants','quota','first_stage_passed','second_stage_passed','distributed','admitted','waitlisted','abandoned','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted','adopted'],metricLabels={applicants:'報名人數',quota:'核定招生名額',first_stage_passed:'第一階段通過人數',second_stage_passed:'第二階段通過人數',distributed:'分發人數',admitted:'正取公告人數',waitlisted:'備取人數',abandoned:'放棄報到人數',pre_return_in:'放榜前流用入',pre_return_out:'放榜前流用出',post_return_in:'放榜後流用入',post_return_out:'放榜後流用出',waitlist_admitted:'實際遞補錄取',adopted:'註冊報到'};
     const rowContext=row=>[row.year+' 學年度',row.level,row.channel,row.department&&row.department!=='全校'?row.department:'全校'].filter(Boolean).join('｜');
     const add=(bucket,category,tone,title,context,detail)=>{const issue={category,tone,title,context,detail};issue.id=qualityIssueId(issue);bucket.push(issue)};
     rows.forEach(row=>{
@@ -1708,7 +1708,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
           else if(n(row.adopted)>flow.finalQuota)add(calculation,'計算錯誤','bad','註冊報到超過最終可用名額',context,'最終可用名額 '+fmt(flow.finalQuota)+'、註冊報到 '+fmt(n(row.adopted))+'。');
           else explained.add(rowId);
         }
-        if(flowProfile==='inbound'&&flow.waitlistAdmitted!=null&&row.waitlisted!=null&&flow.waitlistAdmitted>n(row.waitlisted))add(logic,'邏輯異常','warn','實際遞補高於備取名單人數',context,'備取名單 '+fmt(n(row.waitlisted))+'、實際遞補 '+fmt(flow.waitlistAdmitted)+'。');
+        if(flowProfile==='inbound'&&flow.waitlistAdmitted!=null&&row.waitlisted!=null&&flow.waitlistAdmitted>n(row.waitlisted))add(logic,'邏輯異常','warn','實際遞補高於備取人數',context,'備取人數 '+fmt(n(row.waitlisted))+'、實際遞補 '+fmt(flow.waitlistAdmitted)+'。');
         if(flowProfile==='inbound'&&n(row.adopted)>n(row.admitted)&&(n(row.admitted)>0||n(row.adopted)>0)){
           if(flow.cumulativeAdmitted==null)add(logic,'流用資料待補','warn','註冊高於正取公告，待補實際遞補',context,'正取公告 '+fmt(n(row.admitted))+'、註冊報到 '+fmt(n(row.adopted))+'；請填實際遞補錄取人次。');
           else if(n(row.adopted)>flow.cumulativeAdmitted)add(logic,'邏輯異常','warn','註冊報到高於累計錄取人次',context,'累計錄取 '+fmt(flow.cumulativeAdmitted)+'、註冊報到 '+fmt(n(row.adopted))+'。');
