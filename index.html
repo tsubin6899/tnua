@@ -182,7 +182,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
           <p>新增與匯入資料只保存在這台裝置的瀏覽器中，不會改寫原始官方 Excel。若選「年度總計」，會更新 KPI 與趨勢；選「系所明細」，會更新排名與明細表。</p>
           <section class="excel-card" aria-labelledby="excelToolsTitle">
             <div class="excel-head">
-              <div><h3 id="excelToolsTitle" class="title-with-icon"><span class="mini-title-icon" aria-hidden="true">▣</span><span>Excel 全量批次維護</span></h3><p>可下載空白範本，或一次匯出全部學年度、學制、招生管道與系所資料後在 Excel 編輯；選檔後會先檢查整份檔案，不會立即覆蓋。</p></div>
+              <div><h3 id="excelToolsTitle" class="title-with-icon"><span class="mini-title-icon" aria-hidden="true">▣</span><span>Excel 完整資料庫維護</span></h3><p>一次匯出／匯入全部學年度、學制、招生管道、名額調整與名額明細；選檔後會先檢查整份檔案，不會立即覆蓋。</p></div>
               <div class="excel-actions">
                 <button class="btn secondary" id="downloadTemplate" type="button">下載全量 Excel 空白範本</button>
                 <button class="btn" id="exportXlsx" type="button">匯出全部 Excel</button>
@@ -190,7 +190,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
                 <input class="sr-only" id="importFile" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
               </div>
             </div>
-            <p class="excel-status" id="excelStatus" role="status" aria-live="polite">私人空白模式：網站未內嵌招生統計資料；請使用「匯入全部 Excel／CSV」在本機載入。</p>
+            <p class="excel-status" id="excelStatus" role="status" aria-live="polite">私人空白模式：網站未內嵌資料；請匯入新版完整 Excel／CSV，以載入招生統計、名額調整與名額明細。</p>
             <div class="import-review" id="importReview" hidden>
               <h4 class="title-with-icon"><span class="mini-title-icon" aria-hidden="true">↥</span><span id="importReviewTitle">匯入預覽</span></h4>
               <div class="import-stats" id="importStats"></div>
@@ -362,6 +362,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     '累計錄取人次', '總流用出', '註冊報到人數', '報到缺額', '競爭倍率', '報到率',
     '資料狀態', '是否納入', '備註',
   ];
+  const SYSTEM_HEADERS = ['資料ID', '資料層級', '備註'];
   const IMPORT_HEADERS = [...new Set([...INPUT_HEADERS, ...DETAIL_HEADERS])];
   const LEVELS = ['學士班', '七年一貫制', '學士後學士（歷史）', '研究所總計', '碩士班', '碩士在職專班', '博士班'];
   const HEADER_ALIASES = new Map([
@@ -703,8 +704,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <dimension ref="A1:${lastColumn}${lastRow}"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane xSplit="8" ySplit="3" topLeftCell="I4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews>
   <sheetFormatPr defaultRowHeight="20"/><cols>${cols}</cols><sheetData>
-  <row r="1" ht="34" customHeight="1">${inlineCell('A1', '國立臺北藝術大學｜精確資料明細', 1)}</row>
-  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '總流用出＝放榜前流用出＋放榜後流用出；實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。學士班單獨招生流用入由同系所特殊選才與繁星推薦流用出加總帶入；碩士班、博士班一般考試由同系所甄試帶入；無來源管道時以 0 計算。學士班申請入學使用第一、第二階段通過；特殊選才不使用階段通過欄位，特殊選才、繁星推薦與甄試入學不使用放棄報到。全部招生管道彙總列由指定管道明細自動計算並鎖定，其中碩士班、博士班加總甄試入學與一般考試。錄取缺額與報到缺額亦由系統計算。', 2)}</row>
+  <row r="1" ht="34" customHeight="1">${inlineCell('A1', '國立臺北藝術大學｜招生完整資料庫', 1)}</row>
+  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '本工作表保存全部學年度與招生管道資料；「系統還原資料」工作表另含名額調整與名額明細，匯入時請保留兩張工作表。總流用出＝放榜前流用出＋放榜後流用出；實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。', 2)}</row>
   <row r="3" ht="34" customHeight="1">${DETAIL_HEADERS.map((header, index) => inlineCell(`${columnName(index)}3`, header, 4)).join('')}</row>${dataRows}</sheetData>
   <mergeCells count="2"><mergeCell ref="A1:${lastColumn}1"/><mergeCell ref="A2:${lastColumn}2"/></mergeCells><pageMargins left="0.2" right="0.2" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><tableParts count="1"><tablePart r:id="rId1"/></tableParts>
 </worksheet>`;
@@ -716,19 +717,32 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
 <table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="1" name="AdmissionsDetailTable" displayName="AdmissionsDetailTable" ref="A3:${lastColumn}${lastRow}" totalsRowShown="0"><autoFilter ref="A3:${lastColumn}${lastRow}"/><tableColumns count="${DETAIL_HEADERS.length}">${DETAIL_HEADERS.map((header, index) => `<tableColumn id="${index + 1}" name="${xmlEsc(header)}"/>`).join('')}</tableColumns><tableStyleInfo name="TableStyleMedium2" showFirstColumn="0" showLastColumn="0" showRowStripes="1" showColumnStripes="0"/></table>`;
   }
 
-  function createDetailWorkbook(rows) {
+  function systemSheetXml(rows) {
+    const sourceRows = Array.isArray(rows) ? rows : [];
+    const lastRow = Math.max(3, sourceRows.length + 3);
+    const dataRows = sourceRows.map((row, index) => {
+      const rowNumber = index + 4;
+      return `<row r="${rowNumber}" ht="28" customHeight="1">${inlineCell(`A${rowNumber}`, row.record_id || '', 5)}${inlineCell(`B${rowNumber}`, row.record_type || '系統資料', 5)}${inlineCell(`C${rowNumber}`, row.note || '', 11)}</row>`;
+    }).join('');
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:C${lastRow}"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane ySplit="3" topLeftCell="A4" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="20"/><cols><col min="1" max="1" width="28" customWidth="1"/><col min="2" max="2" width="18" customWidth="1"/><col min="3" max="3" width="90" customWidth="1"/></cols><sheetData><row r="1" ht="34" customHeight="1">${inlineCell('A1', '系統還原資料｜請勿刪除或修改', 1)}</row><row r="2" ht="32" customHeight="1">${inlineCell('A2', sourceRows.length ? '此頁以分段 JSON 保存名額調整、名額資料及其結構；網站匯入時會自動重組。' : '此檔案沒有附帶名額調整與名額資料。', 2)}</row><row r="3" ht="30" customHeight="1">${SYSTEM_HEADERS.map((header, index) => inlineCell(`${columnName(index)}3`, header, 4)).join('')}</row>${dataRows}</sheetData><mergeCells count="2"><mergeCell ref="A1:C1"/><mergeCell ref="A2:C2"/></mergeCells><pageMargins left="0.3" right="0.3" top="0.5" bottom="0.5" header="0.2" footer="0.2"/></worksheet>`;
+  }
+
+  function createDetailWorkbook(rows, systemRows = []) {
     const normalizedRows = Array.isArray(rows) ? rows : [];
+    const normalizedSystemRows = Array.isArray(systemRows) ? systemRows : [];
     const lastRow = Math.max(4, normalizedRows.length + 3);
     const now = new Date().toISOString();
     const files = [
-      { name: '[Content_Types].xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/tables/table1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>` },
+      { name: '[Content_Types].xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/tables/table1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>` },
       { name: '_rels/.rels', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>` },
-      { name: 'docProps/core.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>國立臺北藝術大學招生精確資料明細</dc:title><dc:creator>招生儀表板</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${now}</dcterms:modified></cp:coreProperties>` },
-      { name: 'docProps/app.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>招生儀表板</Application><TitlesOfParts><vt:vector size="1" baseType="lpstr"><vt:lpstr>精確資料明細</vt:lpstr></vt:vector></TitlesOfParts></Properties>` },
-      { name: 'xl/workbook.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="精確資料明細" sheetId="1" r:id="rId1"/></sheets><calcPr calcId="191029"/></workbook>` },
-      { name: 'xl/_rels/workbook.xml.rels', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>` },
+      { name: 'docProps/core.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>國立臺北藝術大學招生完整資料庫</dc:title><dc:creator>招生儀表板</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${now}</dcterms:modified></cp:coreProperties>` },
+      { name: 'docProps/app.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>招生儀表板</Application><TitlesOfParts><vt:vector size="2" baseType="lpstr"><vt:lpstr>精確資料明細</vt:lpstr><vt:lpstr>系統還原資料</vt:lpstr></vt:vector></TitlesOfParts></Properties>` },
+      { name: 'xl/workbook.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="精確資料明細" sheetId="1" r:id="rId1"/><sheet name="系統還原資料" sheetId="2" r:id="rId2"/></sheets><calcPr calcId="191029"/></workbook>` },
+      { name: 'xl/_rels/workbook.xml.rels', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>` },
       { name: 'xl/styles.xml', data: stylesXml() },
       { name: 'xl/worksheets/sheet1.xml', data: detailSheetXml(normalizedRows) },
+      { name: 'xl/worksheets/sheet2.xml', data: systemSheetXml(normalizedSystemRows) },
       { name: 'xl/worksheets/_rels/sheet1.xml.rels', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="../tables/table1.xml"/></Relationships>` },
       { name: 'xl/tables/table1.xml', data: detailTableXml(lastRow) },
     ];
@@ -835,7 +849,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       id: node.getAttribute('r:id') || node.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id') || '',
     }));
     if (!sheets.length) throw new Error('Excel 沒有可讀取的工作表。');
-    const selected = sheets.find(sheet => sheet.name === '填寫資料') || sheets[0];
+    const selected = sheets.find(sheet => sheet.name === '填寫資料') || sheets.find(sheet => sheet.name === '精確資料明細') || sheets[0];
     const target = relationTargets.get(selected.id);
     if (!target) throw new Error('找不到「填寫資料」工作表內容。');
     const sharedText = await readZipText(index, 'xl/sharedStrings.xml', false);
@@ -865,19 +879,49 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       for (const header of IMPORT_HEADERS) row[header] = headerMap.has(header) ? (values[headerMap.get(header)] ?? '') : '';
       if (IMPORT_HEADERS.some(header => row[header] !== '' && row[header] != null)) rows.push(row);
     }
-    return { sheetName: selected.name, headerRow, rows };
+    const systemRows = [];
+    const systemSheet = sheets.find(sheet => sheet.name === '系統還原資料');
+    if (systemSheet) {
+      const systemTarget = relationTargets.get(systemSheet.id);
+      if (systemTarget) {
+        const systemDoc = parseXml(await readZipText(index, resolvePath('xl', systemTarget)), systemSheet.name);
+        const systemMatrix = new Map();
+        for (const rowNode of elements(systemDoc, 'row')) {
+          const rowNumber = Number(rowNode.getAttribute('r')) || systemMatrix.size + 1;
+          const values = [];
+          for (const cell of elements(rowNode, 'c')) values[columnIndex(cell.getAttribute('r'))] = cellValue(cell, sharedStrings);
+          systemMatrix.set(rowNumber, values);
+        }
+        let systemHeaderRow = 0;let systemHeaderMap = new Map();
+        for (const [rowNumber, values] of systemMatrix) {
+          if (rowNumber > 15) break;
+          const map = new Map();values.forEach((value, column) => { const canonical = canonicalHeader(value);if(canonical)map.set(canonical, column) });
+          if (map.has('資料ID') && map.has('資料層級') && map.has('備註')) { systemHeaderRow = rowNumber;systemHeaderMap = map;break }
+        }
+        if (systemHeaderRow) for (const [rowNumber, values] of systemMatrix) {
+          if (rowNumber <= systemHeaderRow) continue;
+          const row = {_rowNumber:rowNumber};for (const header of IMPORT_HEADERS)row[header]=systemHeaderMap.has(header)?(values[systemHeaderMap.get(header)]??''):'';
+          if (String(row['資料層級']||'').trim()==='系統資料')systemRows.push(row);
+        }
+      }
+    }
+    return { sheetName: selected.name, headerRow, rows:[...rows,...systemRows], admissionRows:rows.length, systemRows:systemRows.length };
   }
 
-  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, LEVELS, createWorkbook, createDetailWorkbook, parseWorkbook });
+  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, SYSTEM_HEADERS, LEVELS, createWorkbook, createDetailWorkbook, parseWorkbook });
 })(window);
 
 </script>
 <script>
 (() => {
-  const MODEL = JSON.parse(document.getElementById('model').textContent);
+  const EMBEDDED_MODEL = JSON.parse(document.getElementById('model').textContent);
+  const MODEL = {...EMBEDDED_MODEL};
   const PRIVATE_EMPTY_MODE = MODEL.meta?.private_empty_mode === true;
   const STORAGE_KEY = 'tnuaAdmissionsCustomRows.v1';
   const BACKUP_KEY = 'tnuaAdmissionsCustomRows.backup.v1';
+  const SYSTEM_DATA_KEY = 'tnuaAdmissionsSystemData.v1';
+  const SYSTEM_DATA_FORMAT = 'tnua-admissions-database';
+  const SYSTEM_DATA_VERSION = 2;
   const FILTER_KEY = 'tnuaAdmissionsFilters.v1';
   const VISUAL_STATE_KEY = 'tnuaAdmissionsVisualState.v1';
   const INLINE_EDIT_KEY = 'tnuaAdmissionsInlineEdits.v1';
@@ -885,6 +929,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const TOOL_STATE_KEY = 'tnuaAdmissionsToolkit.v1';
   const VIEW_MODE_KEY = 'tnuaAdmissionsViewModes.v1';
   const QUALITY_ACTION_KEY = 'tnuaAdmissionsQualityActions.v1';
+  let systemData = null;
+  applySystemData(safeParse(localStorage.getItem(SYSTEM_DATA_KEY),null));
+  try{const legacyBackup=localStorage.getItem(BACKUP_KEY);if(legacyBackup&&!sessionStorage.getItem(BACKUP_KEY)){sessionStorage.setItem(BACKUP_KEY,legacyBackup);localStorage.removeItem(BACKUP_KEY)}}catch{}
   const XLSX = window.TNUAXlsx;
   const PAGE_IDS = ['overview','report','trends','toolkit','quota-adjustments','quota-archive','data-detail'];
   const PAGE_TITLES = {overview:'總覽',report:'決策報告',trends:'趨勢',toolkit:'分析工具','quota-adjustments':'名額調整','quota-archive':'名額資料','data-detail':'資料明細'};
@@ -983,6 +1030,37 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const savedViews=safeParse(localStorage.getItem(VIEW_MODE_KEY),{}),mobileDefault=window.matchMedia('(max-width:760px)').matches?'cards':'table';const viewState={detail:['table','cards'].includes(savedViews.detail)?savedViews.detail:mobileDefault,quota:['table','cards'].includes(savedViews.quota)?savedViews.quota:mobileDefault};
 
   function safeParse(value, fallback){try{return value?JSON.parse(value):fallback}catch{return fallback}}
+  function normalizeSystemPayload(value){
+    if(!value||Array.isArray(value)||typeof value!=='object')return null;
+    const adjustments=value.quota_adjustments,detail=value.quota_detail;
+    if(value.format!==SYSTEM_DATA_FORMAT||Number(value.version)!==SYSTEM_DATA_VERSION)return null;
+    if(!adjustments||!Array.isArray(adjustments.years)||!Array.isArray(adjustments.totals)||!Array.isArray(adjustments.events)||!Array.isArray(adjustments.levels)||!Array.isArray(adjustments.policies))return null;
+    if(!detail||!Array.isArray(detail.years)||!Array.isArray(detail.levels)||!Array.isArray(detail.scopes)||!Array.isArray(detail.channels)||!Array.isArray(detail.totals)||!Array.isArray(detail.records))return null;
+    return {format:SYSTEM_DATA_FORMAT,version:SYSTEM_DATA_VERSION,quota_plan:Array.isArray(value.quota_plan)?value.quota_plan:[],quota_adjustments:adjustments,quota_detail:detail,changes:value.changes&&typeof value.changes==='object'?value.changes:{}};
+  }
+  function applySystemData(value){
+    const normalized=normalizeSystemPayload(value),source=normalized||EMBEDDED_MODEL;
+    MODEL.quota_plan=Array.isArray(source.quota_plan)?source.quota_plan:[];
+    MODEL.quota_adjustments=source.quota_adjustments||{source:'私人空白模式（未內嵌）',years:[],totals:[],levels:[],events:[],policies:[]};
+    MODEL.quota_detail=source.quota_detail||{years:[],levels:[],scopes:[],channels:[],summary:{record_count:0,year_start:null,year_end:null},totals:[],records:[]};
+    MODEL.changes=source.changes&&typeof source.changes==='object'?source.changes:{};
+    systemData=normalized;
+  }
+  function currentSystemPayload(){
+    const payload={format:SYSTEM_DATA_FORMAT,version:SYSTEM_DATA_VERSION,quota_plan:MODEL.quota_plan||[],quota_adjustments:MODEL.quota_adjustments,quota_detail:MODEL.quota_detail,changes:MODEL.changes||{}};
+    return payload.quota_adjustments?.years?.length||payload.quota_adjustments?.events?.length||payload.quota_detail?.records?.length?payload:null;
+  }
+  function systemRowsForExport(payload=currentSystemPayload()){
+    if(!payload)return[];const json=JSON.stringify(payload),size=20000,total=Math.ceil(json.length/size);
+    return Array.from({length:total},(_,index)=>({record_id:'SYSTEM-DATA-'+String(index+1).padStart(4,'0')+'-'+String(total).padStart(4,'0'),record_type:'系統資料',note:json.slice(index*size,(index+1)*size)}));
+  }
+  function parseSystemRows(rows){
+    if(!rows.length)return {payload:null,error:null};
+    const ordered=[...rows].sort((a,b)=>cleanText(a['資料ID']).localeCompare(cleanText(b['資料ID']))||(a._rowNumber||0)-(b._rowNumber||0));
+    const json=ordered.map(row=>String(row['備註']??'')).join('');
+    try{const payload=normalizeSystemPayload(JSON.parse(json));return payload?{payload,error:null}:{payload:null,error:'系統還原資料的格式或版本不正確。'}}catch(error){return {payload:null,error:'系統還原資料無法解析：'+error.message}}
+  }
+  function hasImportBackup(){try{return !!(sessionStorage.getItem(BACKUP_KEY)||localStorage.getItem(BACKUP_KEY))}catch{return false}}
   function showPage(page,{push=false,scroll=false}={}){
     activePage=PAGE_IDS.includes(page)?page:'overview';
     document.querySelectorAll('[data-page]').forEach(element=>{element.hidden=element.dataset.page!==activePage});
@@ -1068,12 +1146,16 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     saveInlineEdits();
   }
   function clearInlineEdit(recordId,field){const changes={...(inlineEdits[recordId]||{})};delete changes[field];if(Object.keys(changes).length)inlineEdits[recordId]=changes;else delete inlineEdits[recordId];saveInlineEdits()}
-  function saveCustomRows(){if(customRows.length)localStorage.setItem(STORAGE_KEY,JSON.stringify(customRows));else localStorage.removeItem(STORAGE_KEY);$('restoreBackup').disabled=!localStorage.getItem(BACKUP_KEY)}
+  function saveCustomRows(){if(customRows.length)localStorage.setItem(STORAGE_KEY,JSON.stringify(customRows));else localStorage.removeItem(STORAGE_KEY);$('restoreBackup').disabled=!hasImportBackup()}
   function validateImportedRows(rawRows){
-    const result={rows:[],errors:[],warnings:[],invalidRows:0,duplicatesInFile:0,existingMatches:0};
+    const result={rows:[],systemData:null,systemChunkRows:0,quotaAdjustmentEvents:0,quotaDetailRecords:0,errors:[],warnings:[],invalidRows:0,duplicatesInFile:0,existingMatches:0};
     const seen=new Set();const existing=new Set([...officialRows(),...customRows].flatMap(identityKeys));const matchedExisting=new Set();const stamp=Date.now();
     if(!rawRows.length){result.errors.push('檔案中沒有可匯入的資料列。');result.invalidRows=1;return result}
-    rawRows.forEach((raw,index)=>{
+    const systemRows=rawRows.filter(raw=>cleanText(raw['資料層級'])==='系統資料'),admissionRows=rawRows.filter(raw=>cleanText(raw['資料層級'])!=='系統資料');
+    result.systemChunkRows=systemRows.length;
+    if(systemRows.length){const parsed=parseSystemRows(systemRows);if(parsed.error){result.errors.push(parsed.error);result.invalidRows++}else{result.systemData=parsed.payload;result.quotaAdjustmentEvents=parsed.payload.quota_adjustments.events.length;result.quotaDetailRecords=parsed.payload.quota_detail.records.length}}
+    else result.warnings.push('此檔案是舊版格式，不含名額調整與名額明細；這兩頁不會更新。請改用新版「完整資料庫」備份檔。');
+    admissionRows.forEach((raw,index)=>{
       const rowNumber=raw._rowNumber||index+1;const issues=[];
       const recordType=cleanText(raw['資料層級']);if(!['年度總計','系所明細','招生管道年度總計','招生管道明細'].includes(recordType))issues.push('資料層級不在允許範圍內');
       const year=importNumber(raw['學年度'],'學年度',true,issues);if(year!=null&&(year<90||year>130))issues.push('學年度須介於 90–130');
@@ -1112,6 +1194,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
         if(adoptedDirect==null&&status!=='進行中'&&registered==null&&online==null)result.warnings.push('第 '+rowNumber+' 列：未填註冊報到、正式註冊或線上報到，人數將為 0。');
       }else{result.invalidRows++;result.errors.push('第 '+rowNumber+' 列：'+issues.join('；'))}
     });
+    if(!admissionRows.length&&!result.systemData&&!result.invalidRows){result.errors.push('檔案中沒有可匯入的招生統計或系統還原資料。');result.invalidRows=1}
     result.existingMatches=matchedExisting.size;return result;
   }
   function mergeImportedRows(existing,incoming){
@@ -1124,33 +1207,39 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     return output;
   }
   function renderImportPreview(fileName,validation){
-    pendingImport={fileName,...validation};$('importReview').hidden=false;$('importReviewTitle').textContent='全量匯入預覽｜'+fileName;
-    $('importStats').innerHTML='<span class="stat-chip good">有效 '+validation.rows.length+' 筆</span><span class="stat-chip '+(validation.invalidRows?'bad':'good')+'">錯誤 '+validation.invalidRows+' 筆</span><span class="stat-chip warn">將更新既有 '+validation.existingMatches+' 筆</span><span class="stat-chip">提醒 '+validation.warnings.length+' 則</span>';
+    pendingImport={fileName,...validation};$('importReview').hidden=false;$('importReviewTitle').textContent='完整資料庫匯入預覽｜'+fileName;
+    $('importStats').innerHTML='<span class="stat-chip good">招生統計 '+validation.rows.length+' 筆</span><span class="stat-chip '+(validation.systemData?'good':'warn')+'">名額調整 '+(validation.systemData?validation.quotaAdjustmentEvents+' 筆':'未包含')+'</span><span class="stat-chip '+(validation.systemData?'good':'warn')+'">名額明細 '+(validation.systemData?validation.quotaDetailRecords+' 筆':'未包含')+'</span><span class="stat-chip '+(validation.invalidRows?'bad':'good')+'">錯誤 '+validation.invalidRows+' 筆</span><span class="stat-chip warn">將更新既有 '+validation.existingMatches+' 筆</span><span class="stat-chip">提醒 '+validation.warnings.length+' 則</span>';
     const issues=[...validation.errors,...validation.warnings].slice(0,12);$('importIssues').innerHTML=issues.map(item=>'<li>'+esc(item)+'</li>').join('');$('importIssues').hidden=!issues.length;
-    const blocked=validation.invalidRows>0||validation.rows.length===0;$('mergeImport').disabled=blocked;$('replaceImport').disabled=blocked;
-    $('importNote').textContent=blocked?'目前不會匯入任何資料；請先修正匯入檔後重新選檔。':'檢查完成。可選「合併更新」保留其他自填資料，或「取代既有自填」全部換成這份匯入檔。';
+    const blocked=validation.invalidRows>0||(validation.rows.length===0&&!validation.systemData);$('mergeImport').disabled=blocked;$('replaceImport').disabled=blocked;
+    $('importNote').textContent=blocked?'目前不會匯入任何資料；請先修正匯入檔後重新選檔。':(validation.systemData?'檢查完成。這份檔案會同時更新招生統計、名額調整與名額明細；可選合併或取代招生統計。':'檢查完成，但這是舊版檔案，只會更新招生統計，不會補上名額調整與名額明細。');
     $('excelStatus').textContent='已讀取 '+fileName+'；請確認下方匯入預覽。';
   }
   function resetImportInputs(){$('importFile').value='';$('detailCsvFile').value=''}
   function cancelImport(){pendingImport=null;$('importReview').hidden=true;resetImportInputs();$('excelStatus').textContent='已取消匯入，現有自填資料未變更。'}
   function commitImport(mode){
-    if(!pendingImport||pendingImport.invalidRows||!pendingImport.rows.length)return;
+    if(!pendingImport||pendingImport.invalidRows||(!pendingImport.rows.length&&!pendingImport.systemData))return;
     if(mode==='replace'&&customRows.length&&!confirm('確定以匯入檔的 '+pendingImport.rows.length+' 筆資料取代目前全部 '+customRows.length+' 筆自填資料？'))return;
-    localStorage.setItem(BACKUP_KEY,JSON.stringify(customRows));
-    customRows=mode==='replace'?pendingImport.rows.map(importedRowForStorage):mergeImportedRows(customRows,pendingImport.rows);
+    const previousRows=customRows,previousSystem=systemData,backup={customRows:previousRows,systemData:previousSystem};
+    try{sessionStorage.setItem(BACKUP_KEY,JSON.stringify(backup));localStorage.removeItem(BACKUP_KEY)}catch(error){$('excelStatus').textContent='建立匯入前備份失敗，為避免資料遺失，本次沒有匯入：'+error.message;return}
+    try{
+      if(pendingImport.rows.length)customRows=mode==='replace'?pendingImport.rows.map(importedRowForStorage):mergeImportedRows(customRows,pendingImport.rows);
+      saveCustomRows();
+      if(pendingImport.systemData){localStorage.setItem(SYSTEM_DATA_KEY,JSON.stringify(pendingImport.systemData));applySystemData(pendingImport.systemData);Object.assign(quotaState,{level:'全部',year:String(MODEL.quota_adjustments?.years?.at(-1)||'全部'),category:'全部',query:''});Object.assign(quotaDetailState,{year:String(MODEL.quota_detail?.years?.at(-1)||116),level:'全部',scope:'全部',college:'全部',department:'全部',channel:'全部'})}
+    }catch(error){customRows=previousRows;applySystemData(previousSystem);try{if(previousRows.length)localStorage.setItem(STORAGE_KEY,JSON.stringify(previousRows));else localStorage.removeItem(STORAGE_KEY);if(previousSystem)localStorage.setItem(SYSTEM_DATA_KEY,JSON.stringify(previousSystem));else localStorage.removeItem(SYSTEM_DATA_KEY)}catch{}$('excelStatus').textContent='瀏覽器儲存空間不足或無法寫入，本次匯入已取消：'+error.message;return}
     const first=customRows.find(row=>row.include!=='否')||customRows[0];if(first){state.year=first.year;state.level=first.level;state.college='全部'}
-    const message='全量批次'+(mode==='replace'?'取代':'合併')+'完成：目前共有 '+customRows.length+' 筆自填資料；匯入前版本可用「還原上次匯入前」復原。';
-    saveCustomRows();pendingImport=null;$('importReview').hidden=true;resetImportInputs();setupControls();renderAll();$('excelStatus').textContent=message;
+    const systemMessage=pendingImport.systemData?'；名額調整 '+pendingImport.quotaAdjustmentEvents+' 筆、名額明細 '+pendingImport.quotaDetailRecords+' 筆已恢復':'；此舊版檔案未更新名額資料';
+    const message='完整批次'+(mode==='replace'?'取代':'合併')+'完成：招生統計 '+customRows.length+' 筆'+systemMessage+'。匯入前版本可用「還原上次匯入前」復原。';
+    saveCustomRows();pendingImport=null;$('importReview').hidden=true;resetImportInputs();setupQuotaControls();setupControls();renderAll();$('excelStatus').textContent=message;
   }
   function downloadBytes(name,data){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),700)}
   function exportExcel(rows,blank){
     try{const data=XLSX.createWorkbook(rows);const date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes(blank?'北藝大招生自填資料空白範本.xlsx':'北藝大招生自填資料_'+date+'.xlsx',data);$('excelStatus').textContent=blank?'已下載美化空白範本。':'已匯出 '+rows.length+' 筆自填資料；可在 Excel 完成後再匯入。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
   }
   function exportDetailExcel(rows){
-    try{const data=XLSX.createDetailWorkbook(rows);const date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes('北藝大招生全量資料_'+date+'.xlsx',data);$('excelStatus').textContent='已匯出全部學年度與招生管道，共 '+rows.length+' 筆 Excel 資料。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
+    try{const payload=currentSystemPayload(),systemRows=systemRowsForExport(payload),data=XLSX.createDetailWorkbook(rows,systemRows),date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');downloadBytes('北藝大招生完整資料庫_'+date+'.xlsx',data);$('excelStatus').textContent=payload?'已匯出完整 Excel：招生統計 '+rows.length+' 筆、名額調整 '+payload.quota_adjustments.events.length+' 筆、名額明細 '+payload.quota_detail.records.length+' 筆。':'已匯出招生統計 '+rows.length+' 筆；目前瀏覽器尚無名額調整與名額明細可匯出。'}catch(error){$('excelStatus').textContent='Excel 匯出失敗：'+error.message}
   }
   function exportDetailTemplate(){
-    try{const data=XLSX.createDetailWorkbook([]);downloadBytes('北藝大招生全量資料空白範本.xlsx',data);$('excelStatus').textContent='已下載含完整招生管道欄位的全量 Excel 空白範本。'}catch(error){$('excelStatus').textContent='Excel 範本下載失敗：'+error.message}
+    try{const data=XLSX.createDetailWorkbook([]);downloadBytes('北藝大招生統計空白範本.xlsx',data);$('excelStatus').textContent='已下載招生統計欄位空白範本；名額調整與名額明細請由完整資料庫備份保留。'}catch(error){$('excelStatus').textContent='Excel 範本下載失敗：'+error.message}
   }
   const CSV_HEADER_ALIASES={record_id:'資料ID',record_type:'資料層級',year:'學年度',level:'學制',channel_group:'招生管道類別',channel:'招生管道',college:'學院',department:'系所',applicants:'報名人數',quota:'核定招生名額',first_stage_passed:'第一階段通過人數',second_stage_passed:'第二階段通過人數',distributed:'分發人數',admitted:'正取公告人數',waitlisted:'備取人數',abandoned:'放棄報到人數',pre_return_in:'放榜前流用入',pre_return_out:'放榜前流用出',post_return_in:'放榜後流用入',post_return_out:'放榜後流用出',waitlist_admitted:'實際遞補錄取',quota_returned:'總流用出',adopted:'註冊報到人數',online_final:'最終線上報到',registered:'正式註冊',status:'資料狀態',include:'是否納入',note:'備註','備取名單人數':'備取人數','第一階段通過':'第一階段通過人數','第二階段通過':'第二階段通過人數','分發':'分發人數','放棄報到':'放棄報到人數','放榜前轉入':'放榜前流用入','放榜前轉出':'放榜前流用出','放榜後轉入':'放榜後流用入','放榜後轉出':'放榜後流用出','原表名額流用出':'總流用出','原表流用出':'總流用出','原表名額轉出':'總流用出','名額回流':'總流用出'};
   function csvHeaderName(value){const label=cleanText(value).replace(/^﻿/,'');return CSV_HEADER_ALIASES[label.toLowerCase()]||label}
@@ -1171,6 +1260,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     return {rows:matrix.map((values,index)=>{const output={_rowNumber:index+2};headers.forEach((header,column)=>{output[header]=values[column]??''});return output})};
   }
   function detailExportValue(row,key){
+    if(row.record_type==='系統資料')return row[key]??'';
     const flow=detailFlowMetrics(row);
     if(['first_stage_passed','second_stage_passed'].includes(key)&&(row.level!=='學士班'||row.channel!=='申請入學'))return '';
     if(key==='abandoned'&&['特殊選才','繁星推薦','甄試入學'].includes(row.channel))return '';
@@ -1185,7 +1275,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     if(key==='status')return row.status||'已完成';if(key==='include')return row.include==='否'?'否':'是';return row[key]??'';
   }
   function csvCell(value){return '"'+String(value??'').replaceAll('"','""')+'"'}
-  function exportDetailCsv(rows){const headers=DETAIL_EXPORT_COLUMNS.map(column=>column[0]),lines=[headers.map(csvCell).join(','),...rows.map(row=>DETAIL_EXPORT_COLUMNS.map(column=>csvCell(detailExportValue(row,column[1]))).join(','))],date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');download('北藝大招生全量資料_'+date+'.csv',String.fromCharCode(0xFEFF)+lines.join(String.fromCharCode(13,10)),'text/csv;charset=utf-8');$('excelStatus').textContent='已匯出全部學年度與招生管道，共 '+rows.length+' 筆 CSV 資料。'}
+  function exportDetailCsv(rows){const payload=currentSystemPayload(),systemRows=systemRowsForExport(payload),exportRows=[...rows,...systemRows],headers=DETAIL_EXPORT_COLUMNS.map(column=>column[0]),lines=[headers.map(csvCell).join(','),...exportRows.map(row=>DETAIL_EXPORT_COLUMNS.map(column=>csvCell(detailExportValue(row,column[1]))).join(','))],date=new Date().toLocaleDateString('sv-SE').replaceAll('-','');download('北藝大招生完整資料庫_'+date+'.csv',String.fromCharCode(0xFEFF)+lines.join(String.fromCharCode(13,10)),'text/csv;charset=utf-8');$('excelStatus').textContent=payload?'已匯出完整 CSV：招生統計 '+rows.length+' 筆、名額調整 '+payload.quota_adjustments.events.length+' 筆、名額明細 '+payload.quota_detail.records.length+' 筆。':'已匯出招生統計 '+rows.length+' 筆；目前瀏覽器尚無名額調整與名額明細可匯出。'}
   function sum(rows,key){return rows.reduce((a,r)=>a+n(r[key]),0)}
   function ratio(a,b){return b?a/b:NaN}
   function totalFlowOutValue(row){return hasNumber(row.pre_return_out)&&hasNumber(row.post_return_out)?n(row.pre_return_out)+n(row.post_return_out):null}
@@ -1684,7 +1774,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function renderCustomList(){
     $('customList').innerHTML=customRows.length?customRows.map(r=>'<div class="custom-row"><span><strong>'+esc(r.record_type)+'｜'+r.year+'｜'+esc(r.level)+'</strong>　'+esc(r.department)+'　報名 '+fmt(r.applicants)+'／名額 '+fmt(r.quota)+'</span><button class="btn small danger" type="button" data-delete="'+esc(r.record_id)+'">刪除</button></div>').join(''):'<div class="chart-summary">尚未新增自填資料。</div>';
-    $('restoreBackup').disabled=!localStorage.getItem(BACKUP_KEY);
+    $('restoreBackup').disabled=!hasImportBackup();
   }
   function persistToolkit(){localStorage.setItem(TOOL_STATE_KEY,JSON.stringify(toolState))}
   function toolkitRows(level){
@@ -1866,9 +1956,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   $('replaceImport').addEventListener('click',()=>commitImport('replace'));
   $('cancelImport').addEventListener('click',cancelImport);
   $('restoreBackup').addEventListener('click',()=>{
-    const raw=localStorage.getItem(BACKUP_KEY);if(!raw){$('excelStatus').textContent='目前沒有可還原的匯入前備份。';return}
-    const backup=safeParse(raw,null);if(!Array.isArray(backup)){$('excelStatus').textContent='匯入前備份無法讀取。';return}
-    customRows=backup;localStorage.removeItem(BACKUP_KEY);saveCustomRows();setupControls();renderAll();$('excelStatus').textContent='已還原上次匯入前的 '+customRows.length+' 筆自填資料。';
+    let raw=null;try{raw=sessionStorage.getItem(BACKUP_KEY)||localStorage.getItem(BACKUP_KEY)}catch{}if(!raw){$('excelStatus').textContent='目前沒有可還原的匯入前備份。';return}
+    const backup=safeParse(raw,null),legacy=Array.isArray(backup);if(!legacy&&(!backup||!Array.isArray(backup.customRows))){$('excelStatus').textContent='匯入前備份無法讀取。';return}
+    customRows=legacy?backup:backup.customRows;const restoredSystem=legacy?systemData:normalizeSystemPayload(backup.systemData);applySystemData(restoredSystem);try{if(restoredSystem)localStorage.setItem(SYSTEM_DATA_KEY,JSON.stringify(restoredSystem));else localStorage.removeItem(SYSTEM_DATA_KEY);sessionStorage.removeItem(BACKUP_KEY);localStorage.removeItem(BACKUP_KEY)}catch{}Object.assign(quotaState,{level:'全部',year:String(MODEL.quota_adjustments?.years?.at(-1)||'全部'),category:'全部',query:''});Object.assign(quotaDetailState,{year:String(MODEL.quota_detail?.years?.at(-1)||116),level:'全部',scope:'全部',college:'全部',department:'全部',channel:'全部'});saveCustomRows();setupQuotaControls();setupControls();renderAll();$('excelStatus').textContent='已還原上次匯入前的招生統計 '+customRows.length+' 筆'+(legacy?'；舊版備份未變更名額資料。':(restoredSystem?'，並還原名額調整與名額明細。':'，名額資料已還原為空白。'));
   });
   $('exportJson').addEventListener('click',()=>download('tnua-admissions-custom.json',JSON.stringify(customRows,null,2),'application/json'));
   $('exportCsv').addEventListener('click',()=>exportDetailCsv(allExchangeRows()));
@@ -1880,6 +1970,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     parseCsvText,
     validateImportedRows,
     allExchangeRows,
+    currentSystemPayload,
+    systemRowsForExport,
+    systemDataSummary:()=>({stored:!!systemData,quotaAdjustmentEvents:MODEL.quota_adjustments?.events?.length||0,quotaDetailRecords:MODEL.quota_detail?.records?.length||0,quotaYears:MODEL.quota_adjustments?.years?.length||0,quotaDetailYears:MODEL.quota_detail?.years?.length||0}),
     roundTrip:async()=>{const sample={record_id:'TEST-001',record_type:'系所明細',year:116,level:'學士班',college:'音樂學院',department:'音樂學系',applicants:210,quota:38,admitted:45,online_final:36,registered:null,status:'進行中',include:'是',note:'round-trip test'};const data=XLSX.createWorkbook([sample]);const parsed=await XLSX.parseWorkbook(data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength));const validation=validateImportedRows(parsed.rows);const csv=parseCsvText('資料ID,資料層級,學年度,學制,學院,系所,報名人數,招生名額,錄取人數,註冊報到人數,資料狀態,是否納入,備註'+String.fromCharCode(10)+'CSV-001,系所明細,116,學士班,音樂學院,音樂學系,210,38,45,36,進行中,是,"換行'+String.fromCharCode(10)+'備註"');const csvValidation=validateImportedRows(csv.rows);return {bytes:data.length,parsedRows:parsed.rows.length,validRows:validation.rows.length,invalidRows:validation.invalidRows,department:validation.rows[0]?.department,csvRows:csv.rows.length,csvValidRows:csvValidation.rows.length,csvNote:csvValidation.rows[0]?.note}}
   };
   showPage(activePage);setupQuotaControls();setupControls();renderAll();
