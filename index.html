@@ -171,7 +171,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       <div id="rankChart"></div><div class="chart-summary" id="rankSummary"></div>
     </article>
     <article class="panel wide dashboard-page" id="data-detail" data-page="data-detail">
-      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才／甄試／繁星顯示流用出、總流用出與放棄報到；申請入學顯示第一階段通過與分發；四技二專顯示分發；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；一般考試的實際可用名額＝招生名額＋放榜前流用入（即同系所甄試的放榜前流用出）；最終可用名額＝實際可用名額＋放榜後流用入（即同系所甄試的放榜後流用出）。碩士班、博士班一般考試若沒有甄試管道，兩個流用入欄鎖定為「—」，計算時視為 0。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出目前 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
+      <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才／甄試／繁星顯示流用出、總流用出與放棄報到；申請入學顯示第一階段通過與分發；四技二專顯示分發；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；學士班單獨招生的放榜前／後流用入，分別由同系所特殊選才與繁星推薦的放榜前／後流用出加總帶入；碩士班、博士班一般考試則由同系所甄試入學帶入。承接管道若沒有對應來源管道，兩個流用入欄鎖定為「—」，計算時視為 0。實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。</span><span class="flow-help"><strong>全部招生管道：</strong>學士班的報名、名額、錄取、備取與註冊報到，只加總單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學；碩士班、博士班只採一般考試。這些彙總列均為系統衍生欄位，不開放填寫。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出目前 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出目前 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
       <div class="detail-legend" aria-label="明細表顏色說明"><span class="legend-key"><i class="legend-swatch total" aria-hidden="true"></i>年度總計／全校層級</span><span class="legend-key"><i class="legend-swatch" aria-hidden="true"></i>系所與招生管道明細</span><span class="legend-key"><i class="legend-swatch editable" aria-hidden="true"></i>框線欄位與備註可直接編輯</span><span class="legend-key">—／待補＝資料未知，不當成 0</span></div>
       <div class="table-wrap detail-scroll"><table class="detail-table"><thead id="detailHead"></thead><tbody id="detailBody"></tbody></table></div>
       <div class="data-card-grid" id="detailCards" aria-live="polite"></div>
@@ -704,7 +704,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   <dimension ref="A1:${lastColumn}${lastRow}"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane xSplit="8" ySplit="3" topLeftCell="I4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews>
   <sheetFormatPr defaultRowHeight="20"/><cols>${cols}</cols><sheetData>
   <row r="1" ht="34" customHeight="1">${inlineCell('A1', '國立臺北藝術大學｜精確資料明細', 1)}</row>
-  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '總流用出＝放榜前流用出＋放榜後流用出；一般考試實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。碩士班、博士班流用入由同系所甄試流用出自動帶入；無甄試管道時以 0 計算。錄取缺額與報到缺額亦由系統計算。', 2)}</row>
+  <row r="2" ht="25" customHeight="1">${inlineCell('A2', '總流用出＝放榜前流用出＋放榜後流用出；實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。學士班單獨招生流用入由同系所特殊選才與繁星推薦流用出加總帶入；碩士班、博士班一般考試由同系所甄試帶入；無來源管道時以 0 計算。全部招生管道彙總列由指定管道明細自動計算並鎖定。錄取缺額與報到缺額亦由系統計算。', 2)}</row>
   <row r="3" ht="34" customHeight="1">${DETAIL_HEADERS.map((header, index) => inlineCell(`${columnName(index)}3`, header, 4)).join('')}</row>${dataRows}</sheetData>
   <mergeCells count="2"><mergeCell ref="A1:${lastColumn}1"/><mergeCell ref="A2:${lastColumn}2"/></mergeCells><pageMargins left="0.2" right="0.2" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><tableParts count="1"><tablePart r:id="rId1"/></tableParts>
 </worksheet>`;
@@ -1189,13 +1189,48 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       return {...row,pre_return_in:completeOptionalSum(sources,'pre_return_out'),post_return_in:completeOptionalSum(sources,'post_return_out'),_graduateFlowLink:'selection',_graduateFlowSourceCount:sources.length};
     });
   }
-  function allChannelDetails(){return linkGraduateExamFlows(combinedRows(MODEL.channel_details||[],'招生管道明細'))}
+  const UNDERGRAD_FLOW_OUT_CHANNELS=new Set(['特殊選才','繁星推薦']);
+  function undergraduateFlowKey(row,canonical=false){const department=canonical?canonicalDepartment(row.department):cleanText(row.department);return [row.year,row.level,department].join('|')}
+  function linkUndergraduateSingleFlows(rows){
+    const exact=new Map(),canonical=new Map(),add=(map,key,row)=>map.set(key,[...(map.get(key)||[]),row]);
+    rows.filter(row=>row.level==='學士班'&&UNDERGRAD_FLOW_OUT_CHANNELS.has(row.channel)).forEach(row=>{add(exact,undergraduateFlowKey(row),row);add(canonical,undergraduateFlowKey(row,true),row)});
+    return rows.map(row=>{
+      if(row.level!=='學士班'||row.channel!=='單獨招生')return row;
+      const sources=exact.get(undergraduateFlowKey(row))||canonical.get(undergraduateFlowKey(row,true))||[];
+      if(!sources.length)return {...row,pre_return_in:0,post_return_in:0,_undergraduateFlowLink:'none',_undergraduateFlowSourceCount:0};
+      return {...row,pre_return_in:completeOptionalSum(sources,'pre_return_out'),post_return_in:completeOptionalSum(sources,'post_return_out'),_undergraduateFlowLink:'selection',_undergraduateFlowSourceCount:sources.length};
+    });
+  }
+  function allChannelDetails(){return linkUndergraduateSingleFlows(linkGraduateExamFlows(combinedRows(MODEL.channel_details||[],'招生管道明細')))}
   function detailPool(){return state.channel==='全部'?allDetails():allChannelDetails().filter(r=>r.channel===state.channel)}
   function departmentChannelRows(row){return allChannelDetails().filter(candidate=>candidate.year===row.year&&candidate.level===row.level&&canonicalDepartment(candidate.department)===canonicalDepartment(row.department))}
   function standaloneFlowRow(row){return row.record_type==='系所明細'&&!departmentChannelRows(row).length}
-  function editableFlowRow(row){return row.record_type==='招生管道明細'||standaloneFlowRow(row)}
-  function departmentFlowRollup(row){const channels=departmentChannelRows(row);if(!channels.length)return row;return {...row,pre_return_in:completeOptionalSum(channels,'pre_return_in'),pre_return_out:completeOptionalSum(channels,'pre_return_out'),post_return_in:completeOptionalSum(channels,'post_return_in'),post_return_out:completeOptionalSum(channels,'post_return_out'),waitlist_admitted:completeOptionalSum(channels,'waitlist_admitted'),quota_returned:optionalSum(channels,'quota_returned'),_flowRollup:true}}
-  function selectedDetails(){const rows=detailPool().filter(r=>r.year===state.year&&r.level===state.level&&(state.college==='全部'||r.college===state.college)&&(state.department==='全部'||r.department===state.department));return state.channel==='全部'?rows.map(departmentFlowRollup):rows}
+  function editableFlowRow(row){return !row._automaticChannelRollup&&(row.record_type==='招生管道明細'||standaloneFlowRow(row))}
+  function rollupDepartmentFlows(row,channels){if(!channels.length)return row;return {...row,pre_return_in:completeOptionalSum(channels,'pre_return_in'),pre_return_out:completeOptionalSum(channels,'pre_return_out'),post_return_in:completeOptionalSum(channels,'post_return_in'),post_return_out:completeOptionalSum(channels,'post_return_out'),waitlist_admitted:completeOptionalSum(channels,'waitlist_admitted'),quota_returned:optionalSum(channels,'quota_returned'),_flowRollup:true}}
+  function departmentFlowRollup(row){return rollupDepartmentFlows(row,departmentChannelRows(row))}
+  const UNDERGRAD_ALL_CHANNELS=new Set(['單獨招生','特殊選才','繁星推薦','申請入學','四技二專甄選入學','四技二專']);
+  const EXAM_ONLY_ALL_LEVELS=new Set(['碩士班','博士班']);
+  function matchingDepartmentRows(base,rows){const exact=rows.filter(row=>cleanText(row.department)===cleanText(base.department));return exact.length?exact:rows.filter(row=>canonicalDepartment(row.department)===canonicalDepartment(base.department))}
+  function automaticAllChannelRollups(baseRows,channelRows,level){
+    const allowed=level==='學士班'?UNDERGRAD_ALL_CHANNELS:EXAM_ONLY_ALL_LEVELS.has(level)?new Set(['一般考試']):null;
+    if(!allowed)return baseRows.map(departmentFlowRollup);
+    const eligible=channelRows.filter(row=>row.level===level&&allowed.has(row.channel));
+    return baseRows.map(base=>{
+      const samePeriod=channelRows.filter(row=>row.year===base.year&&row.level===base.level);
+      const allMatches=matchingDepartmentRows(base,samePeriod),sources=matchingDepartmentRows(base,eligible.filter(row=>row.year===base.year));
+      const rolled=rollupDepartmentFlows(base,allMatches);
+      const rule=level==='學士班'?'單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學':'一般考試';
+      if(!sources.length)return {...rolled,source:'原系所明細（指定管道資料尚未建立）',note:'指定管道資料尚未建立；暫用原系所明細並鎖定為唯讀',_automaticChannelRollup:true,_automaticRollupFallback:true};
+      const status=sources.some(row=>row.status==='進行中')?'進行中':sources.every(row=>row.status==='預估')?'預估':'已完成';
+      const applicants=sum(sources,'applicants'),quota=sum(sources,'quota'),admitted=sum(sources,'admitted'),waitlisted=sum(sources,'waitlisted'),adopted=sum(sources,'adopted');
+      return {...rolled,applicants,quota,admitted,waitlisted,adopted,online_final:adopted,registered:status==='進行中'?null:adopted,admission_shortfall:quota-admitted,registration_shortfall:quota-adopted,status,source:'指定招生管道自動加總',note:'由'+rule+'自動加總（唯讀）',_automaticChannelRollup:true,_automaticChannelRollupSourceCount:sources.length};
+    });
+  }
+  function selectedDetails(){
+    const baseRows=detailPool().filter(row=>row.year===state.year&&row.level===state.level);
+    const rows=state.channel==='全部'?automaticAllChannelRollups(baseRows,allChannelDetails(),state.level):baseRows;
+    return rows.filter(row=>(state.college==='全部'||row.college===state.college)&&(state.department==='全部'||row.department===state.department));
+  }
   function campusTotalWithDerivedFields(row){
     const channelRows=allChannelAnnual().filter(candidate=>candidate.year===row.year&&candidate.level===row.level&&(!row.channel||candidate.channel===row.channel));
     return {...row,waitlisted:channelRows.length?sum(channelRows,'waitlisted'):n(row.waitlisted),admission_shortfall:n(row.quota)-n(row.admitted),registration_shortfall:n(row.quota)-n(row.adopted)};
@@ -1549,9 +1584,12 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function visibleRows(){const details=selectedDetails(),totals=details.length?automaticCampusTotal(details):selectedTotals();return [...totals,...details].sort((a,b)=>Number(isHighestScope(b))-Number(isHighestScope(a))||compareColleges(a.college,b.college)||compareDepartments(a.department,b.department,state.level)||String(a.record_type).localeCompare(String(b.record_type),'zh-Hant'))}
   function editableCell(row,field,label){const value=row[field]==null?'':Math.round(n(row[field]));return '<td class="num"><input class="inline-number" type="number" min="0" step="1" inputmode="numeric" data-record-id="'+esc(row.record_id)+'" data-field="'+field+'" value="'+value+'" placeholder="未知" aria-label="'+esc((row.department||row.level)+' '+label)+'"></td>'}
-  function readonlyNumberCell(value,label,extraClass=''){return '<td class="num formula-cell '+extraClass+'" title="'+esc(label+'（由下方明細自動加總）')+'">'+(value==null?'—':fmt(n(value)))+'</td>'}
-  function linkedFlowCell(row,field,label){if(row._graduateFlowLink==='none')return '<td class="num formula-cell flow-reference" title="此系所沒有甄試入學管道；計算時流用入視為 0">—</td>';return formulaCell(row[field],label+'（由同系所甄試入學自動帶入）')}
-  function flowFieldCell(row,field,label,highest){if(!highest&&row._graduateFlowLink&&['pre_return_in','post_return_in'].includes(field))return linkedFlowCell(row,field,label);return !highest&&editableFlowRow(row)?editableCell(row,field,label):readonlyNumberCell(row[field],label)}
+  function readonlyNumberCell(value,label,extraClass='',reason='由下方明細自動加總'){return '<td class="num formula-cell '+extraClass+'" title="'+esc(label+'（'+reason+'）')+'">'+(value==null?'—':fmt(n(value)))+'</td>'}
+  function automaticFlowLink(row){return row._graduateFlowLink||row._undergraduateFlowLink||''}
+  function automaticFlowSource(row){return row._graduateFlowLink?'甄試入學':'特殊選才／繁星推薦'}
+  function automaticFlowStateLabel(row,complete){const link=automaticFlowLink(row),source=automaticFlowSource(row);if(link==='none')return '無'+source+'管道';if(link==='selection')return complete?'已由'+source+'帶入':'等待'+source+'流用出';return complete?'流用已計入':'流用待補'}
+  function linkedFlowCell(row,field,label){const link=automaticFlowLink(row),source=automaticFlowSource(row);if(link==='none')return '<td class="num formula-cell flow-reference" title="此系所沒有'+source+'管道；計算時流用入視為 0">—</td>';return formulaCell(row[field],label+'（由同系所'+source+'自動帶入）')}
+  function flowFieldCell(row,field,label,highest){if(!highest&&automaticFlowLink(row)&&['pre_return_in','post_return_in'].includes(field))return linkedFlowCell(row,field,label);return !highest&&editableFlowRow(row)?editableCell(row,field,label):readonlyNumberCell(row[field],label)}
   function totalFlowOutCell(row){return formulaCell(totalFlowOutValue(row),'總流用出')}
   function formulaCell(value,label){if(value==null)return '<td class="num formula-cell unknown" title="'+esc(label+'：流用欄尚未填妥')+'">待補</td>';const numeric=n(value),tone=numeric>0?' risk':numeric<0?' strong':'';return '<td class="num formula-cell'+tone+'" title="'+esc(label+'（自動計算）')+'">'+fmt(numeric)+'</td>'}
   function noteCell(row){return '<td class="detail-note"><textarea class="inline-note" rows="1" maxlength="500" data-record-id="'+esc(row.record_id)+'" aria-label="'+esc((row.department||row.level)+' 備註')+'">'+esc(row.note||'')+'</textarea></td>'}
@@ -1567,7 +1605,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function detailFieldCell(row,key,profile,highest,flow,competition,fill){
     const label=detailHeaderLabel(profile,key);
-    if(['applicants','quota','first_stage_passed','distributed','admitted','waitlisted','abandoned','adopted'].includes(key))return highest?readonlyNumberCell(row[key],'全校'+label):editableCell(row,key,label);
+    const automatic=highest||row._automaticChannelRollup,reason=row._automaticChannelRollup?'由指定招生管道明細自動加總':'由下方明細自動加總';
+    if(['applicants','quota','first_stage_passed','distributed','admitted','waitlisted','abandoned','adopted'].includes(key))return automatic?readonlyNumberCell(row[key],highest?'全校'+label:label,'',reason):editableCell(row,key,label);
     if(['pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted'].includes(key))return flowFieldCell(row,key,label,highest);
     if(key==='release_quota')return formulaCell(flow.releaseQuota,label);
     if(key==='final_quota')return formulaCell(flow.finalQuota,label);
@@ -1576,12 +1615,12 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     if(key==='registration_shortfall')return formulaCell(n(row.quota)-n(row.adopted),label);
     if(key==='competition')return '<td class="num '+(competition>=5?'strong':'')+'">'+mult(competition)+'</td>';
     if(key==='fill')return '<td class="num '+(fill<.9?'risk':'')+'">'+pct(fill)+'</td>';
-    if(key==='status'){const value=row.status==='進行中'?'<span class="pending">進行中</span>':esc(row.status),flowLabel=row._graduateFlowLink==='none'?'無甄試管道':row._graduateFlowLink==='selection'?(flow.complete?'已由甄試帶入':'等待甄試流用出'):(flow.complete?'流用已計入':'流用待補'),flowState=profile.hasFlow?'<br><span class="flow-state '+(flow.complete?'':'pending')+'">'+flowLabel+'</span>':'';return '<td>'+value+flowState+'</td>'}
-    if(key==='note')return highest?readonlyTotalNote(row):noteCell(row);
+    if(key==='status'){const value=row.status==='進行中'?'<span class="pending">進行中</span>':esc(row.status),flowLabel=automaticFlowStateLabel(row,flow.complete),flowState=profile.hasFlow?'<br><span class="flow-state '+(flow.complete?'':'pending')+'">'+flowLabel+'</span>':'';return '<td>'+value+flowState+'</td>'}
+    if(key==='note')return automatic?readonlyTotalNote(row):noteCell(row);
     return '<td>—</td>';
   }
   function detailCardValue(row,key,profile,flow,competition,fill){if(key==='competition')return mult(competition);if(key==='fill')return pct(fill);if(key==='release_quota')return flowDisplay(flow.releaseQuota);if(key==='final_quota')return flowDisplay(flow.finalQuota);if(key==='quota_returned')return flowDisplay(totalFlowOutValue(row));if(key==='admission_shortfall')return fmt(n(row.quota)-n(row.admitted));if(key==='registration_shortfall')return fmt(n(row.quota)-n(row.adopted));if(['first_stage_passed','distributed','waitlisted','abandoned','pre_return_in','pre_return_out','post_return_in','post_return_out','waitlist_admitted'].includes(key))return row[key]==null?'待補':fmt(n(row[key]));return fmt(n(row[key]))}
-  function renderDetailCards(rows,profile){$('detailCards').innerHTML=rows.length?rows.map(row=>{const flow=detailFlowMetrics(row),competition=ratio(n(row.applicants),n(row.quota)),fillQuota=flow.finalQuota??n(row.quota),fill=ratio(n(row.adopted),fillQuota),metricKeys=profile.fields.filter(key=>!['status','note'].includes(key)),metrics=metricKeys.map(key=>[key==='quota'?profile.quotaLabel:DETAIL_FIELD_DEFS[key].cardLabel,detailCardValue(row,key,profile,flow,competition,fill)]),flowSummary=profile.key==='inbound'?'<div class="data-card-flow"><strong>'+fmt(n(row.quota))+' → '+flowDisplay(flow.releaseQuota)+' → '+flowDisplay(flow.finalQuota)+'</strong><small>招生名額 → 實際可用名額 → 最終可用名額</small></div>':(['outbound','star'].includes(profile.key)?'<div class="data-card-flow"><strong>'+flowDisplay(flow.preOut)+'＋'+flowDisplay(flow.postOut)+'＝'+flowDisplay(totalFlowOutValue(row))+'</strong><small>放榜前流用出＋放榜後流用出＝總流用出</small></div>':''),flowState=profile.hasFlow?'<span class="flow-state '+(flow.complete?'':'pending')+'">'+(row._graduateFlowLink==='none'?'無甄試管道':row._graduateFlowLink==='selection'?(flow.complete?'已由甄試帶入':'等待甄試流用出'):(flow.complete?'流用資料已計入':'流用資料待補'))+'</span>':'';return '<article class="data-card"><h4>'+esc(row.department||'全校')+'</h4><p class="data-card-meta">'+row.year+' 學年度｜'+esc(row.level)+(row.channel?'｜'+esc(row.channel):'')+'｜'+esc(row.status||'')+'</p>'+flowSummary+'<div class="data-card-metrics">'+metrics.map(metric=>'<div class="data-card-metric"><span>'+metric[0]+'</span><strong>'+metric[1]+'</strong></div>').join('')+'</div>'+flowState+(row.note?'<p class="data-card-reference">'+esc(row.note)+'</p>':'')+'</article>'}).join(''):'<div class="tool-empty">目前篩選沒有資料。</div>'}
+  function renderDetailCards(rows,profile){$('detailCards').innerHTML=rows.length?rows.map(row=>{const flow=detailFlowMetrics(row),competition=ratio(n(row.applicants),n(row.quota)),fillQuota=flow.finalQuota??n(row.quota),fill=ratio(n(row.adopted),fillQuota),metricKeys=profile.fields.filter(key=>!['status','note'].includes(key)),metrics=metricKeys.map(key=>[key==='quota'?profile.quotaLabel:DETAIL_FIELD_DEFS[key].cardLabel,detailCardValue(row,key,profile,flow,competition,fill)]),flowSummary=profile.key==='inbound'?'<div class="data-card-flow"><strong>'+fmt(n(row.quota))+' → '+flowDisplay(flow.releaseQuota)+' → '+flowDisplay(flow.finalQuota)+'</strong><small>招生名額 → 實際可用名額 → 最終可用名額</small></div>':(['outbound','star'].includes(profile.key)?'<div class="data-card-flow"><strong>'+flowDisplay(flow.preOut)+'＋'+flowDisplay(flow.postOut)+'＝'+flowDisplay(totalFlowOutValue(row))+'</strong><small>放榜前流用出＋放榜後流用出＝總流用出</small></div>':''),flowState=profile.hasFlow?'<span class="flow-state '+(flow.complete?'':'pending')+'">'+automaticFlowStateLabel(row,flow.complete)+'</span>':'';return '<article class="data-card"><h4>'+esc(row.department||'全校')+'</h4><p class="data-card-meta">'+row.year+' 學年度｜'+esc(row.level)+(row.channel?'｜'+esc(row.channel):'')+'｜'+esc(row.status||'')+'</p>'+flowSummary+'<div class="data-card-metrics">'+metrics.map(metric=>'<div class="data-card-metric"><span>'+metric[0]+'</span><strong>'+metric[1]+'</strong></div>').join('')+'</div>'+flowState+(row.note?'<p class="data-card-reference">'+esc(row.note)+'</p>':'')+'</article>'}).join(''):'<div class="tool-empty">目前篩選沒有資料。</div>'}
   function renderTable(){
     const rows=visibleRows(),profile=detailProfile(),table=$('detailHead').closest('table');table.dataset.profile=profile.key;renderDetailHead(profile);$('detailBody').innerHTML=rows.length?rows.map(row=>{const flow=detailFlowMetrics(row),competition=ratio(n(row.applicants),n(row.quota)),fillQuota=flow.finalQuota??n(row.quota),fill=ratio(n(row.adopted),fillQuota),highest=isHighestScope(row),college=collegeChip(row.college),department=row.department==='全校'?'<span class="campus-chip">全校</span>':esc(row.department),cells=profile.fields.map(key=>detailFieldCell(row,key,profile,highest,flow,competition,fill)).join('');return '<tr'+(highest?' class="row-total" data-total-source="details"':'')+'><td class="detail-level"><span class="scope-chip '+(highest?'total':'')+'"><span aria-hidden="true">'+(highest?'◆':'•')+'</span>'+esc(row.record_type)+'</span></td><td>'+row.year+'</td><td>'+esc(row.level)+'</td><td>'+esc(row.channel||'—')+'</td><td>'+college+'</td><td class="detail-department">'+department+'</td>'+cells+'</tr>'}).join(''):'<tr><td colspan="'+(6+profile.fields.length)+'">目前篩選沒有資料。</td></tr>';
     updateRowCount(rows.length);
