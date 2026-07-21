@@ -291,10 +291,6 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     </article>
     <div class="tool-grid">
       <article class="tool-card wide">
-        <div class="tool-card-head"><div><h3>資料異常與計算檢核中心</h3><p>依原始數值檢查公式、流程邏輯與各層級加總；可標記已修正或忽略，處理狀態會保存在此瀏覽器。</p></div><button class="btn small secondary" id="refreshQuality" type="button">重新檢查</button></div>
-        <div class="quality-status-grid" id="qualityStatus"></div><div class="tool-status quality-summary" id="qualitySummary" aria-live="polite"></div><div class="quality-list" id="qualityList"></div>
-      </article>
-      <article class="tool-card wide">
         <div class="tool-card-head"><div><h3>系所 × 學年度雙向比較</h3><p>選兩個年度或系所，直接比較報名、名額、錄取與註冊報到差異。</p></div></div>
         <div class="tool-controls four">
           <div class="field"><label for="compareLevel">學制</label><select id="compareLevel"></select></div>
@@ -340,6 +336,10 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
           <div class="field"><label for="scenarioFillRate">目標報到率（%）</label><input id="scenarioFillRate" type="number" min="0" max="200" step="1"></div>
         </div>
         <div class="scenario-results" id="scenarioResults"></div><p class="chart-summary" id="scenarioNote"></p>
+      </article>
+      <article class="tool-card wide">
+        <div class="tool-card-head"><div><h3>資料異常與計算檢核中心</h3><p>依原始數值檢查公式、流程邏輯與各層級加總；可標記已修正或忽略，處理狀態會保存在此瀏覽器。</p></div><button class="btn small secondary" id="refreshQuality" type="button">重新檢查</button></div>
+        <div class="quality-status-grid" id="qualityStatus"></div><div class="tool-status quality-summary" id="qualitySummary" aria-live="polite"></div><div class="quality-list" id="qualityList"></div>
       </article>
     </div>
   </section>
