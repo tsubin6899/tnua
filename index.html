@@ -1881,7 +1881,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function renderSafely(name,renderer){try{renderer()}catch(error){window.__tnuaDashboardErrors.push({name,message:error?.message||String(error)});console.error('儀表板區塊渲染失敗：'+name,error)}}
   function rewardEligibleRows(year){
     const rows=[],channelRows=allChannelDetails().filter(row=>row.year===year),rewardDepartment=(level,department)=>level==='七年一貫制'?'舞蹈學系':canonicalDepartment(department),internal=row=>row.channel_group==='總量內';
-    channelRows.filter(row=>row.level==='學士班'&&internal(row)).forEach(row=>rows.push({...row,department:rewardDepartment(row.level,row.department),_rewardApplicant: ['單獨招生','申請入學'].includes(row.channel)?n(row.applicants):0}));
+    channelRows.filter(row=>row.level==='學士班'&&canonicalDepartment(row.department)!=='舞蹈學系'&&internal(row)).forEach(row=>rows.push({...row,department:rewardDepartment(row.level,row.department),_rewardApplicant: ['單獨招生','申請入學'].includes(row.channel)?n(row.applicants):0}));
     const graduateChannels=new Set(['甄試入學','一般考試']);channelRows.filter(row=>['碩士班','碩士在職專班','博士班'].includes(row.level)&&graduateChannels.has(row.channel)&&internal(row)).forEach(row=>rows.push({...row,department:rewardDepartment(row.level,row.department),_rewardApplicant:n(row.applicants)}));
     allDetails().filter(row=>row.year===year&&row.level==='七年一貫制').forEach(row=>rows.push({...row,department:rewardDepartment(row.level,row.department),_rewardApplicant:n(row.applicants)}));
     return rows;
