@@ -1878,21 +1878,21 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function renderToolkit(){syncToolkitControls();renderAnalysisReminder();renderQualityCenter();renderComparison();renderAlertCenter();renderDepartmentReport();renderVersionHistory();renderScenario()}
   function renderSafely(name,renderer){try{renderer()}catch(error){window.__tnuaDashboardErrors.push({name,message:error?.message||String(error)});console.error('儀表板區塊渲染失敗：'+name,error)}}
   function rewardEligibleRows(year){
-    const rows=[];const channelRows=allChannelDetails().filter(row=>row.year===year);
-    const groups=[['學士班',new Set(['單獨招生','申請入學'])],['碩士班',new Set(['甄試入學','一般考試'])],['碩士在職專班',new Set(['甄試入學','一般考試'])],['博士班',new Set(['甄試入學','一般考試'])]];
-    groups.forEach(([level,channels])=>channelRows.filter(row=>row.level===level&&channels.has(row.channel)).forEach(row=>rows.push({...row,department:canonicalDepartment(row.department)})));
-    allDetails().filter(row=>row.year===year&&row.level==='七年一貫制').forEach(row=>rows.push({...row,department:canonicalDepartment(row.department)}));
+    const rows=[],channelRows=allChannelDetails().filter(row=>row.year===year),rewardDepartment=(level,department)=>level==='七年一貫制'?'舞蹈學系':canonicalDepartment(department),internal=row=>row.channel_group==='總量內';
+    channelRows.filter(row=>row.level==='學士班'&&internal(row)).forEach(row=>rows.push({...row,department:rewardDepartment(row.level,row.department),_rewardApplicant: ['單獨招生','申請入學'].includes(row.channel)?n(row.applicants):0}));
+    const graduateChannels=new Set(['甄試入學','一般考試']);channelRows.filter(row=>['碩士班','碩士在職專班','博士班'].includes(row.level)&&graduateChannels.has(row.channel)&&internal(row)).forEach(row=>rows.push({...row,department:rewardDepartment(row.level,row.department),_rewardApplicant:n(row.applicants)}));
+    allDetails().filter(row=>row.year===year&&row.level==='七年一貫制').forEach(row=>rows.push({...row,department:rewardDepartment(row.level,row.department),_rewardApplicant:n(row.applicants)}));
     return rows;
   }
   function rewardSummaryRows(year){
-    const aggregateYear=targetYear=>{const map=new Map();rewardEligibleRows(targetYear).forEach(row=>{const key=row.level+'｜'+row.department,existing=map.get(key)||{level:row.level,department:row.department,applicants:0,quota:0,admitted:0,adopted:0};['applicants','quota','admitted','adopted'].forEach(field=>existing[field]+=n(row[field]));map.set(key,existing)});return map};
+    const aggregateYear=targetYear=>{const map=new Map();rewardEligibleRows(targetYear).forEach(row=>{const key=row.level+'｜'+row.department,existing=map.get(key)||{level:row.level,department:row.department,applicants:0,quota:0,admitted:0,adopted:0};existing.applicants+=n(row._rewardApplicant);['quota','admitted','adopted'].forEach(field=>existing[field]+=n(row[field]));map.set(key,existing)});return map};
     const current=aggregateYear(year),previous=aggregateYear(year-1);return [...current.values()].map(row=>({...row,previousApplicants:previous.get(row.level+'｜'+row.department)?.applicants, growth:previous.has(row.level+'｜'+row.department)?ratio(row.applicants-previous.get(row.level+'｜'+row.department).applicants,previous.get(row.level+'｜'+row.department).applicants):NaN,fill:ratio(row.adopted,row.quota)})).sort((a,b)=>quotaDetailCohort(a.level)-quotaDetailCohort(b.level)||compareDepartments(a.department,b.department,a.level));
   }
   function renderRewards(){
     const years=[...new Set([...allChannelDetails(),...allDetails()].map(row=>n(row.year)).filter(Boolean))].sort((a,b)=>b-a);if(!years.length){$('rewardYear').innerHTML='';$('rewardBody').innerHTML='<tr><td colspan="9">尚無可計算的招生明細，請先匯入完整資料庫。</td></tr>';$('rewardSnapshot').innerHTML='';return}if(!years.includes(rewardState.year))rewardState.year=years[0];$('rewardYear').innerHTML=years.map(year=>'<option value="'+year+'"'+(year===rewardState.year?' selected':'')+'>'+year+'學年度</option>').join('');
     const rows=rewardSummaryRows(rewardState.year),totals={applicants:sum(rows,'applicants'),quota:sum(rows,'quota'),admitted:sum(rows,'admitted'),adopted:sum(rows,'adopted')};$('rewardSnapshot').innerHTML=[['納入系所',fmt(rows.length)],['報名人數',fmt(totals.applicants)],['總量內名額',fmt(totals.quota)],['註冊報到率',pct(ratio(totals.adopted,totals.quota))]].map(item=>'<div class="report-kpi"><span>'+item[0]+'</span><strong>'+item[1]+'</strong></div>').join('');
     $('rewardBody').innerHTML=rows.length?rows.map(row=>'<tr><td>'+esc(row.level)+'</td><td>'+esc(row.department)+'</td><td class="num">'+fmt(row.previousApplicants)+'</td><td class="num">'+fmt(row.applicants)+'</td><td class="num">'+pct(row.growth)+'</td><td class="num">'+fmt(row.quota)+'</td><td class="num">'+fmt(row.admitted)+'</td><td class="num">'+fmt(row.adopted)+'</td><td class="num">'+pct(row.fill)+'</td></tr>').join(''):'<tr><td colspan="9">此學年度沒有符合招生獎勵計算口徑的資料。</td></tr>';
-    $('rewardNote').textContent='計算口徑：學士班只加總「單獨招生、申請入學」；碩士班、碩士在職專班與博士班只加總「甄試入學、一般考試」；七年一貫制採其系所明細。外加名額與其他招生管道均不納入。';
+    $('rewardNote').textContent='計算口徑：學士班的「報名人數」只加總單獨招生、申請入學；招生名額、錄取人數與註冊人數則加總總量內全部招生管道。碩士班、碩士在職專班與博士班只加總甄試入學、一般考試；七年一貫制合計男、女生資料。外加名額均不納入。';
   }
   function renderAll(){
     updateChannelOptions();updateYearOptions();updateCollegeOptions();updateDepartmentOptions();persist();$('contextTitle').textContent=state.year+'學年度｜'+state.level+(state.channel==='全部'?'':'｜'+state.channel)+(state.college==='全部'?'':'｜'+state.college)+(state.department==='全部'?'':'｜'+state.department);window.__tnuaDashboardErrors=[];
