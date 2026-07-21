@@ -934,8 +934,10 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   applySystemData(safeParse(localStorage.getItem(SYSTEM_DATA_KEY),null));
   try{const legacyBackup=localStorage.getItem(BACKUP_KEY);if(legacyBackup&&!sessionStorage.getItem(BACKUP_KEY)){sessionStorage.setItem(BACKUP_KEY,legacyBackup);localStorage.removeItem(BACKUP_KEY)}}catch{}
   const XLSX = window.TNUAXlsx;
-  const PAGE_IDS = ['overview','report','trends','toolkit','quota-adjustments','quota-archive','data-detail'];
-  const PAGE_TITLES = {overview:'總覽',report:'決策報告',trends:'趨勢',toolkit:'分析工具','quota-adjustments':'名額調整','quota-archive':'名額資料','data-detail':'資料明細'};
+  if(document.querySelector){document.querySelector('.brand-nav').insertAdjacentHTML('beforeend','<a data-page-link="rewards" href="#rewards"><span class="nav-icon" aria-hidden="true">★</span>招生獎勵</a>');document.querySelector('#analysisPages').insertAdjacentHTML('afterbegin','<article class="panel wide dashboard-page" id="rewards" data-page="rewards"><div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">★</span><span>招生獎勵統計</span></h2><p>依資料明細即時計算；學士班僅納入單獨招生與申請入學，碩博士班合併甄試入學與一般考試，且僅採總量內名額。</p></div><div class="viz-control"><label for="rewardYear">學年度</label><select id="rewardYear"></select></div></div><div class="report-snapshot" id="rewardSnapshot"></div><div class="table-wrap"><table class="report-table"><thead><tr><th>學制</th><th>系所名稱</th><th class="num">前一學年度報名</th><th class="num">本學年度報名</th><th class="num">報名成長率</th><th class="num">招生名額</th><th class="num">錄取人數</th><th class="num">註冊人數</th><th class="num">註冊報到率</th></tr></thead><tbody id="rewardBody"></tbody></table></div><p class="report-note" id="rewardNote"></p></article>')}
+  const PAGE_IDS = ['overview','report','trends','toolkit','quota-adjustments','quota-archive','rewards','data-detail'];
+  const PAGE_TITLES = {overview:'總覽',report:'決策報告',trends:'趨勢',toolkit:'分析工具','quota-adjustments':'名額調整','quota-archive':'名額資料',rewards:'招生獎勵','data-detail':'資料明細'};
+  const rewardState = {year:114};
   let activePage = PAGE_IDS.includes(location.hash.slice(1))?location.hash.slice(1):'overview';
   const GRADUATE_TOTAL_LEVEL = '研究所（總和）';
   const GRADUATE_COMPONENT_LEVELS = new Set(['碩士班','碩士在職專班','博士班']);
@@ -1074,8 +1076,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function showPage(page,{push=false,scroll=false}={}){
     activePage=PAGE_IDS.includes(page)?page:'overview';
     document.querySelectorAll('[data-page]').forEach(element=>{element.hidden=element.dataset.page!==activePage});
-    $('analysisPages').hidden=!['trends','data-detail'].includes(activePage);
-    const quotaView=['quota-adjustments','quota-archive','toolkit'].includes(activePage);$('dashboardFilters').hidden=quotaView;$('dashboardStatus').hidden=quotaView;
+    $('analysisPages').hidden=!['trends','rewards','data-detail'].includes(activePage);
+    const quotaView=['quota-adjustments','quota-archive','toolkit','rewards'].includes(activePage);$('dashboardFilters').hidden=quotaView;$('dashboardStatus').hidden=quotaView;
     $('dashboardFooter').hidden=activePage==='quota-archive';
     document.querySelectorAll('[data-page-link]').forEach(link=>{const current=link.dataset.pageLink===activePage;link.classList.toggle('active',current);if(current)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')});
     $('pageStatus').textContent=PAGE_TITLES[activePage]+'分頁';document.title=PAGE_TITLES[activePage]+'｜國立臺北藝術大學招生資訊';
@@ -1875,9 +1877,26 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function renderScenario(){const base=toolkitRow(toolState.scenarioLevel,toolState.scenarioYear,toolState.scenarioDepartment);if(!base){$('scenarioResults').innerHTML='';$('scenarioNote').textContent='目前沒有可模擬的基準資料。';return}const quota=Math.max(0,Math.round(base.quota+toolState.scenarioQuotaDelta)),applicants=Math.max(0,Math.round(base.applicants*(1+toolState.scenarioApplicantsPct/100))),adopted=Math.max(0,Math.round(quota*toolState.scenarioFillRate/100)),competition=ratio(applicants,quota),vacancy=quota-adopted,items=[['試算報名',fmt(applicants)],['試算名額',fmt(quota)],['試算註冊報到',fmt(adopted)],['試算不足額',fmt(vacancy)]];$('scenarioResults').innerHTML=items.map(item=>'<div class="scenario-card"><span>'+item[0]+'</span><strong>'+item[1]+'</strong></div>').join('');$('scenarioNote').textContent='基準：'+base.year+' 學年度 '+base.department+'；試算競爭倍率 '+mult(competition)+'。此結果僅供規劃，不會改寫正式資料。'}
   function renderToolkit(){syncToolkitControls();renderAnalysisReminder();renderQualityCenter();renderComparison();renderAlertCenter();renderDepartmentReport();renderVersionHistory();renderScenario()}
   function renderSafely(name,renderer){try{renderer()}catch(error){window.__tnuaDashboardErrors.push({name,message:error?.message||String(error)});console.error('儀表板區塊渲染失敗：'+name,error)}}
+  function rewardEligibleRows(year){
+    const rows=[];const channelRows=allChannelDetails().filter(row=>row.year===year);
+    const groups=[['學士班',new Set(['單獨招生','申請入學'])],['碩士班',new Set(['甄試入學','一般考試'])],['碩士在職專班',new Set(['甄試入學','一般考試'])],['博士班',new Set(['甄試入學','一般考試'])]];
+    groups.forEach(([level,channels])=>channelRows.filter(row=>row.level===level&&channels.has(row.channel)).forEach(row=>rows.push({...row,department:canonicalDepartment(row.department)})));
+    allDetails().filter(row=>row.year===year&&row.level==='七年一貫制').forEach(row=>rows.push({...row,department:canonicalDepartment(row.department)}));
+    return rows;
+  }
+  function rewardSummaryRows(year){
+    const aggregateYear=targetYear=>{const map=new Map();rewardEligibleRows(targetYear).forEach(row=>{const key=row.level+'｜'+row.department,existing=map.get(key)||{level:row.level,department:row.department,applicants:0,quota:0,admitted:0,adopted:0};['applicants','quota','admitted','adopted'].forEach(field=>existing[field]+=n(row[field]));map.set(key,existing)});return map};
+    const current=aggregateYear(year),previous=aggregateYear(year-1);return [...current.values()].map(row=>({...row,previousApplicants:previous.get(row.level+'｜'+row.department)?.applicants, growth:previous.has(row.level+'｜'+row.department)?ratio(row.applicants-previous.get(row.level+'｜'+row.department).applicants,previous.get(row.level+'｜'+row.department).applicants):NaN,fill:ratio(row.adopted,row.quota)})).sort((a,b)=>quotaDetailCohort(a.level)-quotaDetailCohort(b.level)||compareDepartments(a.department,b.department,a.level));
+  }
+  function renderRewards(){
+    const years=[...new Set([...allChannelDetails(),...allDetails()].map(row=>n(row.year)).filter(Boolean))].sort((a,b)=>b-a);if(!years.length){$('rewardYear').innerHTML='';$('rewardBody').innerHTML='<tr><td colspan="9">尚無可計算的招生明細，請先匯入完整資料庫。</td></tr>';$('rewardSnapshot').innerHTML='';return}if(!years.includes(rewardState.year))rewardState.year=years[0];$('rewardYear').innerHTML=years.map(year=>'<option value="'+year+'"'+(year===rewardState.year?' selected':'')+'>'+year+'學年度</option>').join('');
+    const rows=rewardSummaryRows(rewardState.year),totals={applicants:sum(rows,'applicants'),quota:sum(rows,'quota'),admitted:sum(rows,'admitted'),adopted:sum(rows,'adopted')};$('rewardSnapshot').innerHTML=[['納入系所',fmt(rows.length)],['報名人數',fmt(totals.applicants)],['總量內名額',fmt(totals.quota)],['註冊報到率',pct(ratio(totals.adopted,totals.quota))]].map(item=>'<div class="report-kpi"><span>'+item[0]+'</span><strong>'+item[1]+'</strong></div>').join('');
+    $('rewardBody').innerHTML=rows.length?rows.map(row=>'<tr><td>'+esc(row.level)+'</td><td>'+esc(row.department)+'</td><td class="num">'+fmt(row.previousApplicants)+'</td><td class="num">'+fmt(row.applicants)+'</td><td class="num">'+pct(row.growth)+'</td><td class="num">'+fmt(row.quota)+'</td><td class="num">'+fmt(row.admitted)+'</td><td class="num">'+fmt(row.adopted)+'</td><td class="num">'+pct(row.fill)+'</td></tr>').join(''):'<tr><td colspan="9">此學年度沒有符合招生獎勵計算口徑的資料。</td></tr>';
+    $('rewardNote').textContent='計算口徑：學士班只加總「單獨招生、申請入學」；碩士班、碩士在職專班與博士班只加總「甄試入學、一般考試」；七年一貫制採其系所明細。外加名額與其他招生管道均不納入。';
+  }
   function renderAll(){
     updateChannelOptions();updateYearOptions();updateCollegeOptions();updateDepartmentOptions();persist();$('contextTitle').textContent=state.year+'學年度｜'+state.level+(state.channel==='全部'?'':'｜'+state.channel)+(state.college==='全部'?'':'｜'+state.college)+(state.department==='全部'?'':'｜'+state.department);window.__tnuaDashboardErrors=[];
-    [['關鍵指標',renderKpis],['招生轉換漏斗',renderOverviewFunnel],['系所健康矩陣',renderHealthMatrix],['決策統計報告',renderDecisionReport],['風險排行',renderRiskRanking],['四項指標趨勢',renderTrend],['系所年度熱圖',renderHeatmap],['招生管道構成',renderChannelComposition],['系所競爭倍率排名',renderRanking],['精確資料明細',renderTable],['自填資料',renderCustomList],['招生名額調整',renderQuotaAdjustments],['招生名額資料明細',renderQuotaDetail],['招生分析工具',renderToolkit]].forEach(([name,renderer])=>renderSafely(name,renderer));
+    [['關鍵指標',renderKpis],['招生轉換漏斗',renderOverviewFunnel],['系所健康矩陣',renderHealthMatrix],['決策統計報告',renderDecisionReport],['風險排行',renderRiskRanking],['四項指標趨勢',renderTrend],['系所年度熱圖',renderHeatmap],['招生管道構成',renderChannelComposition],['系所競爭倍率排名',renderRanking],['招生獎勵統計',renderRewards],['精確資料明細',renderTable],['自填資料',renderCustomList],['招生名額調整',renderQuotaAdjustments],['招生名額資料明細',renderQuotaDetail],['招生分析工具',renderToolkit]].forEach(([name,renderer])=>renderSafely(name,renderer));
     document.body.dataset.renderState=window.__tnuaDashboardErrors.length?'partial':'ready';
   }
 
@@ -1893,6 +1912,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   $('trendMetric').addEventListener('change',()=>{vizState.heatMetric=$('trendMetric').value;renderAll()});
   $('riskMetric').addEventListener('change',()=>{vizState.riskMetric=$('riskMetric').value;renderAll()});
   $('channelMode').addEventListener('change',()=>{vizState.channelMode=$('channelMode').value;renderAll()});
+  $('rewardYear').addEventListener('change',()=>{rewardState.year=Number($('rewardYear').value);renderRewards()});
   $('detailTableMode').addEventListener('click',()=>{viewState.detail='table';applyViewModes()});$('detailCardMode').addEventListener('click',()=>{viewState.detail='cards';applyViewModes()});$('quotaTableMode').addEventListener('click',()=>{viewState.quota='table';applyViewModes()});$('quotaCardMode').addEventListener('click',()=>{viewState.quota='cards';applyViewModes()});
   $('refreshQuality').addEventListener('click',renderQualityCenter);
   $('qualityList').addEventListener('click',event=>{const button=event.target.closest('[data-quality-action]');if(button)setQualityAction(button.dataset.qualityId,button.dataset.qualityAction)});
