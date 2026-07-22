@@ -1041,14 +1041,18 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const params = new URLSearchParams(location.search);
   const saved = safeParse(localStorage.getItem(FILTER_KEY), {});
   const savedVisual = safeParse(localStorage.getItem(VISUAL_STATE_KEY), {});
+  const entryFilterKeys=['year','level','status','college','channel','department','q'];
+  const hasExplicitEntryFilter=entryFilterKeys.some(key=>params.has(key))&&history.state?.tnuaGeneratedFilter!==true;
+  const entrySaved=hasExplicitEntryFilter?saved:{};
   const state = {
-    year: Number(params.get('year') || saved.year || 114),
-    level: normalizeLevel(params.get('level') || saved.level || '學士班'),
-    status: ['completed','ongoing','forecast','all'].includes(params.get('status')||saved.status)?(params.get('status')||saved.status):'completed',
-    college: params.get('college') || saved.college || '全部',
-    channel: params.get('channel') || saved.channel || '全部',
-    department: canonicalDepartment(params.get('department') || params.get('q') || saved.department || saved.query || '全部'),
+    year: Number(params.get('year') || entrySaved.year || NaN),
+    level: normalizeLevel(params.get('level') || entrySaved.level || '學士班'),
+    status: ['completed','ongoing','forecast','all'].includes(params.get('status')||entrySaved.status)?(params.get('status')||entrySaved.status):'completed',
+    college: params.get('college') || entrySaved.college || '全部',
+    channel: params.get('channel') || entrySaved.channel || '全部',
+    department: canonicalDepartment(params.get('department') || params.get('q') || entrySaved.department || entrySaved.query || '全部'),
   };
+  let pendingLatestUndergraduateEntry=!hasExplicitEntryFilter;
   els.status.value=state.status;
   const vizState = {
     heatMetric: ['applicants','quota','admitted','adopted','competition','admitRate','fill','vacancy','yoy'].includes(params.get('metric'))?params.get('metric'):(savedVisual.heatMetric||'fill'),
@@ -1114,8 +1118,9 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     $('dashboardFooter').hidden=activePage==='quota-archive';
     document.querySelectorAll('[data-page-link]').forEach(link=>{const current=link.dataset.pageLink===activePage;link.classList.toggle('active',current);if(current)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')});
     $('pageStatus').textContent=PAGE_TITLES[activePage]+'分頁';document.title=PAGE_TITLES[activePage]+'｜國立臺北藝術大學招生資訊';
-    if(push)history.pushState({page:activePage},'',location.pathname+location.search+'#'+activePage);
-    else if(!location.hash)history.replaceState({page:activePage},'',location.pathname+location.search+'#'+activePage);
+    const navigationState={page:activePage,tnuaGeneratedFilter:!hasExplicitEntryFilter};
+    if(push)history.pushState(navigationState,'',location.pathname+location.search+'#'+activePage);
+    else if(!location.hash)history.replaceState(navigationState,'',location.pathname+location.search+'#'+activePage);
     if(window.matchMedia('(max-width:760px)').matches)requestAnimationFrame(()=>{const nav=document.querySelector('.brand-nav'),current=document.querySelector('[data-page-link="'+activePage+'"]');if(nav&&current)nav.scrollLeft=Math.max(0,current.offsetLeft-(nav.clientWidth-current.clientWidth)/2)});
     if(scroll){if(window.matchMedia('(min-width:761px)').matches)window.scrollTo({top:0,left:0});else $('main').scrollIntoView({block:'start'})}
   }
@@ -1484,6 +1489,12 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     const rows=[...annualRowsForState(),...detailPool()];
     return [...new Set(rows.filter(row=>row.level===state.level&&Number.isFinite(Number(row.year))).map(row=>Number(row.year)))].sort((a,b)=>b-a);
   }
+  function applyLatestUndergraduateEntry(){
+    if(!pendingLatestUndergraduateEntry)return;
+    state.level='學士班';state.status='completed';state.college='全部';state.channel='全部';state.department='全部';
+    const years=[...new Set([...allAnnual(),...allDetails()].filter(row=>row.level==='學士班'&&statusMatches(row,'completed')).map(row=>Number(row.year)).filter(Number.isFinite))].sort((a,b)=>b-a);
+    state.year=years[0]??NaN;if(years.length)pendingLatestUndergraduateEntry=false;
+  }
   function updateYearOptions(){
     let years=availableYearsForState();
     if(!years.length)years=[...new Set([...allAnnual(),...allDetails()].filter(row=>statusMatches(row)).map(row=>Number(row.year)).filter(Number.isFinite))].sort((a,b)=>b-a);
@@ -1492,6 +1503,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
 
   function setupControls(){
+    applyLatestUndergraduateEntry();
     els.level.innerHTML=FILTER_LEVELS.map(x=>'<option>'+x+'</option>').join('');
     $('fLevel').innerHTML=INPUT_LEVELS.map(x=>'<option>'+x+'</option>').join('');
     if(!FILTER_LEVELS.includes(state.level))state.level=FILTER_LEVELS[0];
@@ -1523,7 +1535,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   function persist(){
     const q=new URLSearchParams();q.set('year',state.year);q.set('level',state.level);if(state.status!=='completed')q.set('status',state.status);if(state.college!=='全部')q.set('college',state.college);if(state.channel!=='全部')q.set('channel',state.channel);if(state.department!=='全部')q.set('department',state.department);
     if(vizState.heatMetric!=='fill')q.set('metric',vizState.heatMetric);if(vizState.healthSort!=='risk')q.set('health',vizState.healthSort);if(vizState.riskMetric!=='vacancy')q.set('risk',vizState.riskMetric);if(vizState.channelMode!=='count')q.set('channelMode',vizState.channelMode);
-    history.replaceState({page:activePage},'',location.pathname+'?'+q.toString()+'#'+activePage);localStorage.setItem(FILTER_KEY,JSON.stringify(state));localStorage.setItem(VISUAL_STATE_KEY,JSON.stringify(vizState));
+    history.replaceState({page:activePage,tnuaGeneratedFilter:!hasExplicitEntryFilter},'',location.pathname+'?'+q.toString()+'#'+activePage);localStorage.setItem(FILTER_KEY,JSON.stringify(state));localStorage.setItem(VISUAL_STATE_KEY,JSON.stringify(vizState));
   }
   function aggregate(){
     const details=selectedDetails();
@@ -2048,7 +2060,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     $('rewardNote').textContent='本頁資料狀態獨立於全站篩選。計算口徑：學士班的「報名人數」只加總單獨招生、申請入學；招生名額、錄取人數與註冊人數則加總總量內全部招生管道。碩士班與博士班加總甄試入學、一般考試；碩士在職專班若未提供管道明細，則以系所明細視為一般考試資料計算；七年一貫制合計男、女生資料。外加名額均不納入。';
   }
   function renderAll(){
-    updateChannelOptions();updateYearOptions();updateCollegeOptions();updateDepartmentOptions();persist();$('contextTitle').textContent=state.year+'學年度｜'+state.level+'｜'+STATUS_SCOPE_LABELS[state.status]+(state.channel==='全部'?'':'｜'+state.channel)+(state.college==='全部'?'':'｜'+state.college)+(state.department==='全部'?'':'｜'+state.department);window.__tnuaDashboardErrors=[];
+    applyLatestUndergraduateEntry();updateChannelOptions();updateYearOptions();updateCollegeOptions();updateDepartmentOptions();persist();$('contextTitle').textContent=state.year+'學年度｜'+state.level+'｜'+STATUS_SCOPE_LABELS[state.status]+(state.channel==='全部'?'':'｜'+state.channel)+(state.college==='全部'?'':'｜'+state.college)+(state.department==='全部'?'':'｜'+state.department);window.__tnuaDashboardErrors=[];
     [['關鍵指標',renderKpis],['招生轉換漏斗',renderOverviewFunnel],['系所健康矩陣',renderHealthMatrix],['決策統計報告',renderDecisionReport],['風險排行',renderRiskRanking],['四項指標趨勢',renderTrend],['系所年度熱圖',renderHeatmap],['招生管道構成',renderChannelComposition],['系所競爭倍率排名',renderRanking],['招生獎勵統計',renderRewards],['精確資料明細',renderTable],['自填資料',renderCustomList],['招生名額調整',renderQuotaAdjustments],['招生名額資料明細',renderQuotaDetail],['招生分析工具',renderToolkit]].forEach(([name,renderer])=>renderSafely(name,renderer));
     applyCentralPermissions();document.body.dataset.renderState=window.__tnuaDashboardErrors.length?'partial':'ready';
   }
