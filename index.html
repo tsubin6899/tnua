@@ -88,6 +88,19 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
 .central-card{border-color:#a9c9d8;background:linear-gradient(145deg,#f4fafc,#fff)}.central-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.central-status{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.central-status>div{border:1px solid #d5e2e8;border-radius:10px;padding:10px;background:#fff}.central-status span{display:block;color:var(--muted);font-size:.67rem}.central-status strong{display:block;margin-top:3px;color:var(--navy);font-size:.86rem;overflow-wrap:anywhere}.central-message{margin:10px 0 0;color:#526878;font-size:.75rem;line-height:1.5}.central-login{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:18px;background:rgba(11,30,47,.82);backdrop-filter:blur(10px)}.central-login[hidden]{display:none}.central-login-card{width:min(420px,100%);border-radius:18px;padding:24px;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.35)}.central-login-card h2{margin:0;color:var(--navy)}.central-login-card p{color:var(--muted);font-size:.82rem;line-height:1.6}.central-login-card .field{margin-top:12px}.central-login-card .btn{width:100%;margin-top:16px}.central-login-error{min-height:1.5em;margin-top:8px;color:#9b3933;font-size:.76rem;font-weight:800}.central-mode-badge{cursor:default}.central-readonly .inline-number,.central-readonly .inline-note{background:#eef1f3!important;color:#79838c;pointer-events:none}.unknown-note{color:#805c00;font-weight:800}
 @media(max-width:1100px){.filters{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.central-status{grid-template-columns:1fr}.central-actions .btn{flex:1 1 135px}}
+#toolkit.toolkit-page{background:linear-gradient(145deg,#f5f8fc 0%,#fbf7fc 44%,#f4faf8 100%);border-color:#cbd9e6;box-shadow:0 18px 44px rgba(20,33,61,.09)}
+#toolkit .toolkit-hero{margin:-20px -20px 0;padding:24px 26px;border-radius:18px 18px 14px 14px;background:linear-gradient(125deg,#17324d 0%,#315f8f 48%,#694a8e 100%);color:#fff;box-shadow:0 12px 30px rgba(35,60,100,.2)}
+#toolkit .toolkit-hero .title-icon{background:linear-gradient(145deg,#f3c852,#e89a56);color:#352305;box-shadow:0 7px 16px rgba(0,0,0,.2)}
+#toolkit .toolkit-hero p{color:#e5eef7;max-width:900px}#toolkit .toolkit-hero .report-head-note{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.26);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.tool-card{--tool-accent:#2878b5;--tool-soft:#eef6fb;position:relative;overflow:hidden;border-top:5px solid var(--tool-accent);background:linear-gradient(145deg,#fff 0%,var(--tool-soft) 150%);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.tool-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(20,33,61,.1)}.tool-card::after{content:"";position:absolute;z-index:0;right:-54px;top:-66px;width:150px;height:150px;border-radius:50%;background:var(--tool-soft);opacity:.82}.tool-card>*{position:relative;z-index:1}
+.tool-card-title{display:flex;align-items:center;gap:10px;line-height:1.35}.tool-card-icon{display:inline-grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:var(--tool-accent);color:#fff;font-size:1.05rem;font-weight:900;box-shadow:0 6px 14px rgba(20,33,61,.16)}
+.tool-card .tool-controls{padding:12px;border:1px solid #dce6ec;border-radius:13px;background:var(--tool-soft);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}.tool-card .field label{color:var(--tool-accent)}.tool-card .field select,.tool-card .field input{border-color:#c5d3dd}
+.theme-compare{--tool-accent:#2878b5;--tool-soft:#eaf5fb}.theme-alert{--tool-accent:#c5534d;--tool-soft:#fff0ee}.theme-report{--tool-accent:#6b4fa1;--tool-soft:#f3effb}.theme-central{--tool-accent:#168a83;--tool-soft:#eaf8f5}.theme-version{--tool-accent:#9b6a00;--tool-soft:#fff7df}.theme-scenario{--tool-accent:#b44f7c;--tool-soft:#fff0f6}.theme-quality{--tool-accent:#4058a5;--tool-soft:#eef1ff}
+.theme-compare .comparison-side:first-child{border-color:#b7d8ea;background:linear-gradient(145deg,#f2f9fd,#fff)}.theme-compare .comparison-side:last-child{border-color:#b9ddd6;background:linear-gradient(145deg,#eff9f6,#fff)}.theme-compare .comparison-delta{border-radius:12px;background:linear-gradient(180deg,#e7f1f8,#f5f1fa)}.theme-compare .comparison-metric:nth-child(1){border-top:3px solid #2878b5}.theme-compare .comparison-metric:nth-child(2){border-top:3px solid #168a83}.theme-compare .comparison-metric:nth-child(3){border-top:3px solid #d5a021}.theme-compare .comparison-metric:nth-child(4){border-top:3px solid #6b4fa1}
+.theme-alert .alert-row{border-left:5px solid #c5534d;background:linear-gradient(100deg,#fff2f0,#fff)}.theme-report .report-kpi:nth-child(4n+1){border-top:4px solid #6b4fa1;background:#f5f1fb}.theme-report .report-kpi:nth-child(4n+2){border-top:4px solid #2878b5;background:#eef6fb}.theme-report .report-kpi:nth-child(4n+3){border-top:4px solid #168a83;background:#edf8f5}.theme-report .report-kpi:nth-child(4n+4){border-top:4px solid #d5a021;background:#fff8e8}
+.theme-central .central-status>div:nth-child(1){border-top:4px solid #168a83;background:#eef9f6}.theme-central .central-status>div:nth-child(2){border-top:4px solid #2878b5;background:#eef6fb}.theme-central .central-status>div:nth-child(3){border-top:4px solid #6b4fa1;background:#f5f1fb}.theme-version .version-row{border-left:5px solid #d5a021;background:linear-gradient(100deg,#fff9e9,#fff)}
+.theme-scenario .scenario-card:nth-child(4n+1){border-top:4px solid #b44f7c;background:#fff1f7}.theme-scenario .scenario-card:nth-child(4n+2){border-top:4px solid #6b4fa1;background:#f5f1fb}.theme-scenario .scenario-card:nth-child(4n+3){border-top:4px solid #2878b5;background:#eef6fb}.theme-scenario .scenario-card:nth-child(4n+4){border-top:4px solid #168a83;background:#edf8f5}.theme-quality .quality-status-grid{padding:2px}.theme-quality .quality-card{box-shadow:0 5px 13px rgba(64,88,165,.07)}
+@media(max-width:760px){#toolkit .toolkit-hero{margin:-13px -13px 0;padding:18px 16px}.tool-card-icon{width:31px;height:31px;flex-basis:31px;font-size:.95rem}.tool-card:hover{transform:none}.tool-card .tool-controls{padding:10px}}
 </style>
 </head>
 <body>
@@ -289,7 +302,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   </section>
   <section class="panel toolkit-page dashboard-page" id="toolkit" data-page="toolkit" aria-labelledby="toolkitTitle" hidden>
     <div class="toolkit-hero">
-      <div><h2 id="toolkitTitle" class="title-with-icon"><span class="title-icon" aria-hidden="true">◆</span><span>招生分析工具</span></h2><p>把資料查核、跨年度比較、預警、單系報告、版本管理與名額情境試算集中在同一分頁。</p></div>
+      <div><h2 id="toolkitTitle" class="title-with-icon"><span class="title-icon" aria-hidden="true">✦</span><span>招生分析工具</span></h2><p>把資料查核、跨年度比較、預警、單系報告、版本管理與名額情境試算集中在同一分頁。</p></div>
       <span class="report-head-note">依目前資料即時計算</span>
     </div>
     <article class="analysis-reminder" id="analysisReminder" role="status" aria-live="polite">
@@ -298,8 +311,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       <button class="btn small secondary" id="viewAlertDetails" type="button">查看提醒明細</button>
     </article>
     <div class="tool-grid">
-      <article class="tool-card wide">
-        <div class="tool-card-head"><div><h3>系所 × 學年度雙向比較</h3><p>選兩個年度或系所，直接比較報名、名額、錄取與註冊報到差異。</p></div></div>
+      <article class="tool-card wide theme-compare">
+        <div class="tool-card-head"><div><h3 class="tool-card-title"><span class="tool-card-icon" aria-hidden="true">⇄</span><span>系所 × 學年度雙向比較</span></h3><p>選兩個年度或系所，直接比較報名、名額、錄取與註冊報到差異。</p></div></div>
         <div class="tool-controls four">
           <div class="field"><label for="compareLevel">學制</label><select id="compareLevel"></select></div>
           <div class="field"><label for="compareYearA">比較 A 學年度</label><select id="compareYearA"></select></div>
@@ -309,8 +322,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
         </div>
         <div class="comparison-board" id="comparisonBoard"></div>
       </article>
-      <article class="tool-card wide" id="alertCenterCard">
-        <div class="tool-card-head"><div><h3>可自訂招生預警中心</h3><p>用報到率、競爭倍率、連續衰退與持續缺額門檻找出需優先追蹤的系所。</p></div></div>
+      <article class="tool-card wide theme-alert" id="alertCenterCard">
+        <div class="tool-card-head"><div><h3 class="tool-card-title"><span class="tool-card-icon" aria-hidden="true">!</span><span>可自訂招生預警中心</span></h3><p>用報到率、競爭倍率、連續衰退與持續缺額門檻找出需優先追蹤的系所。</p></div></div>
         <div class="tool-controls four">
           <div class="field"><label for="alertLevel">學制</label><select id="alertLevel"></select></div>
           <div class="field"><label for="alertFill">報到率低於（%）</label><input id="alertFill" type="number" min="0" max="200" step="1"></div>
@@ -320,8 +333,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
         </div>
         <div class="tool-status" id="alertStatus"></div><div class="alert-list" id="alertCenterList"></div>
       </article>
-      <article class="tool-card wide" id="departmentReportCard">
-        <div class="tool-card-head"><div><h3 id="departmentReportTitle">單一系所招生分析報告</h3><p id="departmentReportSubtitle">選擇年度與系所後，自動產生可列印／另存 PDF 的摘要。</p></div><button class="btn small secondary no-print" id="printDepartmentReport" type="button">列印／另存 PDF</button></div>
+      <article class="tool-card wide theme-report" id="departmentReportCard">
+        <div class="tool-card-head"><div><h3 class="tool-card-title"><span class="tool-card-icon" aria-hidden="true">▤</span><span id="departmentReportTitle">單一系所招生分析報告</span></h3><p id="departmentReportSubtitle">選擇年度與系所後，自動產生可列印／另存 PDF 的摘要。</p></div><button class="btn small secondary no-print" id="printDepartmentReport" type="button">列印／另存 PDF</button></div>
         <div class="tool-controls four no-print">
           <div class="field"><label for="reportLevel">學制</label><select id="reportLevel"></select></div>
           <div class="field"><label for="reportYear">學年度</label><select id="reportYear"></select></div>
@@ -329,18 +342,18 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
         </div>
         <p class="tool-status" id="departmentReportDate"></p><div class="report-kpi-row" id="departmentReportKpis"></div><div class="report-history" id="departmentReportHistory"></div><p class="chart-summary" id="departmentReportInsight"></p>
       </article>
-      <article class="tool-card wide central-card" id="centralCard">
-        <div class="tool-card-head"><div><h3>中央資料、登入與正式發布</h3><p>由中央入口開啟時，資料保存在共用伺服器；編輯者可儲存草稿，管理者審核後正式發布，所有操作均留下時間與使用者紀錄。</p></div><span class="status-pill neutral" id="centralRole">本機模式</span></div>
+      <article class="tool-card wide central-card theme-central" id="centralCard">
+        <div class="tool-card-head"><div><h3 class="tool-card-title"><span class="tool-card-icon" aria-hidden="true">☁</span><span>中央資料、登入與正式發布</span></h3><p>由中央入口開啟時，資料保存在共用伺服器；編輯者可儲存草稿，管理者審核後正式發布，所有操作均留下時間與使用者紀錄。</p></div><span class="status-pill neutral" id="centralRole">本機模式</span></div>
         <div class="central-status"><div><span>連線狀態</span><strong id="centralConnection">未連接中央伺服器</strong></div><div><span>目前使用者</span><strong id="centralUser">—</strong></div><div><span>資料版本</span><strong id="centralRevision">本機瀏覽器</strong></div></div>
         <div class="central-actions"><button class="btn small secondary" id="centralReload" type="button" disabled>重新載入中央資料</button><button class="btn small" id="centralSaveDraft" type="button" disabled>儲存共用草稿</button><button class="btn small gold" id="centralPublish" type="button" disabled>正式發布</button><button class="btn small secondary" id="centralLogout" type="button" hidden>登出</button></div>
         <p class="central-message" id="centralMessage">目前使用私人本機模式；如需多人共用，請由中央啟動入口開啟。</p>
       </article>
-      <article class="tool-card">
-        <div class="tool-card-head"><div><h3>資料版本與變更紀錄</h3><p id="versionDescription">本機模式建立瀏覽器快照；中央模式顯示共用草稿與正式發布紀錄。</p></div><button class="btn small secondary" id="createVersion" type="button">建立快照</button></div>
+      <article class="tool-card theme-version">
+        <div class="tool-card-head"><div><h3 class="tool-card-title"><span class="tool-card-icon" aria-hidden="true">↺</span><span>資料版本與變更紀錄</span></h3><p id="versionDescription">本機模式建立瀏覽器快照；中央模式顯示共用草稿與正式發布紀錄。</p></div><button class="btn small secondary" id="createVersion" type="button">建立快照</button></div>
         <div class="version-list" id="versionList"></div>
       </article>
-      <article class="tool-card">
-        <div class="tool-card-head"><div><h3>招生名額情境模擬</h3><p>調整名額、報名變化與目標報到率，快速試算可能結果。</p></div></div>
+      <article class="tool-card theme-scenario">
+        <div class="tool-card-head"><div><h3 class="tool-card-title"><span class="tool-card-icon" aria-hidden="true">∑</span><span>招生名額情境模擬</span></h3><p>調整名額、報名變化與目標報到率，快速試算可能結果。</p></div></div>
         <div class="tool-controls">
           <div class="field"><label for="scenarioLevel">學制</label><select id="scenarioLevel"></select></div>
           <div class="field"><label for="scenarioYear">基準學年度</label><select id="scenarioYear"></select></div>
@@ -351,8 +364,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
         </div>
         <div class="scenario-results" id="scenarioResults"></div><p class="chart-summary" id="scenarioNote"></p>
       </article>
-      <article class="tool-card wide">
-        <div class="tool-card-head"><div><h3>資料異常與計算檢核中心</h3><p>依原始數值檢查公式、流程邏輯與各層級加總；可標記已修正或忽略，處理狀態會保存在此瀏覽器。</p></div><button class="btn small secondary" id="refreshQuality" type="button">重新檢查</button><span class="quality-refresh-status" id="qualityRefreshStatus" role="status" aria-live="polite"></span></div>
+      <article class="tool-card wide theme-quality">
+        <div class="tool-card-head"><div><h3 class="tool-card-title"><span class="tool-card-icon" aria-hidden="true">✓</span><span>資料異常與計算檢核中心</span></h3><p>依原始數值檢查公式、流程邏輯與各層級加總；可標記已修正或忽略，處理狀態會保存在此瀏覽器。</p></div><button class="btn small secondary" id="refreshQuality" type="button">重新檢查</button><span class="quality-refresh-status" id="qualityRefreshStatus" role="status" aria-live="polite"></span></div>
         <div class="quality-status-grid" id="qualityStatus"></div><div class="tool-status quality-summary" id="qualitySummary" aria-live="polite"></div><div class="quality-list" id="qualityList"></div>
       </article>
     </div>
