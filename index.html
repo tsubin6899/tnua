@@ -1050,7 +1050,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const state = {
     year: Number(entryParam('year') || entrySaved.year || NaN),
     level: normalizeLevel(entryParam('level') || entrySaved.level || '學士班'),
-    status: ['completed','ongoing','forecast','all'].includes(entryParam('status')||entrySaved.status)?(entryParam('status')||entrySaved.status):'completed',
+    status: ['completed','ongoing','forecast','all'].includes(entryParam('status')||entrySaved.status)?(entryParam('status')||entrySaved.status):'all',
     college: entryParam('college') || entrySaved.college || '全部',
     channel: entryParam('channel') || entrySaved.channel || '全部',
     department: canonicalDepartment(entryParam('department') || entryParam('q') || entrySaved.department || entrySaved.query || '全部'),
@@ -1494,8 +1494,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   function applyLatestUndergraduateEntry(force=false){
     if(!pendingLatestUndergraduateEntry&&!force)return;
-    state.level='學士班';state.status='completed';state.college='全部';state.channel='全部';state.department='全部';
-    const years=[...new Set([...allAnnual(),...allDetails()].filter(row=>row.level==='學士班'&&statusMatches(row,'completed')).map(row=>Number(row.year)).filter(Number.isFinite))].sort((a,b)=>b-a);
+    state.level='學士班';state.status='all';state.college='全部';state.channel='全部';state.department='全部';
+    const years=[...new Set([...allAnnual(),...allDetails()].filter(row=>row.level==='學士班').map(row=>Number(row.year)).filter(Number.isFinite))].sort((a,b)=>b-a);
     state.year=years[0]??NaN;if(years.length)pendingLatestUndergraduateEntry=false;
   }
   function updateYearOptions(){
