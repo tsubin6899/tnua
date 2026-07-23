@@ -1042,15 +1042,18 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   const saved = safeParse(localStorage.getItem(FILTER_KEY), {});
   const savedVisual = safeParse(localStorage.getItem(VISUAL_STATE_KEY), {});
   const entryFilterKeys=['year','level','status','college','channel','department','q'];
-  const hasExplicitEntryFilter=entryFilterKeys.some(key=>params.has(key))&&history.state?.tnuaGeneratedFilter!==true;
+  const preserveEntryFilter=params.get('preserve')==='1';
+  const hasExplicitEntryFilter=preserveEntryFilter&&entryFilterKeys.some(key=>params.has(key));
   const entrySaved=hasExplicitEntryFilter?saved:{};
+  const entryParam=key=>hasExplicitEntryFilter?params.get(key):null;
+  if(!preserveEntryFilter)activePage='overview';
   const state = {
-    year: Number(params.get('year') || entrySaved.year || NaN),
-    level: normalizeLevel(params.get('level') || entrySaved.level || '學士班'),
-    status: ['completed','ongoing','forecast','all'].includes(params.get('status')||entrySaved.status)?(params.get('status')||entrySaved.status):'completed',
-    college: params.get('college') || entrySaved.college || '全部',
-    channel: params.get('channel') || entrySaved.channel || '全部',
-    department: canonicalDepartment(params.get('department') || params.get('q') || entrySaved.department || entrySaved.query || '全部'),
+    year: Number(entryParam('year') || entrySaved.year || NaN),
+    level: normalizeLevel(entryParam('level') || entrySaved.level || '學士班'),
+    status: ['completed','ongoing','forecast','all'].includes(entryParam('status')||entrySaved.status)?(entryParam('status')||entrySaved.status):'completed',
+    college: entryParam('college') || entrySaved.college || '全部',
+    channel: entryParam('channel') || entrySaved.channel || '全部',
+    department: canonicalDepartment(entryParam('department') || entryParam('q') || entrySaved.department || entrySaved.query || '全部'),
   };
   let pendingLatestUndergraduateEntry=!hasExplicitEntryFilter;
   els.status.value=state.status;
@@ -1296,7 +1299,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
       saveCustomRows();
       if(pendingImport.systemData){localStorage.setItem(SYSTEM_DATA_KEY,JSON.stringify(pendingImport.systemData));applySystemData(pendingImport.systemData);Object.assign(quotaState,{level:'全部',year:String(MODEL.quota_adjustments?.years?.at(-1)||'全部'),category:'全部',query:''});Object.assign(quotaDetailState,{year:String(MODEL.quota_detail?.years?.at(-1)||116),level:'全部',scope:'全部',college:'全部',department:'全部',channel:'全部'})}
     }catch(error){customRows=previousRows;applySystemData(previousSystem);try{if(previousRows.length)localStorage.setItem(STORAGE_KEY,JSON.stringify(previousRows));else localStorage.removeItem(STORAGE_KEY);if(previousSystem)localStorage.setItem(SYSTEM_DATA_KEY,JSON.stringify(previousSystem));else localStorage.removeItem(SYSTEM_DATA_KEY)}catch{}$('excelStatus').textContent='瀏覽器儲存空間不足或無法寫入，本次匯入已取消：'+error.message;return}
-    const first=customRows.find(row=>row.include!=='否')||customRows[0];if(first){state.year=first.year;state.level=first.level;state.college='全部'}
+    applyLatestUndergraduateEntry(true);
     const systemMessage=pendingImport.systemData?'；名額調整 '+pendingImport.quotaAdjustmentEvents+' 筆、名額明細 '+pendingImport.quotaDetailRecords+' 筆已恢復':'；此舊版檔案未更新名額資料';
     const message='完整批次'+(mode==='replace'?'取代':'合併')+'完成：招生統計 '+customRows.length+' 筆'+systemMessage+'。匯入前版本可用「還原上次匯入前」復原。';
     saveCustomRows();pendingImport=null;$('importReview').hidden=true;resetImportInputs();setupQuotaControls();setupControls();renderAll();$('excelStatus').textContent=message;
@@ -1489,8 +1492,8 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     const rows=[...annualRowsForState(),...detailPool()];
     return [...new Set(rows.filter(row=>row.level===state.level&&Number.isFinite(Number(row.year))).map(row=>Number(row.year)))].sort((a,b)=>b-a);
   }
-  function applyLatestUndergraduateEntry(){
-    if(!pendingLatestUndergraduateEntry)return;
+  function applyLatestUndergraduateEntry(force=false){
+    if(!pendingLatestUndergraduateEntry&&!force)return;
     state.level='學士班';state.status='completed';state.college='全部';state.channel='全部';state.department='全部';
     const years=[...new Set([...allAnnual(),...allDetails()].filter(row=>row.level==='學士班'&&statusMatches(row,'completed')).map(row=>Number(row.year)).filter(Number.isFinite))].sort((a,b)=>b-a);
     state.year=years[0]??NaN;if(years.length)pendingLatestUndergraduateEntry=false;
@@ -1533,7 +1536,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
     els.department.innerHTML='<option>全部</option>'+departments.map(x=>'<option>'+esc(x)+'</option>').join('');els.department.value=state.department;els.department.disabled=!departments.length;
   }
   function persist(){
-    const q=new URLSearchParams();q.set('year',state.year);q.set('level',state.level);if(state.status!=='completed')q.set('status',state.status);if(state.college!=='全部')q.set('college',state.college);if(state.channel!=='全部')q.set('channel',state.channel);if(state.department!=='全部')q.set('department',state.department);
+    const q=new URLSearchParams();if(preserveEntryFilter)q.set('preserve','1');q.set('year',state.year);q.set('level',state.level);if(state.status!=='completed')q.set('status',state.status);if(state.college!=='全部')q.set('college',state.college);if(state.channel!=='全部')q.set('channel',state.channel);if(state.department!=='全部')q.set('department',state.department);
     if(vizState.heatMetric!=='fill')q.set('metric',vizState.heatMetric);if(vizState.healthSort!=='risk')q.set('health',vizState.healthSort);if(vizState.riskMetric!=='vacancy')q.set('risk',vizState.riskMetric);if(vizState.channelMode!=='count')q.set('channelMode',vizState.channelMode);
     history.replaceState({page:activePage,tnuaGeneratedFilter:!hasExplicitEntryFilter},'',location.pathname+'?'+q.toString()+'#'+activePage);localStorage.setItem(FILTER_KEY,JSON.stringify(state));localStorage.setItem(VISUAL_STATE_KEY,JSON.stringify(vizState));
   }
@@ -2009,7 +2012,7 @@ h1,h2,h3,h4,h5,h6,th,.brand-name{font-family:var(--font-sans);font-weight:600!im
   }
   async function loadCentralData(){
     if(!centralState.authenticated)return;centralState.loading=true;updateCentralUi('正在載入中央資料…');
-    try{const preferred=centralState.role==='viewer'?'published':'draft',data=await centralRequest('/api/data?stage='+preferred),versions=await centralRequest('/api/versions');centralState.revision=Number(data.revision)||0;centralState.stage=data.stage||preferred;centralState.versions=Array.isArray(versions.versions)?versions.versions:[];if(data.payload)applyCentralPayload(data.payload);setupQuotaControls();setupControls();renderAll();updateCentralUi(data.payload?'中央資料已載入。':'中央伺服器尚無資料；編輯者可先匯入完整 Excel／CSV，再儲存共用草稿。')}
+    try{const preferred=centralState.role==='viewer'?'published':'draft',data=await centralRequest('/api/data?stage='+preferred),versions=await centralRequest('/api/versions');centralState.revision=Number(data.revision)||0;centralState.stage=data.stage||preferred;centralState.versions=Array.isArray(versions.versions)?versions.versions:[];if(data.payload){applyCentralPayload(data.payload);applyLatestUndergraduateEntry(true)}setupQuotaControls();setupControls();renderAll();updateCentralUi(data.payload?'中央資料已載入。':'中央伺服器尚無資料；編輯者可先匯入完整 Excel／CSV，再儲存共用草稿。')}
     catch(error){updateCentralUi('中央資料載入失敗：'+error.message)}finally{centralState.loading=false;updateCentralUi($('centralMessage').textContent);renderVersionHistory()}
   }
   async function initCentralMode(){
