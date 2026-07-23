@@ -1731,8 +1731,17 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     let data=annualRowsForState().filter(row=>row.year<=state.year);
     const revisedYears=new Set(detailRows.filter(row=>hasInlineEdit(row)||String(row.record_id||'').startsWith('CUSTOM-')).map(row=>row.year));
     revisedYears.forEach(year=>{const rows=detailRows.filter(row=>row.year===year);if(!rows.length)return;const derived={year,level:state.level,applicants:sum(rows,'applicants'),quota:sum(rows,'quota'),admitted:completeMetricSum(rows,'admitted'),adopted:completeMetricSum(rows,'adopted')};data=[...data.filter(row=>row.year!==year),derived]});
+    const reconciledYears=new Set();
+    if(state.channel==='全部'&&['碩士班','碩士在職專班'].includes(state.level)){
+      const annualByYear=new Map(data.map(row=>[row.year,row]));
+      const detailsByYear=new Map();
+      detailRows.forEach(row=>{const rows=detailsByYear.get(row.year)||[];rows.push(row);detailsByYear.set(row.year,rows)});
+      detailsByYear.forEach((rows,year)=>{const annual=annualByYear.get(year);if(!annual||revisedYears.has(year))return;const derived={year,level:state.level,applicants:sum(rows,'applicants'),quota:sum(rows,'quota'),admitted:completeMetricSum(rows,'admitted'),adopted:completeMetricSum(rows,'adopted')};if(n(annual.quota)!==derived.quota){annualByYear.set(year,derived);reconciledYears.add(year)}});
+      data=[...annualByYear.values()];
+    }
     data=[...new Map(data.map(row=>[row.year,row])).values()].sort((a,b)=>a.year-b.year);
-    return {data,basis:revisedYears.size?'官方年度總計；有編輯的年度依系所明細更新':'官方年度總計',context};
+    const basis=[revisedYears.size?'有編輯的年度依系所明細更新':'官方年度總計',reconciledYears.size?'碩士班／碩士在職專班年度總計與明細不一致時，優先採系所明細加總':''].filter(Boolean).join('；');
+    return {data,basis,context};
   }
   function miniLineSvg(def,rows,context){
     const values=rows.map(row=>hasNumber(row[def.key])?n(row[def.key]):NaN),W=Math.max(520,rows.length*44+70),H=216,p={l:44,r:18,t:30,b:34},max=Math.max(...values.filter(Number.isFinite),1)*1.18,sx=index=>p.l+(rows.length<=1?0:index/(rows.length-1))*(W-p.l-p.r),sy=value=>H-p.b-value/max*(H-p.t-p.b);let svg=svgBase(def.label+'歷年趨勢',context+'的'+def.label+'趨勢；缺值以空白點呈現，不視為 0',W,H,'width:'+W+'px;max-width:none');
