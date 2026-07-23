@@ -145,7 +145,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     <div class="filters">
       <div class="field"><label for="year">學年度</label><select id="year"></select></div>
       <div class="field"><label for="level">學制</label><select id="level"></select></div>
-      <div class="field"><label for="statusScope">資料狀態</label><select id="statusScope"><option value="completed">已完成（正式）</option><option value="ongoing">進行中（暫時）</option><option value="forecast">預估（模擬）</option><option value="all">全部狀態</option></select></div>
+      <div class="field"><label for="statusScope">資料狀態</label><select id="statusScope"><option value="completed">已完成（完成註冊報到）</option><option value="ongoing">進行中（尚未完成註冊）</option><option value="all">全部狀態</option></select></div>
       <div class="field"><label for="channel">招生管道</label><select id="channel"></select></div>
       <div class="field"><label for="college">學院</label><select id="college"></select></div>
       <div class="field"><label for="department">系所</label><select id="department"></select></div>
@@ -252,13 +252,13 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
               <div class="field"><label for="fLevel">學制</label><select id="fLevel" required></select></div>
               <div class="field"><label for="fCollege">學院</label><input id="fCollege" value="全校"></div>
               <div class="field"><label for="fDepartment">系所</label><input id="fDepartment" value="全校"></div>
-              <div class="field"><label for="fStatus">資料狀態</label><select id="fStatus"><option>已完成</option><option>進行中</option><option>預估</option></select></div>
+              <div class="field"><label for="fStatus">資料狀態</label><select id="fStatus"><option value="已完成">已完成（完成註冊報到）</option><option value="進行中">進行中（尚未完成註冊）</option></select></div>
               <div class="field"><label for="fApplicants">報名人數</label><input id="fApplicants" type="number" min="0" required></div>
               <div class="field"><label for="fQuota">招生名額</label><input id="fQuota" type="number" min="0" required></div>
               <div class="field"><label for="fAdmitted">錄取人數</label><input id="fAdmitted" type="number" min="0"></div>
               <div class="field"><label for="fOnline">最終線上報到</label><input id="fOnline" type="number" min="0"></div>
               <div class="field"><label for="fRegistered">正式註冊</label><input id="fRegistered" type="number" min="0"></div>
-              <div class="field"><label for="fNote">備註</label><input id="fNote" placeholder="例如：預估值"></div>
+              <div class="field"><label for="fNote">備註</label><input id="fNote" placeholder="例如：暫採線上報到"></div>
             </div>
             <div class="form-actions"><button class="btn gold" type="submit">新增並套用</button><button class="btn secondary" id="exportJson" type="button">備份自填 JSON</button><button class="btn secondary" id="restoreBackup" type="button">還原上次匯入前</button><button class="btn danger" id="clearCustom" type="button">清除全部自填</button></div>
           </form>
@@ -626,7 +626,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     <dataValidation type="whole" operator="between" allowBlank="1" sqref="C6:C${lastRow}"><formula1>90</formula1><formula2>130</formula2></dataValidation>
     <dataValidation type="list" allowBlank="1" sqref="D6:D${lastRow}"><formula1>${levelList}</formula1></dataValidation>
     <dataValidation type="whole" operator="between" allowBlank="1" sqref="G6:K${lastRow}"><formula1>0</formula1><formula2>100000</formula2></dataValidation>
-    <dataValidation type="list" allowBlank="1" sqref="L6:L${lastRow}"><formula1>&quot;已完成,進行中,預估&quot;</formula1></dataValidation>
+    <dataValidation type="list" allowBlank="1" sqref="L6:L${lastRow}"><formula1>&quot;已完成,進行中&quot;</formula1></dataValidation>
     <dataValidation type="list" allowBlank="1" sqref="M6:M${lastRow}"><formula1>&quot;是,否&quot;</formula1></dataValidation>
     <dataValidation type="textLength" operator="lessThanOrEqual" allowBlank="1" sqref="N6:N${lastRow}"><formula1>300</formula1></dataValidation>
   </dataValidations>
@@ -668,7 +668,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       ['錄取人數', '否', '非負整數', '錄取率分子', '320', '不得為負數'],
       ['最終線上報到', '否', '非負整數', '進行中資料的註冊報到人數', '272', '進行中資料建議填寫'],
       ['正式註冊', '否', '非負整數', '已完成資料的註冊報到人數', '268', '已完成資料建議填寫'],
-      ['資料狀態', '是', '下拉', '決定採用線上報到或正式註冊', '進行中', '已完成／進行中／預估'],
+      ['資料狀態', '是', '下拉', '決定採用線上報到或正式註冊', '進行中', '已完成（完成註冊報到）／進行中（尚未完成註冊）'],
       ['是否納入', '是', '下拉', '控制是否進入儀表板分析', '是', '是／否'],
       ['備註', '否', '文字', '補充口徑或限制', '暫採線上報到', '避免放入敏感個資'],
       ['競爭倍率', '公式', '數值', '報名人數 ÷ 招生名額', '5.18x', '請勿手動修改'],
@@ -986,13 +986,13 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   const TOOL_STATE_KEY = 'tnuaAdmissionsToolkit.v1';
   const VIEW_MODE_KEY = 'tnuaAdmissionsViewModes.v1';
   const QUALITY_ACTION_KEY = 'tnuaAdmissionsQualityActions.v1';
-  const STATUS_SCOPE_LABELS = {completed:'已完成（正式）',ongoing:'進行中（暫時）',forecast:'預估（模擬）',all:'全部狀態'};
+  const STATUS_SCOPE_LABELS = {completed:'已完成（完成註冊報到）',ongoing:'進行中（尚未完成註冊）',all:'全部狀態'};
   let systemData = null;
   applySystemData(safeParse(localStorage.getItem(SYSTEM_DATA_KEY),null));
   try{const legacyBackup=localStorage.getItem(BACKUP_KEY);if(legacyBackup&&!sessionStorage.getItem(BACKUP_KEY)){sessionStorage.setItem(BACKUP_KEY,legacyBackup);localStorage.removeItem(BACKUP_KEY)}}catch{}
   const XLSX = window.TNUAXlsx;
   if(document.querySelector){document.querySelector('.brand-nav').insertAdjacentHTML('beforeend','<a data-page-link="rewards" href="#rewards"><span class="nav-icon" aria-hidden="true">★</span>招生獎勵</a>');document.querySelector('#analysisPages').insertAdjacentHTML('afterbegin','<article class="panel wide dashboard-page" id="rewards" data-page="rewards"><div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">★</span><span>招生獎勵統計</span></h2><p>本頁可獨立切換資料狀態；學士班僅納入單獨招生與申請入學，碩博士班合併甄試入學與一般考試，且僅採總量內名額。</p></div><div class="viz-control"><label for="rewardYear">學年度</label><select id="rewardYear"></select></div></div><div class="report-snapshot" id="rewardSnapshot"></div><div class="table-wrap"><table class="report-table"><thead><tr><th>學制</th><th>系所名稱</th><th>資料狀態</th><th class="num">前一學年度報名</th><th class="num">本學年度報名</th><th class="num">報名成長率</th><th class="num">招生名額</th><th class="num">錄取人數</th><th class="num">註冊人數</th><th class="num">註冊報到率</th></tr></thead><tbody id="rewardBody"></tbody></table></div><p class="report-note" id="rewardNote"></p></article>')}
-  if(document.querySelector)document.querySelector('#rewards .panel-head').insertAdjacentHTML('beforeend','<div class="viz-control"><label for="rewardLevel">學制</label><select id="rewardLevel"><option value="全部">全部學制</option><option value="七年一貫制">七年一貫制</option><option value="學士班">學士班</option><option value="碩士班">碩士班</option><option value="碩士在職專班">碩士在職專班</option><option value="博士班">博士班</option></select></div><div class="viz-control"><label for="rewardStatus">資料狀態</label><select id="rewardStatus"><option value="all">全部狀態</option><option value="completed">已完成（正式）</option><option value="ongoing">進行中（暫時）</option><option value="forecast">預估（模擬）</option></select></div>');
+  if(document.querySelector)document.querySelector('#rewards .panel-head').insertAdjacentHTML('beforeend','<div class="viz-control"><label for="rewardLevel">學制</label><select id="rewardLevel"><option value="全部">全部學制</option><option value="七年一貫制">七年一貫制</option><option value="學士班">學士班</option><option value="碩士班">碩士班</option><option value="碩士在職專班">碩士在職專班</option><option value="博士班">博士班</option></select></div><div class="viz-control"><label for="rewardStatus">資料狀態</label><select id="rewardStatus"><option value="all">全部狀態</option><option value="completed">已完成（完成註冊報到）</option><option value="ongoing">進行中（尚未完成註冊）</option></select></div>');
   const PAGE_IDS = ['overview','report','trends','toolkit','quota-adjustments','quota-archive','rewards','data-detail'];
   const PAGE_TITLES = {overview:'總覽',report:'決策報告',trends:'趨勢',toolkit:'分析工具','quota-adjustments':'名額調整','quota-archive':'名額資料',rewards:'招生獎勵','data-detail':'資料明細'};
   const rewardState = {year:null,level:'全部',status:'all'};
@@ -1081,7 +1081,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   const state = {
     year: Number(entryParam('year') || entrySaved.year || NaN),
     level: normalizeLevel(entryParam('level') || entrySaved.level || '學士班'),
-    status: ['completed','ongoing','forecast','all'].includes(entryParam('status')||entrySaved.status)?(entryParam('status')||entrySaved.status):'all',
+    status: ['completed','ongoing','all'].includes(entryParam('status')||entrySaved.status)?(entryParam('status')||entrySaved.status):'all',
     college: entryParam('college') || entrySaved.college || '全部',
     channel: entryParam('channel') || entrySaved.channel || '全部',
     department: canonicalDepartment(entryParam('department') || entryParam('q') || entrySaved.department || entrySaved.query || '全部'),
@@ -1162,7 +1162,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
   function nullable(v){return v === '' || v == null ? null : n(v)}
   function hasNumber(v){return v!==''&&v!=null&&Number.isFinite(Number(v))}
-  function statusMatches(row,scope=state.status){const status=row?.status||'已完成';return scope==='all'||(scope==='completed'&&status==='已完成')||(scope==='ongoing'&&status==='進行中')||(scope==='forecast'&&status==='預估')}
+  function statusMatches(row,scope=state.status){const status=row?.status||'已完成';return scope==='all'||(scope==='completed'&&status==='已完成')||(scope==='ongoing'&&status==='進行中')}
   function completeMetricSum(rows,key){return rows.length&&rows.every(row=>hasNumber(row[key]))?rows.reduce((total,row)=>total+n(row[key]),0):null}
   function detailProfileKey(channel=state.channel,level=state.level){
     if(level==='碩士在職專班')return 'inservice';
@@ -1286,7 +1286,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       const adoptedDirect=importNumber(raw['註冊報到人數'],'註冊報到人數',false,issues);
       const online=importNumber(raw['最終線上報到'],'最終線上報到',false,issues);
       const registered=importNumber(raw['正式註冊'],'正式註冊',false,issues);
-      const status=cleanText(raw['資料狀態'])||'已完成';if(!['已完成','進行中','預估'].includes(status))issues.push('資料狀態須為已完成、進行中或預估');
+      const status=cleanText(raw['資料狀態'])||'已完成';if(!['已完成','進行中'].includes(status))issues.push('資料狀態須為已完成（完成註冊報到）或進行中（尚未完成註冊）');
       const include=cleanText(raw['是否納入'])||'是';if(!['是','否'].includes(include))issues.push('是否納入須為是或否');
       const sourceId=cleanText(raw['資料ID']);
       const adopted=adoptedDirect??(status==='進行中'?online:(registered??online));
@@ -1405,7 +1405,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   function rowsForDashboardLevel(rows,level=state.level){return level===GRADUATE_TOTAL_LEVEL?graduateTotalDetailRows(rows):rows.filter(row=>row.level===level)}
   function aggregateGraduateTotalRows(rows,year,channel='全部'){
     const sources=rows.filter(row=>Number(row.year)===Number(year)&&GRADUATE_COMPONENT_LEVELS.has(row.level)&&(channel==='全部'||row.channel===channel));if(!sources.length)return [];
-    const status=sources.some(row=>row.status==='進行中')?'進行中':sources.every(row=>row.status==='預估')?'預估':'已完成',applicants=sum(sources,'applicants'),quota=sum(sources,'quota'),admitted=completeMetricSum(sources,'admitted'),adopted=completeMetricSum(sources,'adopted');
+    const status=sources.some(row=>row.status==='進行中')?'進行中':'已完成',applicants=sum(sources,'applicants'),quota=sum(sources,'quota'),admitted=completeMetricSum(sources,'admitted'),adopted=completeMetricSum(sources,'adopted');
     return [{record_id:'AUTO-GRADUATE-TOTAL-'+year+'-'+channel,record_type:channel==='全部'?'年度總計':'招生管道年度總計',year:Number(year),level:GRADUATE_TOTAL_LEVEL,channel_group:channel==='全部'?'':sources.find(row=>row.channel_group)?.channel_group||'',channel:channel==='全部'?'':channel,college:'全校',department:'全校',applicants,quota,first_stage_passed:completeOptionalSum(sources,'first_stage_passed'),second_stage_passed:completeOptionalSum(sources,'second_stage_passed'),distributed:completeOptionalSum(sources,'distributed'),pre_return_in:completeOptionalSum(sources,'pre_return_in'),pre_return_out:completeOptionalSum(sources,'pre_return_out'),post_return_in:completeOptionalSum(sources,'post_return_in'),post_return_out:completeOptionalSum(sources,'post_return_out'),admitted,waitlisted:optionalSum(sources,'waitlisted'),abandoned:completeOptionalSum(sources,'abandoned'),waitlist_admitted:completeOptionalSum(sources,'waitlist_admitted'),quota_returned:optionalSum(sources,'quota_returned'),adopted,online_final:completeMetricSum(sources,'online_final'),registered:status==='進行中'?null:completeOptionalSum(sources,'registered'),admission_shortfall:admitted==null?null:quota-admitted,registration_shortfall:adopted==null?null:quota-adopted,status,include:'是',source:'碩士班、碩士在職專班、博士班直接加總',note:'由碩士班、碩士在職專班、博士班直接加總（唯讀）',_automaticGraduateTotal:true,_automaticGraduateSourceCount:sources.length}];
   }
   function graduateTotalChannelSourceRows(channel){
@@ -1415,7 +1415,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     const sources=[...channelRows,...inserviceRows],allDepartments=allDetails(),selectionRows=allChannelDetails().filter(row=>GRADUATE_COMPONENT_LEVELS.has(row.level)&&row.channel==='甄試入學');
     return sources.map(row=>{
       const basePool=allDepartments.filter(candidate=>candidate.year===row.year&&candidate.level===row.level),baseRows=matchingDepartmentRows(row,basePool);if(!baseRows.length)return row;
-      const selectionPool=selectionRows.filter(candidate=>candidate.year===row.year&&candidate.level===row.level),selections=matchingDepartmentRows(row,selectionPool),status=baseRows.some(candidate=>candidate.status==='進行中')?'進行中':baseRows.every(candidate=>candidate.status==='預估')?'預估':'已完成';
+      const selectionPool=selectionRows.filter(candidate=>candidate.year===row.year&&candidate.level===row.level),selections=matchingDepartmentRows(row,selectionPool),status=baseRows.some(candidate=>candidate.status==='進行中')?'進行中':'已完成';
       const applicants=Math.max(sum(baseRows,'applicants')-sum(selections,'applicants'),0),quota=Math.max(sum(baseRows,'quota')-sum(selections,'quota'),0),baseAdmitted=completeMetricSum(baseRows,'admitted'),selectionAdmitted=selections.length?completeMetricSum(selections,'admitted'):0,baseAdopted=completeMetricSum(baseRows,'adopted'),selectionAdopted=selections.length?completeMetricSum(selections,'adopted'):0,admitted=baseAdmitted==null||selectionAdmitted==null?null:Math.max(baseAdmitted-selectionAdmitted,0),adopted=baseAdopted==null||selectionAdopted==null?null:Math.max(baseAdopted-selectionAdopted,0),waitlistedBase=completeOptionalSum(baseRows,'waitlisted'),waitlistedSelection=completeOptionalSum(selections,'waitlisted'),waitlisted=waitlistedBase==null?row.waitlisted??null:Math.max(waitlistedBase-(waitlistedSelection??0),0);
       return {...row,applicants,quota,admitted,adopted,online_final:adopted,registered:status==='進行中'?null:adopted,waitlisted,admission_shortfall:admitted==null?null:quota-admitted,registration_shortfall:adopted==null?null:quota-adopted,status,source:'系所總和扣除甄試入學重算',note:'一般考試由同系所總和扣除甄試入學重算；碩士在職專班依原表「碩博士班考試」口徑納入（唯讀）',_graduateExamReconciled:true};
     });
@@ -1496,7 +1496,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       const rule=level==='學士班'?'單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學':'甄試入學與一般考試';
       if(base._reporting_quota_adjusted)return {...rolled,source:'來源系所總量口徑',note:base.note,_automaticChannelRollup:true,_automaticChannelRollupSourceCount:sources.length};
       if(!sources.length)return {...rolled,source:'原系所明細（指定管道資料尚未建立）',note:'指定管道資料尚未建立；暫用原系所明細並鎖定為唯讀',_automaticChannelRollup:true,_automaticRollupFallback:true};
-      const status=sources.some(row=>row.status==='進行中')?'進行中':sources.every(row=>row.status==='預估')?'預估':'已完成';
+      const status=sources.some(row=>row.status==='進行中')?'進行中':'已完成';
       const applicants=sum(sources,'applicants'),quota=sum(sources,'quota'),admitted=completeMetricSum(sources,'admitted'),waitlisted=optionalSum(sources,'waitlisted'),adopted=completeMetricSum(sources,'adopted');
       return {...rolled,applicants,quota,admitted,waitlisted,adopted,online_final:adopted,registered:status==='進行中'?null:adopted,admission_shortfall:admitted==null?null:quota-admitted,registration_shortfall:adopted==null?null:quota-adopted,status,source:'指定招生管道自動加總',note:'由'+rule+'自動加總（唯讀）',_automaticChannelRollup:true,_automaticChannelRollupSourceCount:sources.length};
     });
@@ -1576,11 +1576,11 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     const details=selectedDetails();
     let rows=selectedTotals();
     if(!rows.length||state.college!=='全部'||state.department!=='全部'||details.some(hasInlineEdit))rows=details;
-    return {rows,applicants:sum(rows,'applicants'),quota:sum(rows,'quota'),admitted:completeMetricSum(rows,'admitted'),adopted:completeMetricSum(rows,'adopted'),pending:rows.some(r=>r.status==='進行中'),forecast:rows.some(r=>r.status==='預估'),missingAdmitted:rows.some(r=>!hasNumber(r.admitted)),missingAdopted:rows.some(r=>!hasNumber(r.adopted))};
+    return {rows,applicants:sum(rows,'applicants'),quota:sum(rows,'quota'),admitted:completeMetricSum(rows,'admitted'),adopted:completeMetricSum(rows,'adopted'),pending:rows.some(r=>r.status==='進行中'),missingAdmitted:rows.some(r=>!hasNumber(r.admitted)),missingAdopted:rows.some(r=>!hasNumber(r.adopted))};
   }
   function renderKpis(){
     const k=aggregate();const comp=ratio(k.applicants,k.quota),admit=hasNumber(k.admitted)?ratio(k.admitted,k.applicants):NaN,fill=hasNumber(k.adopted)?ratio(k.adopted,k.quota):NaN,vacancy=hasNumber(k.adopted)?Math.max(k.quota-k.adopted,0):NaN;
-    $('kApplicants').textContent=fmt(k.applicants);$('kQuota').textContent=fmt(k.quota);$('kAdmitted').textContent=fmt(k.admitted);$('kAdopted').textContent=fmt(k.adopted);$('kCompetition').textContent=mult(comp);$('kAdmitRate').textContent=pct(admit);$('kFill').textContent=pct(fill);$('kVacancy').textContent=fmt(vacancy);$('admittedFoot').textContent=STATUS_SCOPE_LABELS[state.status];$('adoptedFoot').textContent=k.missingAdopted?'待補，不納入比率':k.pending?'暫採最終線上報到':k.forecast?'預估值，不列正式績效':'正式註冊／報到';
+    $('kApplicants').textContent=fmt(k.applicants);$('kQuota').textContent=fmt(k.quota);$('kAdmitted').textContent=fmt(k.admitted);$('kAdopted').textContent=fmt(k.adopted);$('kCompetition').textContent=mult(comp);$('kAdmitRate').textContent=pct(admit);$('kFill').textContent=pct(fill);$('kVacancy').textContent=fmt(vacancy);$('admittedFoot').textContent=STATUS_SCOPE_LABELS[state.status];$('adoptedFoot').textContent=k.missingAdopted?'待補，不納入比率':k.pending?'暫採最終線上報到':'正式註冊／報到';
     $('fillCard').className='kpi '+(!Number.isFinite(fill)?'':fill<.9?'alert':'good');$('vacancyCard').className='kpi '+(!Number.isFinite(vacancy)?'':vacancy>0?'alert':'good');
     let title='目前篩選沒有可計算的年度總計';let text='可切換學年度／學制，或在下方加入年度總計資料。';
     if(k.quota){
@@ -1590,7 +1590,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       else{title='整體報到穩定，下一步聚焦需求結構變化';text='目前報到率 '+pct(fill)+'、競爭倍率 '+mult(comp)+'；可從系所排名與年度趨勢辨識資源轉移。'}
     }
     $('insightTitle').textContent=title;$('insightText').textContent=text;
-    $('caveatText').textContent=PRIVATE_EMPTY_MODE&&!officialRows().length&&!customRows.length?'此網站檔案沒有內嵌招生統計資料；請由下方匯入全部 Excel／CSV。中央模式會將資料保存於共用伺服器。':(k.missingAdopted?'目前範圍有待補的註冊報到資料；未知值不視為 0，報到率與缺額暫不計算。':usesOfficialAnnualTotal()?state.year+'學年度尚無可核對的招生管道拆分資料；本頁顯示官方年度總計與系所總計，並非「全部招生管道」加總。':state.channel!=='全部'?'招生管道資料依各年度原始欄位呈現；不足額依名額與錄取／註冊報到即時計算。':k.pending?'目前顯示進行中資料，正式註冊尚待完成；不得與已完成年度直接視為同一口徑。':k.forecast?'目前顯示預估資料，僅供模擬，不列入正式績效。':'全校備取採招生管道加總；錄取與註冊不足額依目前數值即時計算。');
+    $('caveatText').textContent=PRIVATE_EMPTY_MODE&&!officialRows().length&&!customRows.length?'此網站檔案沒有內嵌招生統計資料；請由下方匯入全部 Excel／CSV。中央模式會將資料保存於共用伺服器。':(k.missingAdopted?'目前範圍有待補的註冊報到資料；未知值不視為 0，報到率與缺額暫不計算。':usesOfficialAnnualTotal()?state.year+'學年度尚無可核對的招生管道拆分資料；本頁顯示官方年度總計與系所總計，並非「全部招生管道」加總。':state.channel!=='全部'?'招生管道資料依各年度原始欄位呈現；不足額依名額與錄取／註冊報到即時計算。':k.pending?'目前顯示進行中資料，正式註冊尚待完成；不得與已完成年度直接視為同一口徑。':'全校備取採招生管道加總；錄取與註冊不足額依目前數值即時計算。');
   }
   function optionalSum(rows,key){const values=rows.map(row=>row[key]).filter(value=>value!=null&&Number.isFinite(Number(value)));return values.length?values.reduce((total,value)=>total+Number(value),0):null}
   function completeOptionalSum(rows,key){return rows.length&&rows.every(row=>hasNumber(row[key]))?rows.reduce((total,row)=>total+Number(row[key]),0):null}
@@ -1888,7 +1888,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   function isHighestScope(row){return String(row.record_type||'').includes('年度總計')||row.college==='全校'||row.department==='全校'}
   function automaticCampusTotal(details){
     const sourceRows=details.filter(row=>row.college!=='全校'&&row.department!=='全校');if(!sourceRows.length)return [];
-    const status=sourceRows.some(row=>row.status==='進行中')?'進行中':sourceRows.every(row=>row.status==='預估')?'預估':'已完成';
+    const status=sourceRows.some(row=>row.status==='進行中')?'進行中':'已完成';
     const admitted=completeMetricSum(sourceRows,'admitted'),adopted=completeMetricSum(sourceRows,'adopted');return [{record_id:'AUTO-CAMPUS-'+state.year+'-'+state.level+'-'+state.channel,record_type:state.channel==='全部'?'年度總計':'招生管道年度總計',year:state.year,level:state.level,channel_group:state.channel==='全部'?'':sourceRows[0]?.channel_group||'',channel:state.channel==='全部'?'':state.channel,college:'全校',department:'全校',applicants:sum(sourceRows,'applicants'),quota:sum(sourceRows,'quota'),first_stage_passed:completeOptionalSum(sourceRows,'first_stage_passed'),second_stage_passed:completeOptionalSum(sourceRows,'second_stage_passed'),distributed:completeOptionalSum(sourceRows,'distributed'),pre_return_in:completeOptionalSum(sourceRows,'pre_return_in'),pre_return_out:completeOptionalSum(sourceRows,'pre_return_out'),post_return_in:completeOptionalSum(sourceRows,'post_return_in'),post_return_out:completeOptionalSum(sourceRows,'post_return_out'),admitted,waitlisted:optionalSum(sourceRows,'waitlisted'),abandoned:completeOptionalSum(sourceRows,'abandoned'),waitlist_admitted:completeOptionalSum(sourceRows,'waitlist_admitted'),quota_returned:optionalSum(sourceRows,'quota_returned'),adopted,online_final:adopted,registered:status==='進行中'?null:adopted,status,include:'是',source:'下方明細自動加總',note:'由下方 '+sourceRows.length+' 筆明細自動加總；管道專屬欄須全部完成才顯示總計',_automaticCampusTotal:true}];
   }
   function visibleRows(){const details=selectedDetails(),totals=usesOfficialAnnualTotal()?selectedTotals():(details.length?automaticCampusTotal(details):selectedTotals());return [...totals,...details].sort((a,b)=>Number(isHighestScope(b))-Number(isHighestScope(a))||compareColleges(a.college,b.college)||compareDepartments(a.department,b.department,state.level)||String(a.record_type).localeCompare(String(b.record_type),'zh-Hant'))}
@@ -2085,7 +2085,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     const current=aggregateYear(year,rewardState.status),previous=aggregateYear(year-1,'all'),levelOrder=['七年一貫制','學士班','碩士班','碩士在職專班','博士班'];return [...current.values()].map(row=>({...row,previousApplicants:previous.get(row.level+'｜'+row.department)?.applicants, growth:previous.has(row.level+'｜'+row.department)?ratio(row.applicants-previous.get(row.level+'｜'+row.department).applicants,previous.get(row.level+'｜'+row.department).applicants):NaN,fill:ratio(row.adopted,row.quota)})).sort((a,b)=>orderIndex(levelOrder,a.level)-orderIndex(levelOrder,b.level)||compareDepartments(a.department,b.department,a.level));
   }
   function rewardLevelClass(level){return level==='七年一貫制'?'level-seven-year':level==='學士班'?'level-undergraduate':level==='碩士班'?'level-master':level==='碩士在職專班'?'level-inservice':level==='博士班'?'level-doctoral':'level-other'}
-  function rewardStatusCell(status){const tone=status==='已完成'?'good':status==='進行中'?'warn':status==='預估'?'neutral':'bad';return '<span class="status-pill '+tone+'">'+esc(status)+'</span>'}
+  function rewardStatusCell(status){const tone=status==='已完成'?'good':status==='進行中'?'warn':'bad';return '<span class="status-pill '+tone+'">'+esc(status)+'</span>'}
   function rewardGrowthCell(value){if(!Number.isFinite(value))return '—';const tone=value>0?'positive':value<0?'negative':'';return '<span class="reward-growth '+tone+'">'+(value>.1?'<span class="reward-medal" aria-label="報名成長超過百分之十" title="報名成長超過 10%">🏅</span>':'')+pct(value)+'</span>'}
   function rewardFillCell(value){if(!Number.isFinite(value))return '—';return (value===1?'<span class="reward-medal" aria-label="註冊報到率百分之百" title="註冊報到率 100%">🏅</span>':'')+pct(value)}
   function renderRewards(){
@@ -2168,7 +2168,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     if(confirm('確定要還原全部明細編輯數值嗎？')){inlineEdits={};saveInlineEdits();renderAll()}
   });
   $('resetFilters').addEventListener('click',()=>{Object.assign(state,{year:114,level:'學士班',status:'completed',college:'全部',channel:'全部',department:'全部'});setupControls();renderAll()});
-  $('customForm').addEventListener('submit',e=>{e.preventDefault();if(centralState.available&&!centralCanEdit())return;const status=$('fStatus').value,online=nullable($('fOnline').value),registered=nullable($('fRegistered').value),admitted=nullable($('fAdmitted').value),adopted=status==='進行中'?online:(registered??online);const row={record_id:'CUSTOM-'+Date.now(),record_type:$('fType').value,year:Number($('fYear').value),level:$('fLevel').value,college:$('fCollege').value.trim()||'全校',department:$('fDepartment').value.trim()||'全校',applicants:n($('fApplicants').value),quota:n($('fQuota').value),admitted,online_final:online,registered,adopted,status,include:'是',source:'自行填入',note:$('fNote').value.trim()};customRows.push(row);saveCustomRows();state.year=row.year;state.level=row.level;state.status=status==='進行中'?'ongoing':status==='預估'?'forecast':'completed';state.college='全部';setupControls();renderAll();e.target.reset();$('fYear').value=row.year;$('fLevel').value=row.level;$('fCollege').value='全校';$('fDepartment').value='全校'});
+  $('customForm').addEventListener('submit',e=>{e.preventDefault();if(centralState.available&&!centralCanEdit())return;const status=$('fStatus').value,online=nullable($('fOnline').value),registered=nullable($('fRegistered').value),admitted=nullable($('fAdmitted').value),adopted=status==='進行中'?online:(registered??online);const row={record_id:'CUSTOM-'+Date.now(),record_type:$('fType').value,year:Number($('fYear').value),level:$('fLevel').value,college:$('fCollege').value.trim()||'全校',department:$('fDepartment').value.trim()||'全校',applicants:n($('fApplicants').value),quota:n($('fQuota').value),admitted,online_final:online,registered,adopted,status,include:'是',source:'自行填入',note:$('fNote').value.trim()};customRows.push(row);saveCustomRows();state.year=row.year;state.level=row.level;state.status=status==='進行中'?'ongoing':'completed';state.college='全部';setupControls();renderAll();e.target.reset();$('fYear').value=row.year;$('fLevel').value=row.level;$('fCollege').value='全校';$('fDepartment').value='全校'});
   $('customList').addEventListener('click',e=>{const id=e.target?.dataset?.delete;if(!id)return;customRows=customRows.filter(r=>r.record_id!==id);saveCustomRows();setupControls();renderAll()});
   $('clearCustom').addEventListener('click',()=>{if(!customRows.length||confirm('確定清除全部自行填入資料？')){customRows=[];saveCustomRows();setupControls();renderAll()}});
   $('downloadTemplate').addEventListener('click',exportDetailTemplate);
