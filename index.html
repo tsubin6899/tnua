@@ -121,7 +121,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
 @media print{#report>.panel-head:first-child,#trends>.panel-head:first-child,#quota-adjustments>.panel-head:first-child,#quota-archive>.panel-head:first-child,#rewards>.panel-head:first-child,#data-detail>.panel-head:first-child{background:#fff!important;color:#000!important;box-shadow:none!important}#report>.panel-head:first-child h2,#trends>.panel-head:first-child h2,#quota-adjustments>.panel-head:first-child h2,#quota-archive>.panel-head:first-child h2,#rewards>.panel-head:first-child h2,#data-detail>.panel-head:first-child h2{color:#000!important}}
 .filters{grid-template-columns:repeat(6,minmax(0,1fr))}.filter-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:2px;padding-top:12px;border-top:1px solid #d7e1e7}.filter-actions .btn{white-space:nowrap}.filter-actions .chart-download-tools{width:auto;margin:0}.filter-actions #chartExportStatus{margin-left:4px}@media(max-width:1100px){.filters{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:760px){.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.filter-actions{grid-column:1/-1;justify-content:stretch;padding-top:10px}.filter-actions #resetFilters{width:100%}.filter-actions #printAdmissionReport,.filter-actions .chart-download-tools,.filter-actions #chartExportStatus{display:none!important}}
 #admissionPrintReport{display:none}
-.chart-export-actions{display:inline-flex;align-items:center;gap:5px;margin-left:auto;flex:0 0 auto}.chart-export-button{appearance:none;border:1px solid #b7c9d4;border-radius:8px;padding:5px 8px;background:#fff;color:#175b78;font:800 .7rem/1 "Noto Sans TC","Microsoft JhengHei",sans-serif;cursor:pointer;box-shadow:0 2px 7px rgba(20,33,61,.06)}.chart-export-button:hover,.chart-export-button:focus-visible{border-color:var(--teal);background:#eaf6f4;color:#0d665f;outline:none}.chart-export-button:disabled{opacity:.48;cursor:wait}.chart-export-anchor{display:flex!important;align-items:center;gap:8px}.chart-export-anchor>.chart-export-actions{margin-left:auto}.chart-download-tools{display:inline-flex;align-items:center;gap:6px}.chart-download-tools select{min-width:72px;border:1px solid #b9c6d2;border-radius:8px;padding:7px;background:#fff;color:var(--ink);font-weight:800}.chart-export-meta{margin-top:14px;padding-top:10px;border-top:1px solid #d7e0e6;color:#5d6b78;font-size:12px;line-height:1.45}.chart-export-status{font-size:.76rem;color:var(--muted)}@media(max-width:760px){.chart-export-actions{margin-top:8px;margin-left:0}.chart-export-anchor{align-items:flex-start;flex-wrap:wrap}.chart-download-tools{width:100%;margin-top:7px}.chart-download-tools .btn{flex:1}.chart-download-tools select{flex:0 0 80px}}
+.chart-export-actions{display:inline-flex;align-items:center;gap:5px;margin-left:auto;flex:0 0 auto}.chart-export-button{appearance:none;border:1px solid #b7c9d4;border-radius:8px;padding:5px 8px;background:#fff;color:#175b78;font:800 .7rem/1 "Noto Sans TC","Microsoft JhengHei",sans-serif;cursor:pointer;box-shadow:0 2px 7px rgba(20,33,61,.06)}.chart-export-button:hover,.chart-export-button:focus-visible{border-color:var(--teal);background:#eaf6f4;color:#0d665f;outline:none}.chart-export-button:disabled{opacity:.48;cursor:wait}.chart-export-anchor{display:flex!important;align-items:center;gap:8px}.chart-export-anchor>.chart-export-actions{margin-left:auto}.chart-export-meta{margin-top:14px;padding-top:10px;border-top:1px solid #d7e0e6;color:#5d6b78;font-size:12px;line-height:1.45}.chart-export-status{font-size:.76rem;color:var(--muted)}.chart-export-stage .print-control-value{display:inline-flex;padding:6px 10px;border-radius:999px;background:#e8f2f6;color:#175b78;font-size:12px;font-weight:800}@media(max-width:760px){.chart-export-actions{margin-top:8px;margin-left:0}.chart-export-anchor{align-items:flex-start;flex-wrap:wrap}}
 @page{size:A4 portrait;margin:12mm 11mm 14mm}
 @media print{
   body.admission-report-print{background:#fff!important;color:#14213d!important;font-size:9.5pt}
@@ -198,15 +198,13 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   .print-risk-block .risk-row{padding:1.6mm 0!important}
   .print-risk-block .risk-name,.print-risk-block .risk-value{font-size:7.5pt!important}
   .print-trend-block{padding:0!important;border:0!important}
-  .print-trend-block>.panel-head{margin-bottom:2mm!important}
-  .print-trend-block .small-multiples{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3mm!important}
-  .print-trend-block .mini-chart{min-width:0!important;padding:2.5mm!important;break-inside:avoid!important;page-break-inside:avoid!important}
-  .print-trend-block .mini-chart h3{margin-bottom:1.5mm!important;font-size:9pt!important}
+  .print-trend-block>.panel-head{display:none!important}
+  .print-trend-block .small-multiples{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:1.5mm!important}
+  .print-trend-block .mini-chart{min-width:0!important;padding:1.2mm!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  .print-trend-block .mini-chart h3{margin-bottom:.5mm!important;font-size:9pt!important}
   .print-trend-block .mini-chart-scroll{overflow:hidden!important}
-  .print-trend-block .mini-chart svg{width:100%!important;max-width:100%!important;height:auto!important;max-height:52mm!important}
-  .print-trend-block .trend-stats{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:2mm!important;margin-top:3mm!important}
-  .print-trend-block .trend-stat{min-height:0!important;padding:2mm!important}
-  .print-trend-block .trend-stat .value{font-size:11pt!important}
+  .print-trend-block .mini-chart svg{width:100%!important;max-width:100%!important;height:auto!important;max-height:48mm!important}
+  .print-trend-block .trend-stats,.print-trend-block>.chart-summary{display:none!important}
 }
 </style>
 </head>
@@ -238,7 +236,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       <div class="field"><label for="channel">招生管道</label><select id="channel"></select></div>
       <div class="field"><label for="college">學院</label><select id="college"></select></div>
       <div class="field"><label for="department">系所</label><select id="department"></select></div>
-      <div class="filter-actions"><button class="btn secondary" id="resetFilters" type="button">重設篩選</button><button class="btn gold" id="printAdmissionReport" type="button" title="列印總覽、決策報告與趨勢">列印招生報告</button><span class="chart-download-tools"><label class="sr-only" for="chartExportFormat">圖表下載格式</label><select id="chartExportFormat" aria-label="圖表下載格式"><option value="png">PNG</option><option value="jpg">JPG</option></select><button class="btn secondary" id="downloadPageCharts" type="button">下載本頁圖表</button></span><span class="chart-export-status" id="chartExportStatus" aria-live="polite"></span></div>
+      <div class="filter-actions"><button class="btn secondary" id="resetFilters" type="button">重設篩選</button><button class="btn gold" id="printAdmissionReport" type="button" title="列印總覽、決策報告與趨勢">列印招生報告</button><span class="chart-export-status" id="chartExportStatus" aria-live="polite"></span></div>
     </div>
   </section>
   <div class="statusline" id="dashboardStatus"><strong id="contextTitle">114學年度｜學士班</strong><span><span class="page-status" id="pageStatus">總覽分頁</span>｜<span id="rowCount">—</span></span></div>
@@ -1290,10 +1288,9 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     appendPrintSection(overviewPage,'招生轉換概況','.viz-grid[data-page="overview"] .panel:first-child','print-overview-chart');
     report.appendChild(overviewPage);
 
-    const decisionPage=createPrintPage(2,'DECISION BRIEF','決策摘要',context+'｜本期表現、歷年基準與改善方向');
+    const decisionPage=createPrintPage(2,'DECISION BRIEF','決策摘要',context+'｜本期表現與缺額結構');
     appendPrintSection(decisionPage,'關鍵決策指標','#report .report-snapshot');
     appendPrintSection(decisionPage,'缺額結構','#vacancyBreakdown');
-    appendPrintSection(decisionPage,'基準比較與優先行動','#report .report-layout');
     appendPrintSection(decisionPage,'資料說明','#reportNote');
     report.appendChild(decisionPage);
 
@@ -1449,41 +1446,70 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       }finally{URL.revokeObjectURL(url)}
     }
   }
+  const chartExportScrollSelector='.trend-scroll,.mini-chart-scroll,.quota-chart-scroll,.quadrant-scroll,.heatmap-wrap,.health-wrap';
+  function chartExportWidth(source){
+    const rootRect=source.getBoundingClientRect(),rootStyle=getComputedStyle(source);
+    const horizontalPadding=(parseFloat(rootStyle.paddingLeft)||0)+(parseFloat(rootStyle.paddingRight)||0);
+    const scrollWidths=[...source.querySelectorAll(chartExportScrollSelector)].map(element=>element.scrollWidth||0);
+    const svgWidths=[...source.querySelectorAll('svg')].map(svg=>{
+      const viewBoxWidth=svg.viewBox?.baseVal?.width||0;
+      return Math.max(viewBoxWidth,parseFloat(svg.style.width)||0,svg.scrollWidth||0);
+    });
+    const contentWidth=Math.max(0,...scrollWidths,...svgWidths);
+    return Math.min(2200,Math.max(520,Math.ceil(rootRect.width),Math.ceil(contentWidth+horizontalPadding)));
+  }
+  async function createChartExportStage(source){
+    const width=chartExportWidth(source),clone=source.cloneNode(true);
+    const sourceSelects=[...source.querySelectorAll('select')];
+    [...clone.querySelectorAll('select')].forEach((select,index)=>{select.selectedIndex=sourceSelects[index]?.selectedIndex??select.selectedIndex});
+    replaceExportControls(clone);
+    delete clone.dataset.chartExportId;
+    clone.classList.add('chart-export-stage');
+    clone.setAttribute('aria-hidden','true');
+    Object.assign(clone.style,{position:'fixed',left:'-100000px',top:'0',width:width+'px',minWidth:width+'px',maxWidth:'none',height:'auto',minHeight:'0',maxHeight:'none',margin:'0',overflow:'visible',pointerEvents:'none',zIndex:'-2147483648'});
+    clone.querySelectorAll(chartExportScrollSelector).forEach(scroller=>Object.assign(scroller.style,{width:'100%',maxWidth:'none',height:'auto',maxHeight:'none',overflow:'visible'}));
+    document.body.appendChild(clone);
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    clone.querySelectorAll(chartExportScrollSelector).forEach(scroller=>{scroller.scrollLeft=0;scroller.scrollTop=0});
+    return clone;
+  }
   async function chartBlob(item,format){
     if(document.fonts?.ready)await document.fonts.ready;
-    const source=item.surface,rootRect=source.getBoundingClientRect();
-    const descendantWidths=[...source.querySelectorAll('*')].map(element=>element.scrollWidth||0);
-    const width=Math.min(2200,Math.max(520,Math.ceil(rootRect.width),source.scrollWidth||0,...descendantWidths));
-    const contentHeight=Math.min(4800,Math.max(300,Math.ceil(rootRect.height),source.scrollHeight||0));
-    const metaHeight=56,height=contentHeight+metaHeight;
-    const scale=Math.max(1,Math.min(2.5,7200/width,7200/height));
-    const canvas=document.createElement('canvas');
-    canvas.width=Math.round(width*scale);
-    canvas.height=Math.round(height*scale);
-    const context=canvas.getContext('2d');
-    context.fillStyle='#ffffff';
-    context.fillRect(0,0,canvas.width,canvas.height);
-    context.save();
-    context.scale(scale,scale);
-    const elements=[source,...source.querySelectorAll('*')].filter(element=>!element.closest('.chart-export-actions'));
-    elements.forEach(element=>drawElementBox(context,element,rootRect,width,contentHeight));
-    elements.forEach(element=>drawElementText(context,element,rootRect,width));
-    context.restore();
-    await drawEmbeddedSvgs(context,source,rootRect,scale);
-    context.fillStyle='#ffffff';
-    context.fillRect(0,contentHeight*scale,canvas.width,metaHeight*scale);
-    context.strokeStyle='#d7e0e6';
-    context.lineWidth=Math.max(1,scale);
-    context.beginPath();
-    context.moveTo(0,contentHeight*scale);
-    context.lineTo(canvas.width,contentHeight*scale);
-    context.stroke();
-    context.fillStyle='#526273';
-    context.font=(12*scale)+'px "Microsoft JhengHei","Noto Sans TC",sans-serif';
-    context.textBaseline='middle';
-    context.fillText($('contextTitle').textContent+'｜產出日期 '+new Date().toLocaleDateString('zh-TW')+'｜資料來源：國立臺北藝術大學招生分析儀表板',18*scale,(contentHeight+metaHeight/2)*scale,canvas.width-36*scale);
-    const mime=format==='jpg'?'image/jpeg':'image/png';
-    return await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('無法建立圖檔')),mime,format==='jpg'?.94:undefined));
+    const source=await createChartExportStage(item.surface);
+    try{
+      const rootRect=source.getBoundingClientRect();
+      const width=Math.min(2200,Math.max(520,Math.ceil(rootRect.width)));
+      const contentHeight=Math.min(4800,Math.max(180,Math.ceil(rootRect.height)));
+      const metaHeight=56,height=contentHeight+metaHeight;
+      const scale=Math.max(1,Math.min(2.5,7200/width,7200/height));
+      const canvas=document.createElement('canvas');
+      canvas.width=Math.round(width*scale);
+      canvas.height=Math.round(height*scale);
+      const context=canvas.getContext('2d');
+      context.fillStyle='#ffffff';
+      context.fillRect(0,0,canvas.width,canvas.height);
+      context.save();
+      context.scale(scale,scale);
+      const elements=[source,...source.querySelectorAll('*')].filter(element=>!element.closest('.chart-export-actions'));
+      elements.forEach(element=>drawElementBox(context,element,rootRect,width,contentHeight));
+      elements.forEach(element=>drawElementText(context,element,rootRect,width));
+      context.restore();
+      await drawEmbeddedSvgs(context,source,rootRect,scale);
+      context.fillStyle='#ffffff';
+      context.fillRect(0,contentHeight*scale,canvas.width,metaHeight*scale);
+      context.strokeStyle='#d7e0e6';
+      context.lineWidth=Math.max(1,scale);
+      context.beginPath();
+      context.moveTo(0,contentHeight*scale);
+      context.lineTo(canvas.width,contentHeight*scale);
+      context.stroke();
+      context.fillStyle='#526273';
+      context.font=(12*scale)+'px "Microsoft JhengHei","Noto Sans TC",sans-serif';
+      context.textBaseline='middle';
+      context.fillText($('contextTitle').textContent+'｜產出日期 '+new Date().toLocaleDateString('zh-TW')+'｜資料來源：國立臺北藝術大學招生分析儀表板',18*scale,(contentHeight+metaHeight/2)*scale,canvas.width-36*scale);
+      const mime=format==='jpg'?'image/jpeg':'image/png';
+      return await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('無法建立圖檔')),mime,format==='jpg'?.94:undefined));
+    }finally{source.remove()}
   }
   async function downloadChartImage(item,format){
     const blob=await chartBlob(item,format);
@@ -1498,18 +1524,6 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     setTimeout(()=>URL.revokeObjectURL(url),1500);
   }
   function setChartExportStatus(message){$('chartExportStatus').textContent=message}
-  async function downloadCurrentPageCharts(){
-    const format=$('chartExportFormat').value;
-    const items=[...chartExportRegistry.values()].filter(item=>item.page===activePage&&item.surface.getClientRects().length);
-    if(!items.length){setChartExportStatus('本頁目前沒有可下載的圖表');return}
-    const button=$('downloadPageCharts');
-    button.disabled=true;
-    try{
-      for(let index=0;index<items.length;index++){setChartExportStatus('正在產出 '+(index+1)+'／'+items.length);await downloadChartImage(items[index],format)}
-      setChartExportStatus('已產出 '+items.length+' 張'+format.toUpperCase()+'圖表');
-    }catch(error){setChartExportStatus('圖表下載失敗：'+error.message)}
-    finally{button.disabled=false}
-  }
   function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
   function nullable(v){return v === '' || v == null ? null : n(v)}
   function hasNumber(v){return v!==''&&v!=null&&Number.isFinite(Number(v))}
@@ -2502,7 +2516,6 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   $('reportDepartment').addEventListener('change',()=>{toolState.reportDepartment=$('reportDepartment').value;persistToolkit();renderDepartmentReport()});
   $('printDepartmentReport').addEventListener('click',()=>{document.body.classList.add('department-report-print');const cleanup=()=>document.body.classList.remove('department-report-print');window.addEventListener('afterprint',cleanup,{once:true});window.print();setTimeout(cleanup,1200)});
   $('printAdmissionReport').addEventListener('click',printAdmissionReport);
-  $('downloadPageCharts').addEventListener('click',downloadCurrentPageCharts);
   document.addEventListener('click',async event=>{
     const button=event.target.closest('[data-chart-export]');
     if(!button)return;
