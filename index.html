@@ -1595,7 +1595,15 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   function optionalSum(rows,key){const values=rows.map(row=>row[key]).filter(value=>value!=null&&Number.isFinite(Number(value)));return values.length?values.reduce((total,value)=>total+Number(value),0):null}
   function completeOptionalSum(rows,key){return rows.length&&rows.every(row=>hasNumber(row[key]))?rows.reduce((total,row)=>total+Number(row[key]),0):null}
   function mean(values){const usable=values.filter(Number.isFinite);return usable.length?usable.reduce((total,value)=>total+value,0)/usable.length:NaN}
-  function metricsFor(row){const applicants=n(row.applicants),quota=n(row.quota),admitted=hasNumber(row.admitted)?n(row.admitted):NaN,adopted=hasNumber(row.adopted)?n(row.adopted):NaN;return {applicants,quota,admitted,adopted,competition:ratio(applicants,quota),admitRate:Number.isFinite(admitted)?ratio(admitted,applicants):NaN,fill:Number.isFinite(adopted)?ratio(adopted,quota):NaN,vacancy:Number.isFinite(adopted)?Math.max(quota-adopted,0):NaN}}
+  function reportingFillBasis(row){
+    const flow=detailFlowMetrics(row),candidates=[n(row.quota)];
+    if(flow.finalQuota!=null)candidates.push(flow.finalQuota);
+    if(hasNumber(row.admitted))candidates.push(n(row.admitted));
+    if(flow.cumulativeAdmitted!=null)candidates.push(flow.cumulativeAdmitted);
+    if(hasNumber(row.adopted))candidates.push(n(row.adopted));
+    return Math.max(...candidates);
+  }
+  function metricsFor(row){const applicants=n(row.applicants),quota=n(row.quota),admitted=hasNumber(row.admitted)?n(row.admitted):NaN,adopted=hasNumber(row.adopted)?n(row.adopted):NaN,fillBasis=reportingFillBasis(row);return {applicants,quota,admitted,adopted,fillBasis,competition:ratio(applicants,quota),admitRate:Number.isFinite(admitted)?ratio(admitted,applicants):NaN,fill:Number.isFinite(adopted)?ratio(adopted,fillBasis):NaN,vacancy:Number.isFinite(adopted)?Math.max(fillBasis-adopted,0):NaN}}
   function aggregateDepartmentRows(rows){
     const grouped=new Map();
     rows.filter(row=>row.department&&row.department!=='全校').forEach(row=>{const department=canonicalDepartment(row.department),key=department,current=grouped.get(key)||{year:row.year,level:row.level,college:row.college,department,applicants:0,quota:0,admitted:0,adopted:0,missingAdmitted:false,missingAdopted:false,pending:false};current.applicants+=n(row.applicants);current.quota+=n(row.quota);if(hasNumber(row.admitted))current.admitted+=n(row.admitted);else current.missingAdmitted=true;if(hasNumber(row.adopted))current.adopted+=n(row.adopted);else current.missingAdopted=true;current.pending=current.pending||row.status==='進行中';grouped.set(key,current)});
@@ -1773,7 +1781,8 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     if(vizState.heatMetric==='fill')$('heatmapLegend').innerHTML='<span>低於 90%：優先改善</span><span class="metric-chip risk">＜90%</span><span class="metric-chip">90–95%</span><span class="metric-chip good">≥95%</span>';
     else if(vizState.heatMetric==='yoy')$('heatmapLegend').innerHTML='<span>報名年增減</span><span style="width:120px;height:9px;border-radius:999px;background:linear-gradient(90deg,'+COLORS.red+',#fff,'+COLORS.teal+')"></span><span>下降 ← 0 → 成長</span>';
     else $('heatmapLegend').innerHTML='<span>'+spec.label+'：低</span><span class="heat-gradient"></span><span>高</span>';
-    if(state.level==='學士班'&&years.some(year=>year>=97&&year<=100))$('heatmapLegend').innerHTML+='<span class="metric-chip">† 97–100 報到率分母依來源納入繁星；97 美術另含流用 1 名</span>';
+    if(vizState.heatMetric==='fill')$('heatmapLegend').innerHTML+='<span class="metric-chip">† 報到率分母採最終可報到基數（名額、實際錄取／遞補與註冊人數）</span>';
+    if(state.level==='學士班'&&years.some(year=>year>=97&&year<=100))$('heatmapLegend').innerHTML+='<span class="metric-chip">† 97–100 另依來源納入繁星；97 美術另含流用 1 名</span>';
     const missing=departments.length*years.length-values.length;$('heatmapSummary').textContent=departments.length?'共 '+departments.length+' 個系所、'+years.length+' 個學年度；'+missing+' 格無可用資料。所選 '+state.year+' 學年度以金色框標示。':'目前學制或招生管道沒有系所年度明細；空白不補估。';
   }
   function renderChannelComposition(){
