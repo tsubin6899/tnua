@@ -119,7 +119,53 @@ body[data-active-page="quota-archive"] .quota-detail-page{background:linear-grad
 body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--page-accent);background:linear-gradient(100deg,var(--page-soft),#fff)}body[data-active-page="data-detail"] .editor>summary{padding:14px;border-radius:13px;background:linear-gradient(135deg,var(--page-soft),#fff);color:var(--page-accent)}body[data-active-page="data-detail"] .excel-card{border-top:5px solid var(--page-accent-2);background:linear-gradient(135deg,#eef7fb,var(--page-soft))}
 @media(max-width:760px){#report>.panel-head:first-child,#trends>.panel-head:first-child,#quota-adjustments>.panel-head:first-child,#quota-archive>.panel-head:first-child,#rewards>.panel-head:first-child,#data-detail>.panel-head:first-child{margin:-15px -15px 16px;padding:18px 16px}body[data-active-page="overview"] #dashboardStatus{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;padding:13px}body[data-active-page="overview"] #dashboardStatus>span{grid-column:1/-1;margin-left:0}#data-detail>.panel-head:first-child .edit-note{padding:10px}}
 @media print{#report>.panel-head:first-child,#trends>.panel-head:first-child,#quota-adjustments>.panel-head:first-child,#quota-archive>.panel-head:first-child,#rewards>.panel-head:first-child,#data-detail>.panel-head:first-child{background:#fff!important;color:#000!important;box-shadow:none!important}#report>.panel-head:first-child h2,#trends>.panel-head:first-child h2,#quota-adjustments>.panel-head:first-child h2,#quota-archive>.panel-head:first-child h2,#rewards>.panel-head:first-child h2,#data-detail>.panel-head:first-child h2{color:#000!important}}
-@media print{body.admission-report-print .dashboard-page[hidden],body.admission-report-print .insight{display:none!important}}
+#admissionPrintReport{display:none}
+@page{size:A4 portrait;margin:12mm 11mm 14mm}
+@media print{
+  body.admission-report-print{background:#fff!important;color:#14213d!important;font-size:9.5pt}
+  body.admission-report-print>*:not(#admissionPrintReport){display:none!important}
+  body.admission-report-print #admissionPrintReport{display:block!important}
+  .print-report-page{position:relative;min-height:267mm;box-sizing:border-box;break-after:page;page-break-after:always;background:#fff;color:#14213d}
+  .print-report-page:last-child{break-after:auto;page-break-after:auto}
+  .print-report-masthead{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin:0 0 10mm;padding:0 0 5mm;border-bottom:2px solid #17324d}
+  .print-report-kicker{display:block;margin-bottom:2mm;color:#0f706b;font-size:7.5pt;font-weight:900;letter-spacing:.14em}
+  .print-report-title{margin:0;color:#17324d;font-size:23pt;line-height:1.15;letter-spacing:-.02em}
+  .print-report-subtitle{margin:2mm 0 0;color:#526273;font-size:9pt}
+  .print-report-page-no{display:grid;place-items:center;width:15mm;height:15mm;border-radius:50%;background:#17324d;color:#fff;font-size:8.5pt;font-weight:900}
+  .print-report-section{margin:0 0 7mm}
+  .print-report-section-title{display:flex;align-items:center;gap:3mm;margin:0 0 4mm;color:#17324d;font-size:14pt}
+  .print-report-section-title:before{content:"";width:3mm;height:7mm;border-radius:2mm;background:#0f706b}
+  .print-report-footer{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;padding-top:3mm;border-top:1px solid #ccd7de;color:#6a7885;font-size:7.5pt}
+  .print-report-page .kpis{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:3mm!important;margin:0!important}
+  .print-report-page .kpi{min-height:28mm!important;padding:4mm!important;border:1px solid #d7e0e6!important;border-radius:3mm!important;box-shadow:none!important}
+  .print-report-page .kpi .label{font-size:7.5pt!important}
+  .print-report-page .kpi .value{margin:2mm 0 1mm!important;font-size:18pt!important}
+  .print-report-page .kpi .foot{font-size:7pt!important}
+  .print-report-page .panel{padding:4mm!important;border:1px solid #d7e0e6!important;border-radius:3mm!important;box-shadow:none!important}
+  .print-report-page .panel-head{margin-bottom:3mm!important}
+  .print-report-page .panel h2,.print-report-page .panel h3{font-size:12pt!important}
+  .print-report-page .panel p{font-size:8pt!important}
+  .print-report-page .chart{min-height:0!important;max-height:none!important}
+  .print-report-page svg{max-width:100%!important;height:auto!important}
+  .print-overview-chart svg{max-height:105mm!important}
+  .print-report-page .report-snapshot{grid-template-columns:repeat(2,1fr)!important;gap:3mm!important;margin:0!important}
+  .print-report-page .report-stat{min-height:0!important;padding:4mm!important;border-radius:3mm!important}
+  .print-report-page .report-layout{display:block!important}
+  .print-report-page .report-layout>div+div{margin-top:5mm}
+  .print-report-page .report-table-wrap,.print-report-page .table-wrap{max-height:none!important;overflow:visible!important}
+  .print-report-page table{width:100%!important;min-width:0!important;font-size:8pt!important}
+  .print-report-page th,.print-report-page td{padding:2.2mm!important}
+  .print-report-page th{position:static!important}
+  .print-report-page .report-actions{gap:2mm!important}
+  .print-report-page .report-action{padding:3mm!important}
+  .print-report-page .report-visual-grid{display:block!important}
+  .print-report-page .risk-list{gap:2.5mm!important}
+  .print-report-page .trend-scroll{overflow:visible!important}
+  .print-trend-block svg{max-height:150mm!important}
+  .print-report-page .viz-control,.print-report-page button,.print-report-page input,.print-report-page select{display:none!important}
+  .print-control-value{display:inline-flex;padding:1.5mm 3mm;border-radius:999px;background:#e8f2f6;color:#175b78;font-size:8pt;font-weight:800}
+  .print-report-page .chart-summary{font-size:7.5pt!important}
+}
 </style>
 </head>
 <body>
@@ -153,7 +199,6 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       <div class="filter-actions"><button class="btn secondary" id="resetFilters" type="button">重設篩選</button><button class="btn gold" id="printAdmissionReport" type="button" title="列印總覽、決策報告與趨勢">列印招生報告</button></div>
     </div>
   </section>
-  <section id="printReportHeader" hidden aria-label="招生分析列印報告標題"><span class="eyebrow">TNUA ADMISSIONS INTELLIGENCE</span><h1>招生分析決策報告</h1><p id="printReportContext"></p></section>
   <div class="statusline" id="dashboardStatus"><strong id="contextTitle">114學年度｜學士班</strong><span><span class="page-status" id="pageStatus">總覽分頁</span>｜<span id="rowCount">—</span></span></div>
   <section class="kpis dashboard-page" id="overview" data-page="overview" aria-label="招生關鍵指標">
     <article class="kpi primary"><div class="label">報名人數</div><div class="value" id="kApplicants">—</div><div class="foot">年度總計口徑</div></article>
@@ -1161,17 +1206,71 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     if(window.matchMedia('(max-width:760px)').matches)requestAnimationFrame(()=>{const nav=document.querySelector('.brand-nav'),current=document.querySelector('[data-page-link="'+activePage+'"]');if(nav&&current)nav.scrollLeft=Math.max(0,current.offsetLeft-(nav.clientWidth-current.clientWidth)/2)});
     if(scroll){if(window.matchMedia('(min-width:761px)').matches)window.scrollTo({top:0,left:0});else $('main').scrollIntoView({block:'start'})}
   }
+  function cloneForPrint(selector,className=''){
+    const source=typeof selector==='string'?document.querySelector(selector):selector;
+    if(!source)return null;
+    const clone=source.cloneNode(true);
+    clone.hidden=false;
+    if(className)clone.classList.add(className);
+    clone.querySelectorAll('button,input').forEach(element=>element.remove());
+    clone.querySelectorAll('select').forEach(select=>{
+      const value=document.createElement('span');
+      value.className='print-control-value';
+      value.textContent=select.options[select.selectedIndex]?.textContent||'';
+      select.replaceWith(value);
+    });
+    return clone;
+  }
+  function createPrintPage(number,kicker,title,subtitle){
+    const page=document.createElement('section');
+    page.className='print-report-page';
+    page.innerHTML='<header class="print-report-masthead"><div><span class="print-report-kicker">'+kicker+'</span><h1 class="print-report-title">'+title+'</h1><p class="print-report-subtitle">'+subtitle+'</p></div><span class="print-report-page-no">'+String(number).padStart(2,'0')+' / 04</span></header><footer class="print-report-footer"><span>國立臺北藝術大學｜招生改善決策參考</span><span>依目前篩選條件即時計算</span></footer>';
+    return page;
+  }
+  function appendPrintSection(page,title,source,className=''){
+    const content=cloneForPrint(source,className);
+    if(!content)return;
+    const section=document.createElement('section');
+    section.className='print-report-section';
+    section.innerHTML='<h2 class="print-report-section-title">'+title+'</h2>';
+    section.appendChild(content);
+    page.insertBefore(section,page.querySelector('.print-report-footer'));
+  }
+  function buildAdmissionPrintReport(){
+    const context=$('contextTitle').textContent;
+    const date=new Date().toLocaleDateString('zh-TW');
+    const report=document.createElement('main');
+    report.id='admissionPrintReport';
+    report.setAttribute('aria-label','招生分析列印報告');
+
+    const overviewPage=createPrintPage(1,'EXECUTIVE OVERVIEW','招生分析決策報告',context+'｜產出日期 '+date);
+    appendPrintSection(overviewPage,'核心招生指標','#overview','print-kpi-block');
+    appendPrintSection(overviewPage,'招生轉換概況','.viz-grid[data-page="overview"] .panel:first-child','print-overview-chart');
+    report.appendChild(overviewPage);
+
+    const decisionPage=createPrintPage(2,'DECISION BRIEF','決策摘要',context+'｜本期表現、歷年基準與改善方向');
+    appendPrintSection(decisionPage,'關鍵決策指標','#report .report-snapshot');
+    appendPrintSection(decisionPage,'缺額結構','#vacancyBreakdown');
+    appendPrintSection(decisionPage,'基準比較與優先行動','#report .report-layout');
+    appendPrintSection(decisionPage,'資料說明','#reportNote');
+    report.appendChild(decisionPage);
+
+    const riskPage=createPrintPage(3,'RISK & ACTION','風險與行動重點',context+'｜辨識持續缺額與招生動能變化');
+    appendPrintSection(riskPage,'近三年風險排行','#report .report-visual-grid','print-risk-block');
+    report.appendChild(riskPage);
+
+    const trendPage=createPrintPage(4,'TREND REVIEW','歷年招生趨勢',context+'｜報名、名額、錄取與註冊報到變化');
+    appendPrintSection(trendPage,'四項招生指標趨勢','#trends','print-trend-block');
+    report.appendChild(trendPage);
+    return report;
+  }
   function printAdmissionReport(){
-    const currentPage=activePage;
-    const reportPages=new Set(['overview','report','trends']);
+    const report=buildAdmissionPrintReport();
+    document.body.appendChild(report);
     document.body.classList.add('admission-report-print');
-    $('printReportContext').textContent=$('contextTitle').textContent+'｜依目前篩選條件產出｜'+new Date().toLocaleDateString('zh-TW');
-    $('printReportHeader').hidden=false;
-    document.querySelectorAll('[data-page]').forEach(element=>{element.hidden=!reportPages.has(element.dataset.page)});
-    $('analysisPages').hidden=false;
-    const cleanup=()=>{$('printReportHeader').hidden=true;document.body.classList.remove('admission-report-print');showPage(currentPage)};
+    const cleanup=()=>{document.body.classList.remove('admission-report-print');report.remove()};
     window.addEventListener('afterprint',cleanup,{once:true});
-    window.print();
+    requestAnimationFrame(()=>window.print());
   }
   function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
   function nullable(v){return v === '' || v == null ? null : n(v)}
