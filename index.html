@@ -1961,12 +1961,8 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   function completeOptionalSum(rows,key){return rows.length&&rows.every(row=>hasNumber(row[key]))?rows.reduce((total,row)=>total+Number(row[key]),0):null}
   function mean(values){const usable=values.filter(Number.isFinite);return usable.length?usable.reduce((total,value)=>total+value,0)/usable.length:NaN}
   function reportingFillBasis(row){
-    const flow=detailFlowMetrics(row),candidates=[n(row.quota)];
-    if(flow.finalQuota!=null)candidates.push(flow.finalQuota);
-    if(hasNumber(row.admitted))candidates.push(n(row.admitted));
-    if(flow.cumulativeAdmitted!=null)candidates.push(flow.cumulativeAdmitted);
-    if(hasNumber(row.adopted))candidates.push(n(row.adopted));
-    return Math.max(...candidates);
+    const flow=detailFlowMetrics(row);
+    return flow.finalQuota??n(row.quota);
   }
   function metricsFor(row){const applicants=n(row.applicants),quota=n(row.quota),admitted=hasNumber(row.admitted)?n(row.admitted):NaN,adopted=hasNumber(row.adopted)?n(row.adopted):NaN,fillBasis=reportingFillBasis(row);return {applicants,quota,admitted,adopted,fillBasis,competition:ratio(applicants,quota),admitRate:Number.isFinite(admitted)?ratio(admitted,applicants):NaN,fill:Number.isFinite(adopted)?ratio(adopted,fillBasis):NaN,vacancy:Number.isFinite(adopted)?Math.max(fillBasis-adopted,0):NaN}}
   function aggregateDepartmentRows(rows){
