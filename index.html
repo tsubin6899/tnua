@@ -309,6 +309,12 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
         </div>
       </div>
       <p class="report-note" id="registrarStatus" role="status"></p>
+      <div class="panel-head">
+        <div><h2>教育部學25｜碩博士班總量內招生情形</h2><p>選取當期校務資料庫下載的學25 Excel，帶入甄試與考試的報名及錄取人數。</p></div>
+        <button class="btn small gold" id="downloadMoe25" type="button">選取學25範本並下載</button>
+        <input class="sr-only" id="moe25File" type="file" accept=".xlsx">
+      </div>
+      <p class="report-note" id="moe25Status" role="status"></p>
     </article>
     <article class="panel wide dashboard-page" id="data-detail" data-page="data-detail">
       <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程；匯出與匯入均以全部學年度、全部學制及全部招生管道為範圍。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才顯示流用出；甄試入學／繁星推薦顯示流用出，繁星推薦不顯示備取人數；申請入學顯示第一階段通過與放棄報到；四技二專顯示分發與放棄報到；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；學士班單獨招生的放榜前／後流用入，分別由同系所特殊選才與繁星推薦的放榜前／後流用出加總帶入；碩士班、博士班一般考試則由同系所甄試入學帶入。承接管道若沒有對應來源管道，兩個流用入欄鎖定為「—」，計算時視為 0。實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。</span><span class="flow-help"><strong>全部招生管道：</strong>學士班的報名、名額、錄取、備取與註冊報到，只加總單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學；碩士班、博士班則加總甄試入學與一般考試。這些彙總列均為系統衍生欄位，不開放填寫。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="clearAllData" type="button" title="永久清除目前瀏覽器的資料、備份與快照" style="color:#a32626;border-color:#a32626">清除所有資料</button><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出全部 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出全部 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入全部 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
@@ -975,12 +981,32 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       if (view.getUint32(offset, true) !== 0x02014B50) throw new Error('Excel ZIP 目錄損壞。');
       const flags = view.getUint16(offset + 8, true);
       const method = view.getUint16(offset + 10, true);
-      const compressedSize = view.getUint32(offset + 20, true);
-      const uncompressedSize = view.getUint32(offset + 24, true);
+      let compressedSize = view.getUint32(offset + 20, true);
+      let uncompressedSize = view.getUint32(offset + 24, true);
       const nameLength = view.getUint16(offset + 28, true);
       const extraLength = view.getUint16(offset + 30, true);
       const commentLength = view.getUint16(offset + 32, true);
-      const localOffset = view.getUint32(offset + 42, true);
+      let localOffset = view.getUint32(offset + 42, true);
+      const needsZip64 = [uncompressedSize,compressedSize,localOffset].includes(0xffffffff);
+      if(needsZip64){
+        let extra=offset+46+nameLength;
+        const endExtra=extra+extraLength;
+        while(extra+4<=endExtra&&view.getUint16(extra,true)!==1)extra+=4+view.getUint16(extra+2,true);
+        if(extra+4>endExtra)throw new Error('Excel ZIP64 目錄缺少檔案大小。');
+        const zip64End=extra+4+view.getUint16(extra+2,true);
+        let position=extra+4;
+        const readZip64=value=>{
+          if(value!==0xffffffff)return value;
+          if(position+8>zip64End||zip64End>endExtra)throw new Error('Excel ZIP64 目錄損壞。');
+          const number=Number(view.getBigUint64(position,true));
+          position+=8;
+          if(!Number.isSafeInteger(number))throw new Error('Excel 檔案超過可處理大小。');
+          return number;
+        };
+        uncompressedSize=readZip64(uncompressedSize);
+        compressedSize=readZip64(compressedSize);
+        localOffset=readZip64(localOffset);
+      }
       const name = decoder.decode(data.subarray(offset + 46, offset + 46 + nameLength)).replaceAll('\\', '/');
       entries.set(name, { flags, method, compressedSize, uncompressedSize, localOffset });
       offset += 46 + nameLength + extraLength + commentLength;
@@ -1043,6 +1069,78 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     const number = Number(raw);
     return Number.isFinite(number) ? number : raw;
   }
+
+  async function fillMoe25Workbook(buffer, fillRow) {
+    const archive = zipIndex(buffer);
+    const workbook = parseXml(await readZipText(archive, 'xl/workbook.xml'), '活頁簿');
+    const relations = parseXml(await readZipText(archive, 'xl/_rels/workbook.xml.rels'), '工作表連結');
+    const firstSheet = elements(workbook, 'sheet')[0];
+    const relation = elements(relations, 'Relationship').find(item=>item.getAttribute('Id')===firstSheet?.getAttribute('r:id'));
+    if(!relation)throw new Error('找不到學25工作表。');
+    const sheetPath = resolvePath('xl', relation.getAttribute('Target'));
+    const sheet = parseXml(await readZipText(archive, sheetPath), '學25');
+    const sharedText = await readZipText(archive, 'xl/sharedStrings.xml', false);
+    const shared = sharedText ? elements(parseXml(sharedText,'共用文字'),'si').map(item=>elements(item,'t').map(node=>node.textContent).join('')) : [];
+    const rows = elements(sheet,'row');
+    const readRow = row=>{
+      const values=[];
+      for(const cell of elements(row,'c'))values[columnIndex(cell.getAttribute('r'))]=cellValue(cell,shared);
+      return values;
+    };
+    const headers=rows.length?readRow(rows[0]):[];
+    const required={0:'學校名稱',1:'學年度',5:'單位',7:'學制班別',10:'總量內核定名額-新生招生名額-甄試',
+      12:'總量內核定名額-報名人數-甄試',13:'總量內核定名額-報名人數-考試',
+      16:'總量內核定名額-錄取人數-甄試',17:'總量內核定名額-錄取人數-考試',
+      19:'總量內核定名額-實際註冊人數-已在職者-全職',22:'補充說明'};
+    if(!Object.entries(required).every(([col,label])=>headers[col]===label)||
+      !rows[1]||!String(readRow(rows[1])[0]).includes('合計'))throw new Error('欄位與學25範本不符。請選取當期校務資料庫下載的學25檔案。');
+    const namespace=sheet.documentElement.namespaceURI;
+    function writeNumber(row,col,value){
+      const ref=columnName(col)+row.getAttribute('r');
+      const cells=elements(row,'c');
+      let cell=cells.find(item=>item.getAttribute('r')===ref);
+      if(!cell){
+        cell=sheet.createElementNS(namespace,'c');
+        cell.setAttribute('r',ref);
+        row.insertBefore(cell,cells.find(item=>columnIndex(item.getAttribute('r'))>col)||null);
+      }
+      cell.setAttribute('t','n');
+      cell.replaceChildren();
+      const numeric=sheet.createElementNS(namespace,'v');
+      numeric.textContent=String(value);
+      cell.appendChild(numeric);
+    }
+    const dataRows=rows.slice(2).filter(row=>readRow(row)[0]==='國立臺北藝術大學');
+    if(!dataRows.length||dataRows.length!==rows.slice(2).filter(row=>readRow(row).some(value=>value!==''&&value!=null)).length){
+      throw new Error('範本明細必須為國立臺北藝術大學。');
+    }
+    const totals=new Map();
+    const filledColumns=new Set();
+    const targetColumns=[12,13,16,17];
+    for(const row of dataRows){
+      const values=readRow(row);
+      const replacements=fillRow(values);
+      for(const col of targetColumns){
+        if(replacements[col]!=null){
+          writeNumber(row,col,replacements[col]);
+          values[col]=replacements[col];
+          filledColumns.add(col);
+        }
+        if(typeof values[col]==='number')totals.set(col,(totals.get(col)||0)+values[col]);
+      }
+    }
+    for(const col of filledColumns)writeNumber(rows[1],col,totals.get(col)||0);
+    if(!filledColumns.size)throw new Error('目前資料庫沒有可對應的學25招生數字。');
+    const files=[];
+    for(const [name,entry] of archive.entries){
+      if(name.endsWith('/'))continue;
+      if(entry.uncompressedSize>20*1024*1024)throw new Error('範本內有過大的 Excel 元件。');
+      const data=name===sheetPath?new XMLSerializer().serializeToString(sheet):await readZipEntry(archive,name);
+      files.push({name,data});
+    }
+    return zipStore(files);
+  }
+
   function canonicalHeader(value) {
     const text = String(value == null ? '' : value).replace(/[\s　]+/g, '').toLowerCase();
     return HEADER_ALIASES.get(text) || '';
@@ -1118,7 +1216,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     return { sheetName: selected.name, headerRow, rows:[...rows,...systemRows], admissionRows:rows.length, systemRows:systemRows.length };
   }
 
-  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, SYSTEM_HEADERS, LEVELS, createWorkbook, createRewardWorkbook, createDetailWorkbook, createRegistrarWorkbook, parseWorkbook });
+  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, SYSTEM_HEADERS, LEVELS, createWorkbook, createRewardWorkbook, createDetailWorkbook, createRegistrarWorkbook, fillMoe25Workbook, parseWorkbook });
 })(window);
 
 </script>
@@ -1904,6 +2002,64 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       downloadBytes('北藝大招生名額_國倫系統用.xlsx',XLSX.createRegistrarWorkbook(sheets));
       status.textContent='已下載 '+sheets.length+' 個學年度。'+current+' 筆採目前資料明細，'+historical+' 筆保留國倫原表，'+omitted+' 筆依資料明細的「不納入」設定略過。'+(unresolved?'另有 '+unresolved+' 筆的身分或系所代碼待註冊單位確認，相關欄位留白。':'');
     }catch(error){status.textContent='下載失敗：'+error.message}
+  }
+
+
+  function moe25Department(value,level){
+    const name=cleanText(value).normalize('NFKC').replace(/s/g,'');
+    if(level==='博士班'&&name==='文化資源學院文化資產與藝術創新博士班')return '文化資產與藝術創新';
+    if(level==='碩士在職專班'&&name==='藝術行政與管理研究所領導與決策高階經理人藝術碩士在職專班')return '領導與決策高階經理人藝術';
+    const suffix=new RegExp(level+'$');
+    return name.replace(suffix,'');
+  }
+
+  async function exportMoe25Form(file){
+    if(!file)return;
+    const status=$('moe25Status'),button=$('downloadMoe25');
+    button.disabled=true;
+    status.textContent='正在核對範本和招生明細…';
+    try{
+      if(file.size>10*1024*1024)throw new Error('範本超過 10 MB。');
+      const key=(year,level,department,channel)=>JSON.stringify([year,level,moe25Department(department,level),channel]);
+      const candidates=new Map(),levels=['碩士班','碩士在職專班','博士班'];
+      for(const row of allExchangeRows()){
+        if(!levels.includes(row.level)||row.include==='否')continue;
+        const detail=row.record_type==='招生管道明細'&&row.channel_group==='總量內'&&['甄試入學','一般考試'].includes(row.channel);
+        const inservice=row.level==='碩士在職專班'&&row.record_type==='系所明細';
+        if(!detail&&!inservice)continue;
+        const id=key(Number(row.year),row.level,row.department,inservice?'一般考試':row.channel);
+        const prior=candidates.get(id);
+        if(prior?.detail&&!detail)continue;
+        if(!prior||detail&&!prior.detail)candidates.set(id,{detail,rows:[row]});
+        else prior.rows.push(row);
+      }
+      let matched=0, pending=0;
+      const data=await XLSX.fillMoe25Workbook(await file.arrayBuffer(),values=>{
+        const year=Number(values[1]),department=values[5],level=values[7];
+        const replacement={};
+        let filled=0, complete=true;
+        for(const [channel,quotaCol,appliedCol,admittedCol] of [['甄試入學',10,12,16],['一般考試',11,13,17]]){
+          const rows=candidates.get(key(year,level,department,channel))?.rows;
+          if(rows?.length===1){
+            for(const [field,col] of [['applicants',appliedCol],['admitted',admittedCol]]){
+              if(hasNumber(rows[0][field])){
+                replacement[col]=Number(rows[0][field]);
+                filled++;
+              }else complete=false;
+            }
+          }else if(rows?.length||values[quotaCol]!==0||values[appliedCol]!==0||values[admittedCol]!==0){
+            complete=false;
+          }
+        }
+        if(filled)matched++;
+        if(!complete)pending++;
+        return replacement;
+      });
+      downloadBytes(file.name.replace(/.xlsx$/i,'')+'_招生資料帶入.xlsx',data);
+      status.textContent='已下載，'+matched+' 筆帶入招生數字。'+(pending?'另有 '+pending+' 筆有欄位無法確認，相關欄位保留範本值。':'')+
+        ' 逕修讀博士與依就業狀態拆分的註冊欄保留範本原值，送件前請核對。';
+    }catch(error){status.textContent='無法產出學25：'+error.message}
+    finally{button.disabled=false;$('moe25File').value=''}
   }
 
   function exportDetailTemplate(){
@@ -2793,6 +2949,8 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   $('importRegistrar').addEventListener('click',()=>$('registrarFile').click());
   $('registrarFile').addEventListener('change',event=>importRegistrarForm(event.target.files?.[0]));
   $('downloadRegistrar').addEventListener('click',exportRegistrarForm);
+  $('downloadMoe25').addEventListener('click',()=>$('moe25File').click());
+  $('moe25File').addEventListener('change',event=>exportMoe25Form(event.target.files?.[0]));
   $('exportDetailXlsx').addEventListener('click',()=>exportDetailExcel(allExchangeRows()));
   $('chooseImport').addEventListener('click',()=>$('importFile').click());
   $('importFile').addEventListener('change',async event=>{
