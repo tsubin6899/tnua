@@ -1116,21 +1116,26 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     }
     const totals=new Map();
     const filledColumns=new Set();
-    const targetColumns=[12,13,16,17];
+    let matchedCells=0;
     for(const row of dataRows){
       const values=readRow(row);
       const replacements=fillRow(values);
+      const targetColumns=[12,13,16,17,19,20,21];
+      if(values[7]==='博士班')targetColumns.push(14,18);
       for(const col of targetColumns){
-        if(replacements[col]!=null){
-          writeNumber(row,col,replacements[col]);
-          values[col]=replacements[col];
+        const replacement=replacements[col];
+        if(replacement!=null)matchedCells++;
+        const value=replacement??(values[col]==null||String(values[col]).trim()===''?0:null);
+        if(value!=null){
+          writeNumber(row,col,value);
+          values[col]=value;
           filledColumns.add(col);
         }
         if(typeof values[col]==='number')totals.set(col,(totals.get(col)||0)+values[col]);
       }
     }
     for(const col of filledColumns)writeNumber(rows[1],col,totals.get(col)||0);
-    if(!filledColumns.size)throw new Error('目前資料庫沒有可對應的學25招生數字。');
+    if(!matchedCells)throw new Error('目前資料庫沒有可對應的學25招生數字。');
     const files=[];
     for(const [name,entry] of archive.entries){
       if(name.endsWith('/'))continue;
@@ -2056,8 +2061,8 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
         return replacement;
       });
       downloadBytes(file.name.replace(/.xlsx$/i,'')+'_招生資料帶入.xlsx',data);
-      status.textContent='已下載，'+matched+' 筆帶入招生數字。'+(pending?'另有 '+pending+' 筆有欄位無法確認，相關欄位保留範本值。':'')+
-        ' 逕修讀博士與依就業狀態拆分的註冊欄保留範本原值，送件前請核對。';
+      status.textContent='已下載，'+matched+' 筆帶入招生數字。'+(pending?'另有 '+pending+' 筆有欄位無法確認，相關欄位沿用範本數字，空白暫填 0。':'')+
+        ' 適用的人數欄空白暫填 0。逕修讀博士與依就業狀態拆分的註冊數字，請由負責單位核對補填。';
     }catch(error){status.textContent='無法產出學25：'+error.message}
     finally{button.disabled=false;$('moe25File').value=''}
   }
