@@ -223,7 +223,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
 </header>
 <div class="page-tabs">
   <div class="page-tabs-inner">
-    <nav class="brand-nav" aria-label="主要分頁"><a class="active" data-page-link="overview" href="#overview" aria-current="page"><span class="nav-icon" aria-hidden="true">●</span>總覽</a><a data-page-link="report" href="#report"><span class="nav-icon" aria-hidden="true">▤</span>決策報告</a><a data-page-link="trends" href="#trends"><span class="nav-icon" aria-hidden="true">↗</span>趨勢</a><a data-page-link="toolkit" href="#toolkit"><span class="nav-icon" aria-hidden="true">◆</span>分析工具</a><a data-page-link="quota-adjustments" href="#quota-adjustments"><span class="nav-icon" aria-hidden="true">±</span>名額調整</a><a data-page-link="quota-archive" href="#quota-archive"><span class="nav-icon" aria-hidden="true">▣</span>名額資料</a><a data-page-link="data-detail" href="#data-detail"><span class="nav-icon" aria-hidden="true">▦</span>資料明細</a><a data-page-link="downloads" href="#downloads"><span class="nav-icon" aria-hidden="true">↓</span>表單下載</a></nav>
+    <nav class="brand-nav" aria-label="主要分頁"><a class="active" data-page-link="overview" href="#overview" aria-current="page"><span class="nav-icon" aria-hidden="true">●</span>總覽</a><a data-page-link="report" href="#report"><span class="nav-icon" aria-hidden="true">▤</span>決策報告</a><a data-page-link="trends" href="#trends"><span class="nav-icon" aria-hidden="true">↗</span>趨勢</a><a data-page-link="toolkit" href="#toolkit"><span class="nav-icon" aria-hidden="true">◆</span>分析工具</a><a data-page-link="quota-adjustments" href="#quota-adjustments"><span class="nav-icon" aria-hidden="true">±</span>名額調整</a><a data-page-link="quota-archive" href="#quota-archive"><span class="nav-icon" aria-hidden="true">▣</span>名額資料</a><a data-page-link="data-detail" href="#data-detail"><span class="nav-icon" aria-hidden="true">▦</span>資料明細</a><a data-page-link="downloads" href="#downloads"><span class="nav-icon" aria-hidden="true">↓</span>表單下載</a><a data-page-link="features" href="#features">招生特色</a></nav>
   </div>
 </div>
 </div>
@@ -298,6 +298,19 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     <article class="panel dashboard-page" data-page="trends">
       <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">★</span><span>系所競爭倍率排名</span></h2><p>依目前學年度與學制，顯示最多 10 個系所。</p></div><div class="legend"><span><i class="dot" style="background:var(--teal)"></i>高選擇性</span></div></div>
       <div id="rankChart"></div><div class="chart-summary" id="rankSummary"></div>
+    </article>
+    <article class="panel wide dashboard-page" id="features" data-page="features">
+      <div class="panel-head">
+        <div><h2>招生特色說明</h2><p>按學年度維護學24、學24-1、學24-2的招生特色。學24另有系所網址欄。</p></div>
+        <div class="panel-actions">
+          <label>學年度 <input id="featureYear" type="number" min="90" max="150" value="115"></label>
+          <button class="btn small secondary" id="importFeatures" type="button">匯入特色 Word</button>
+          <input class="sr-only" id="featureFile" type="file" accept=".docx">
+          <button class="btn small gold" id="saveFeatures" type="button">儲存本年度特色</button>
+        </div>
+      </div>
+      <p class="report-note" id="featureStatus" role="status">匯入與編輯內容儲存在目前瀏覽器。</p>
+      <div class="table-wrap"><table class="report-table"><thead><tr><th>單位</th><th>學制</th><th>中文特色</th><th>英文特色</th><th>網址</th></tr></thead><tbody id="featureRows"></tbody></table></div>
     </article>
     <article class="panel wide dashboard-page" id="downloads" data-page="downloads">
       <div class="panel-head">
@@ -1146,6 +1159,30 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     return zipStore(files);
   }
 
+
+  async function readAdmissionFeatures(buffer){
+    const archive=zipIndex(buffer);
+    const entry=archive.entries.get('word/document.xml');
+    if(!entry||entry.uncompressedSize>10*1024*1024)throw new Error('無法讀取 Word 特色表。');
+    const doc=parseXml(await readZipText(archive,'word/document.xml'),'招生特色');
+    const direct=(node,name)=>Array.from(node.children).filter(child=>child.localName===name);
+    const cellText=cell=>direct(cell,'p').map(p=>elements(p,'t').map(t=>t.textContent).join('')).join('\n').trim();
+    const tables=elements(doc,'tbl').map(table=>direct(table,'tr').map(row=>direct(row,'tc').map(cellText)));
+    const detail=tables.find(table=>table[0]?.[0]==='單位'&&table[0]?.[2]?.includes('招生特色'));
+    if(!detail)throw new Error('找不到「單位、學制班別、系所招生特色」表格。');
+    const result=[];
+    let unit='';
+    for(const [name,level,zh='',en='',url=''] of detail.slice(1)){
+      if(name)unit=name;
+      if(unit&&level)result.push({unit,level,zh,en,url});
+    }
+    const summary=tables.find(table=>table!==detail&&table.some(row=>row.length===2&&['博士班','碩士班','學士班'].includes(row[0])));
+    for(const [level,zh] of summary||[]){
+      if(level&&zh)result.push({unit:'各學制（學24-1）',level,zh});
+    }
+    if(!result.length)throw new Error('特色表格沒有明細。');
+    return result;
+  }
   function canonicalHeader(value) {
     const text = String(value == null ? '' : value).replace(/[\s　]+/g, '').toLowerCase();
     return HEADER_ALIASES.get(text) || '';
@@ -1221,7 +1258,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     return { sheetName: selected.name, headerRow, rows:[...rows,...systemRows], admissionRows:rows.length, systemRows:systemRows.length };
   }
 
-  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, SYSTEM_HEADERS, LEVELS, createWorkbook, createRewardWorkbook, createDetailWorkbook, createRegistrarWorkbook, fillMoe25Workbook, parseWorkbook });
+  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, SYSTEM_HEADERS, LEVELS, createWorkbook, createRewardWorkbook, createDetailWorkbook, createRegistrarWorkbook, fillMoe25Workbook, readAdmissionFeatures, parseWorkbook });
 })(window);
 
 </script>
@@ -1249,8 +1286,8 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   const XLSX = window.TNUAXlsx;
   if(document.querySelector){document.querySelector('[data-page-link="data-detail"]').insertAdjacentHTML('beforebegin','<a data-page-link="rewards" href="#rewards"><span class="nav-icon" aria-hidden="true">★</span>招生獎勵</a>');document.querySelector('#analysisPages').insertAdjacentHTML('afterbegin','<article class="panel wide dashboard-page" id="rewards" data-page="rewards"><div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">★</span><span>招生獎勵統計</span></h2><p>本頁可獨立切換資料狀態；學士班僅納入單獨招生與申請入學，碩博士班合併甄試入學與一般考試，且僅採總量內名額。</p></div><div class="viz-control"><label for="rewardYear">學年度</label><select id="rewardYear"></select></div></div><div class="report-snapshot" id="rewardSnapshot"></div><div class="table-wrap"><table class="report-table"><thead><tr><th>學制</th><th>系所名稱</th><th>資料狀態</th><th class="num">前一學年度報名</th><th class="num">本學年度報名</th><th class="num">報名成長率</th><th class="num">招生名額</th><th class="num">錄取人數</th><th class="num">註冊人數</th><th class="num">註冊報到率</th></tr></thead><tbody id="rewardBody"></tbody></table></div><p class="report-note" id="rewardNote"></p></article>')}
   if(document.querySelector)document.querySelector('#rewards .panel-head').insertAdjacentHTML('beforeend','<div class="viz-control"><label for="rewardLevel">學制</label><select id="rewardLevel"><option value="全部">全部學制</option><option value="七年一貫制">七年一貫制</option><option value="學士班">學士班</option><option value="碩士班">碩士班</option><option value="碩士在職專班">碩士在職專班</option><option value="博士班">博士班</option></select></div><div class="viz-control"><label for="rewardStatus">資料狀態</label><select id="rewardStatus"><option value="all">全部狀態</option><option value="completed">已完成（完成註冊報到）</option><option value="ongoing">進行中（尚未完成註冊）</option></select></div><button class="btn small secondary" type="button" id="exportRewards">下載 Excel</button>');
-  const PAGE_IDS = ['overview','report','trends','toolkit','quota-adjustments','quota-archive','rewards','data-detail','downloads'];
-  const PAGE_TITLES = {overview:'總覽',report:'決策報告',trends:'趨勢',toolkit:'分析工具','quota-adjustments':'名額調整','quota-archive':'名額資料',rewards:'招生獎勵','data-detail':'資料明細',downloads:'表單下載'};
+  const PAGE_IDS = ['overview','report','trends','toolkit','quota-adjustments','quota-archive','rewards','data-detail','downloads','features'];
+  const PAGE_TITLES = {overview:'總覽',report:'決策報告',trends:'趨勢',toolkit:'分析工具','quota-adjustments':'名額調整','quota-archive':'名額資料',rewards:'招生獎勵','data-detail':'資料明細',downloads:'表單下載',features:'招生特色'};
   const rewardState = {year:null,level:'全部',status:'all'};
   let activePage = PAGE_IDS.includes(location.hash.slice(1))?location.hash.slice(1):'overview';
   const GRADUATE_TOTAL_LEVEL = '研究所（總和）';
@@ -1334,7 +1371,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   const hasExplicitEntryFilter=preserveEntryFilter&&entryFilterKeys.some(key=>params.has(key));
   const entrySaved=hasExplicitEntryFilter?saved:{};
   const entryParam=key=>hasExplicitEntryFilter?params.get(key):null;
-  if(!preserveEntryFilter&&activePage!=='downloads')activePage='overview';
+  if(!preserveEntryFilter&&!['downloads','features'].includes(activePage))activePage='overview';
   const state = {
     year: Number(entryParam('year') || entrySaved.year || NaN),
     level: normalizeLevel(entryParam('level') || entrySaved.level || '學士班'),
@@ -1436,8 +1473,8 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     activePage=PAGE_IDS.includes(page)?page:'overview';
     document.body.dataset.activePage=activePage;
     document.querySelectorAll('[data-page]').forEach(element=>{element.hidden=element.dataset.page!==activePage});
-    $('analysisPages').hidden=!['trends','rewards','data-detail','downloads'].includes(activePage);
-    const quotaView=['quota-adjustments','quota-archive','toolkit','rewards','downloads'].includes(activePage);$('dashboardFilters').hidden=quotaView;$('dashboardStatus').hidden=quotaView;
+    $('analysisPages').hidden=!['trends','rewards','data-detail','downloads','features'].includes(activePage);
+    const quotaView=['quota-adjustments','quota-archive','toolkit','rewards','downloads','features'].includes(activePage);$('dashboardFilters').hidden=quotaView;$('dashboardStatus').hidden=quotaView;
     $('dashboardFooter').hidden=activePage==='quota-archive';
     document.querySelectorAll('[data-page-link]').forEach(link=>{const current=link.dataset.pageLink===activePage;link.classList.toggle('active',current);if(current)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')});
     $('pageStatus').textContent=PAGE_TITLES[activePage]+'分頁';document.title=PAGE_TITLES[activePage]+'｜國立臺北藝術大學招生資訊';
@@ -2935,7 +2972,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     if(centralState.available){alert('清除所有資料僅限私人本機模式，請從本機網站開啟。');return}
     if(prompt('將永久清除目前瀏覽器的所有招生資料、名額資料、編輯內容、匯入前備份與版本快照（不限目前篩選）。\n請先匯出需要保留的資料；已下載的檔案不會刪除。\n此操作無法復原，請輸入「清除所有資料」確認：')!=='清除所有資料')return;
     try{
-      for(const key of [STORAGE_KEY,SYSTEM_DATA_KEY,INLINE_EDIT_KEY,BACKUP_KEY,VERSION_KEY,QUALITY_ACTION_KEY,FILTER_KEY,VISUAL_STATE_KEY,TOOL_STATE_KEY])localStorage.removeItem(key);
+      for(const key of [STORAGE_KEY,SYSTEM_DATA_KEY,INLINE_EDIT_KEY,BACKUP_KEY,VERSION_KEY,QUALITY_ACTION_KEY,FILTER_KEY,VISUAL_STATE_KEY,TOOL_STATE_KEY,FEATURE_KEY])localStorage.removeItem(key);
       sessionStorage.removeItem(BACKUP_KEY);
     }catch(error){alert('清除未完成，請重試：'+error.message);return}
     alert('已清除目前瀏覽器的所有本機資料，網站將重新載入。');
@@ -2953,6 +2990,75 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   $('exportXlsx').addEventListener('click',()=>exportDetailExcel(allExchangeRows()));
   $('importRegistrar').addEventListener('click',()=>$('registrarFile').click());
   $('registrarFile').addEventListener('change',event=>importRegistrarForm(event.target.files?.[0]));
+
+  const FEATURE_KEY='tnuaAdmissionFeatures.v1';
+  const featuresByYear=safeParse(localStorage.getItem(FEATURE_KEY),{})||{};
+  const featureYear=$('featureYear'),featureStatus=$('featureStatus'),featureBody=$('featureRows');
+  let displayedFeatureYear=featureYear.value;
+  const featureFields=['zh','en','url'];
+  function featureRows(){
+    return featuresByYear[displayedFeatureYear]||[{unit:'全校（學24-2）',level:'全校'}];
+  }
+  function renderAdmissionFeatures(){
+    featureBody.innerHTML=featureRows().map(row=>'<tr><td>'+esc(row.unit)+'</td><td>'+esc(row.level)+'</td>'+
+      featureFields.map((field,index)=>'<td>'+(field!=='zh'&&row.unit.includes('（學24-')?'—':
+        '<textarea rows="'+(field==='url'?2:4)+'" style="width:100%;min-width:10rem" aria-label="'+
+        esc(row.unit+' '+row.level+' '+['中文特色','英文特色','網址'][index])+'">'+esc(row[field]||'')+'</textarea>')+'</td>').join('')+'</tr>').join('');
+  }
+  function persistAdmissionFeatures(rows){
+    localStorage.setItem(FEATURE_KEY,JSON.stringify({...featuresByYear,[displayedFeatureYear]:rows}));
+    featuresByYear[displayedFeatureYear]=rows;
+  }
+  featureYear.addEventListener('change',()=>{
+    if(!featureYear.checkValidity()||!featureYear.value){featureYear.value=displayedFeatureYear;return}
+    if(featureBody.dataset.dirty==='true'&&!confirm('切換學年度會捨棄尚未儲存的編輯。確定切換？')){
+      featureYear.value=displayedFeatureYear;return;
+    }
+    displayedFeatureYear=featureYear.value;
+    featureBody.dataset.dirty='false';
+    featureStatus.textContent='目前顯示 '+displayedFeatureYear+' 學年度。';
+    renderAdmissionFeatures();
+  });
+  featureBody.addEventListener('input',()=>{featureBody.dataset.dirty='true'});
+  $('saveFeatures').addEventListener('click',()=>{
+    const rows=featureRows().map((row,index)=>{
+      const edited={...row};
+      featureFields.forEach((field,col)=>{
+        const input=featureBody.rows[index].cells[col+2].querySelector('textarea');
+        if(input)edited[field]=input.value.trim();
+      });
+      return edited;
+    });
+    try{
+      persistAdmissionFeatures(rows);
+      featureBody.dataset.dirty='false';
+      featureStatus.textContent='已儲存 '+displayedFeatureYear+' 學年度招生特色。';
+    }catch(error){featureStatus.textContent='儲存失敗：'+error.message}
+  });
+  $('importFeatures').addEventListener('click',()=>$('featureFile').click());
+  $('featureFile').addEventListener('change',async event=>{
+    const file=event.target.files?.[0];
+    if(!file)return;
+    const year=displayedFeatureYear;
+    try{
+      if(file.size>10*1024*1024)throw new Error('Word 檔案超過 10 MB。');
+      const filenameYear=file.name.match(/(\d{3})學年度/)?.[1];
+      if(filenameYear&&filenameYear!==year)throw new Error('Word 檔名學年度為 '+filenameYear+'，請先切換學年度。');
+      const rows=await XLSX.readAdmissionFeatures(await file.arrayBuffer());
+      if(year!==displayedFeatureYear)throw new Error('學年度已變更，請重新選檔。');
+      if((featuresByYear[year]?.some(row=>!row.unit.includes('學24-2'))||featureBody.dataset.dirty==='true')&&
+        !confirm('以 Word 內容更新 '+year+' 學年度的系所及學制特色？'))return;
+      const schoolRow=featureRows().find(row=>row.level==='全校')||{unit:'全校（學24-2）',level:'全校'};
+      const schoolText=Array.from(featureBody.rows).find(row=>row.cells[1].textContent==='全校')?.querySelector('textarea')?.value;
+      persistAdmissionFeatures([...rows,{...schoolRow,zh:schoolText??schoolRow.zh}]);
+      featureBody.dataset.dirty='false';
+      renderAdmissionFeatures();
+      featureStatus.textContent='已匯入 '+year+' 學年度 '+rows.length+' 筆系所與學制特色。';
+    }catch(error){featureStatus.textContent='匯入失敗：'+error.message}
+    finally{event.target.value=''}
+  });
+  renderAdmissionFeatures();
+
   $('downloadRegistrar').addEventListener('click',exportRegistrarForm);
   $('downloadMoe25').addEventListener('click',()=>$('moe25File').click());
   $('moe25File').addEventListener('change',event=>exportMoe25Form(event.target.files?.[0]));
