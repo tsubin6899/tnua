@@ -1852,6 +1852,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     let current=0, historical=0, omitted=0;
     const sheets=source.map(sheet=>{
       const rows=[];
+      const waitlistedColumn=sheet.headers.indexOf('備取人數');
       for(const entry of sheet.rows){
         const values=[...entry.values];
         const row=entry.recordId?liveRows.get(entry.recordId):null;
@@ -1864,6 +1865,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
           values[first+6]=row.retained_enrollment??null;
           current++;
         }else historical++;
+        if(values[waitlistedColumn]==null||values[waitlistedColumn]==='')values[waitlistedColumn]=0;
         values[values.length-1] ??= 0;
         rows.push(values);
       }
