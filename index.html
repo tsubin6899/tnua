@@ -1849,10 +1849,30 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     const status=$('registrarStatus');
     if(!source.length){status.textContent='請先匯入含國倫歷史資料的完整資料庫。';return}
     const liveRows=new Map(allExchangeRows().map(row=>[row.record_id,row]));
-    let current=0, historical=0, omitted=0;
+    const identityCodes=new Map(), departmentCodes=new Map(), channelDepartmentCodes=new Map();
+    function recordCode(index,key,value){
+      if(value==null||value==='')return;
+      if(!index.has(key))index.set(key,new Set());
+      index.get(key).add(value);
+    }
+    function uniqueCode(index,key){
+      const codes=index.get(key);
+      return codes?.size===1?[...codes][0]:null;
+    }
+    const departmentKey=(channel,department)=>JSON.stringify([channel,department]);
+    for(const sheet of source.filter(sheet=>sheet.headers.includes('身分代碼'))){
+      for(const {values:[,identity,code,channel,department]} of sheet.rows){
+        recordCode(identityCodes,channel,identity);
+        recordCode(departmentCodes,department,code);
+        recordCode(channelDepartmentCodes,departmentKey(channel,department),code);
+      }
+    }
+    let current=0, historical=0, omitted=0, unresolved=0;
     const sheets=source.map(sheet=>{
       const rows=[];
       const waitlistedColumn=sheet.headers.indexOf('備取人數');
+      const hasCodes=sheet.headers.includes('身分代碼');
+      const headers=hasCodes?sheet.headers:['年度','身分代碼','系所代碼',...sheet.headers.slice(1)];
       for(const entry of sheet.rows){
         const values=[...entry.values];
         const row=entry.recordId?liveRows.get(entry.recordId):null;
@@ -1867,13 +1887,22 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
         }else historical++;
         if(values[waitlistedColumn]==null||values[waitlistedColumn]==='')values[waitlistedColumn]=0;
         values[values.length-1] ??= 0;
+        if(!hasCodes){
+          const [,channel,department]=values;
+          const identity=uniqueCode(identityCodes,channel);
+          const key=departmentKey(channel,department);
+          const code=channelDepartmentCodes.has(key)
+            ? uniqueCode(channelDepartmentCodes,key) : uniqueCode(departmentCodes,department);
+          values.splice(1,0,identity,code);
+        }
+        if(values[1]==null||values[1]===''||values[2]==null||values[2]==='')unresolved++;
         rows.push(values);
       }
-      return {name:sheet.name,headers:sheet.headers,rows};
+      return {name:sheet.name,headers,rows};
     });
     try{
       downloadBytes('北藝大招生名額_國倫系統用.xlsx',XLSX.createRegistrarWorkbook(sheets));
-      status.textContent='已下載 '+sheets.length+' 個學年度。'+current+' 筆採目前資料明細，'+historical+' 筆保留國倫原表，'+omitted+' 筆依資料明細的「不納入」設定略過。';
+      status.textContent='已下載 '+sheets.length+' 個學年度。'+current+' 筆採目前資料明細，'+historical+' 筆保留國倫原表，'+omitted+' 筆依資料明細的「不納入」設定略過。'+(unresolved?'另有 '+unresolved+' 筆的身分或系所代碼待註冊單位確認，相關欄位留白。':'');
     }catch(error){status.textContent='下載失敗：'+error.message}
   }
 
