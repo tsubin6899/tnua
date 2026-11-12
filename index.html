@@ -1864,6 +1864,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
           values[first+6]=row.retained_enrollment??null;
           current++;
         }else historical++;
+        values[values.length-1] ??= 0;
         rows.push(values);
       }
       return {name:sheet.name,headers:sheet.headers,rows};
