@@ -334,6 +334,15 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
         <input class="sr-only" id="moe24File" type="file" accept=".xlsx">
       </div>
       <p class="report-note" id="moe24Status" role="status"></p>
+      <div class="panel-head">
+        <div><h2>教育部招生總量｜表7-1A、7-1B、7-1C、7-2</h2><p>選取當年度範本回填名額。舊版 .xls 請先另存為 .xlsx。基本名額合計預設沿用範本，可輸入教育部核定值。</p></div>
+        <div class="panel-actions">
+          <label>學制基本名額合計 <input id="quotaBasicTarget" type="number" min="0" step="1" placeholder="沿用範本"></label>
+          <button class="btn small gold" id="downloadQuotaAllocation" type="button">選取招生總量範本並下載</button>
+          <input class="sr-only" id="quotaAllocationFile" type="file" accept=".xlsx">
+        </div>
+      </div>
+      <p class="report-note" id="quotaAllocationStatus" role="status"></p>
     </article>
     <article class="panel wide dashboard-page" id="data-detail" data-page="data-detail">
       <div class="panel-head"><div><h2 class="title-with-icon"><span class="title-icon" aria-hidden="true">▦</span><span>精確資料明細</span></h2><p>欄位會依招生管道自動切換，只顯示該管道適用的招生流程；匯出與匯入均以全部學年度、全部學制及全部招生管道為範圍。</p><div class="edit-note">單獨招生／一般考試顯示流用入、實際可用名額與最終可用名額；特殊選才顯示流用出；甄試入學／繁星推薦顯示流用出，繁星推薦不顯示備取人數；申請入學顯示第一階段通過與放棄報到；四技二專顯示分發與放棄報到；外加與特殊學制隱藏流用欄。<span class="flow-help"><strong>自動公式：</strong>總流用出＝放榜前流用出＋放榜後流用出；學士班單獨招生的放榜前／後流用入，分別由同系所特殊選才與繁星推薦的放榜前／後流用出加總帶入；碩士班、博士班一般考試則由同系所甄試入學帶入。承接管道若沒有對應來源管道，兩個流用入欄鎖定為「—」，計算時視為 0。實際可用名額＝招生名額＋放榜前流用入；最終可用名額＝實際可用名額＋放榜後流用入。</span><span class="flow-help"><strong>全部招生管道：</strong>學士班的報名、名額、錄取、備取與註冊報到，只加總單獨招生、特殊選才、繁星推薦、申請入學及四技二專甄選入學；碩士班、博士班則加總甄試入學與一般考試。這些彙總列均為系統衍生欄位，不開放填寫。</span><span class="flow-help"><strong>填寫原則：</strong>空白代表未知，確認數值為零才填 0；編輯內容僅儲存在目前瀏覽器。</span></div></div><div class="panel-actions"><div class="view-toggle" aria-label="明細呈現方式"><button id="detailTableMode" type="button">表格</button><button id="detailCardMode" type="button">卡片</button></div><button class="btn small secondary" id="clearAllData" type="button" title="永久清除目前瀏覽器的資料、備份與快照" style="color:#a32626;border-color:#a32626">清除所有資料</button><button class="btn small secondary" id="resetInlineEdits" type="button">還原編輯數值</button><button class="btn small secondary" id="exportCsv" type="button">匯出全部 CSV</button><button class="btn small secondary" id="exportDetailXlsx" type="button">匯出全部 Excel</button><button class="btn small gold" id="importDetailCsv" type="button">匯入全部 CSV</button><input class="sr-only" id="detailCsvFile" type="file" accept=".csv,text/csv"></div></div>
@@ -1141,6 +1150,122 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     return zipStore(files);
   }
 
+
+  function fillQuotaAllocation(buffer,records,basicOverride){
+    const forms={
+      '7-1A':{level:'碩士班',name:2,previous:4,basic:6,channels:{甄試入學:[9,10],一般考試:[11,12]}},
+      '7-1B':{level:'碩士在職專班',name:1,previous:3,basic:5,channels:{一般考試:[8,9,10,11,12,13]}},
+      '7-1C':{level:'博士班',name:1,previous:2,basic:5,channels:{甄試入學:[8,9],一般考試:[10,11]}},
+      '7-2':{level:'學士班',name:5,previous:6,basic:8,
+        channels:{單獨招生:[19,20],特殊選才:[21],繁星推薦:[12],申請入學:[13],四技二專:[14,15,16]},
+        external:{繁星推薦原住民:25,申請入學原住民:26,單獨招生原住民:27,申請入學青年生涯領航計畫:30}},
+    };
+    const normalize=(name,level)=>String(name??'').normalize('NFKC').replace(/\s/g,'')
+      .replace(/^文化資源學院(?=文化資產與藝術創新)/,'')
+      .replace(/^藝術行政與管理研究所(?=領導與決策)/,'')
+      .replace(new RegExp(level+'$'),'');
+    return editFirstWorksheet(buffer,({rows,readRow,headers,writeCell})=>{
+      const match=headers.find(value=>typeof value==='string'&&value.includes('新生招生名額分配表'))
+        ?.match(/【表(7-1[ABC]|7-2)】\s*(\d{3})學年度/);
+      if(!match)throw new Error('請選取表7-1A、7-1B、7-1C或7-2的 Excel 範本。');
+      const [,form,yearText]=match,year=Number(yearText),spec=forms[form];
+      const title=readRow(rows[1]);
+      if(title[spec.name]!=='系所(組)名稱')throw new Error('系所欄位與範本不符。');
+      const number=(value,label)=>{
+        if(!Number.isSafeInteger(value)||value<0)throw new Error(label+'須為非負整數。');
+        return value;
+      };
+      const count=(values,col)=>values[col]==null||values[col]===''?0:number(values[col],'範本名額');
+      const schoolColumn=form==='7-2'?3:spec.name-1;
+      const totalIndex=rows.findIndex((row,index)=>index>=5&&readRow(row)[spec.name]==='總計');
+      if(totalIndex<6)throw new Error('找不到範本明細或總計列。');
+      const totalRow=rows[totalIndex], originalTotals=readRow(totalRow);
+      const catalog=new Map();
+      const key=(y,level,name)=>JSON.stringify([y,level,normalize(name,level)]);
+      for(const record of records){
+        if(![year-1,year].includes(Number(record.year)))continue;
+        const id=key(Number(record.year),record.level,record.department);
+        if(!catalog.has(id))catalog.set(id,[]);
+        catalog.get(id).push(record);
+      }
+      const seen=new Set();
+      const items=rows.slice(5,totalIndex).map(row=>{
+        const values=readRow(row),name=values[spec.name];
+        if(values[schoolColumn]!=='國立臺北藝術大學'||!name)throw new Error('範本明細須為國立臺北藝術大學。');
+        const dance=form==='7-2'&&name==='舞蹈學系';
+        const level=dance?'七年一貫制':spec.level;
+        const department=dance?'舞蹈學系七年一貫制(學士班)':name;
+        const id=key(year,level,department);
+        if(seen.has(id))throw new Error('範本系所重複：'+name);
+        seen.add(id);
+        const inner=targetYear=>catalog.get(key(targetYear,level,department))?.filter(record=>record.scope==='總量內名額');
+        const previous=inner(year-1),current=inner(year);
+        if(!previous?.length||!current?.length)throw new Error(name+'缺少前一年或當年度的總量內名額。');
+        const total=entries=>entries.reduce((sum,record)=>sum+number(record.quota,'系統名額'),0);
+        const quota=total(current), updates=new Map([[spec.previous,total(previous)],[spec.basic+2,quota]]);
+        for(const [channel,columns] of Object.entries(spec.channels)){
+          const channelQuota=total(current.filter(record=>record.channel===channel));
+          const original=columns.reduce((sum,col)=>sum+count(values,col),0);
+          if(original===channelQuota)continue;
+          if(columns.slice(1).some(col=>count(values,col)>0)||channel==='四技二專'){
+            throw new Error(name+'的'+channel+'名額變動，請先在範本調整細項分配。');
+          }
+          updates.set(columns[0],channelQuota);
+        }
+        for(const [channel,col] of Object.entries(spec.external||{})){
+          const records=catalog.get(id).filter(record=>record.scope==='外加名額'&&record.channel===channel);
+          updates.set(col,total(records));
+        }
+        const first=form==='7-2'?11:spec.basic+3;
+        const last={'7-1A':12,'7-1B':13,'7-1C':11,'7-2':23}[form];
+        let channelTotal=0;
+        for(let col=first;col<=last;col++)channelTotal+=updates.get(col)??count(values,col);
+        if(channelTotal!==quota)throw new Error(name+'的管道分配與總量內名額不一致，請核對範本拆分與擴充名額。');
+        return {row,values,quota,updates};
+      });
+      for(const [id,entries] of catalog){
+        const [recordYear,level,name]=JSON.parse(id);
+        const relevant=level===spec.level||(form==='7-2'&&level==='七年一貫制'&&name==='舞蹈學系七年一貫制(學士班)');
+        if(recordYear===year&&relevant&&!seen.has(id)&&entries.some(record=>record.scope==='總量內名額'&&record.quota>0)){
+          throw new Error('範本缺少系所：'+name);
+        }
+      }
+      const total=items.reduce((sum,item)=>sum+item.quota,0);
+      const target=number(basicOverride??originalTotals[spec.basic],'學制基本名額合計');
+      if(target>total)throw new Error('基本名額合計超過當年度分配名額。');
+      const ratio=form==='7-1C'?0.7:0.8;
+      const valid=items.every(({values,quota})=>Number.isSafeInteger(values[spec.basic])&&values[spec.basic]>=0&&
+        Number.isSafeInteger(values[spec.basic+1])&&values[spec.basic+1]>=0&&values[spec.basic]+values[spec.basic+1]===quota);
+      const keep=valid&&items.reduce((sum,item)=>sum+item.values[spec.basic],0)===target;
+      if(!keep){
+        for(const item of items)item.basic=Math.floor(item.quota*ratio);
+        let difference=target-items.reduce((sum,item)=>sum+item.basic,0);
+        const ranked=[...items].sort((a,b)=>difference>=0
+          ? (b.quota*ratio-b.basic)-(a.quota*ratio-a.basic)
+          : (a.quota*ratio-a.basic)-(b.quota*ratio-b.basic));
+        while(difference){
+          for(const item of ranked){
+            if(!difference)break;
+            if(difference>0&&item.basic<item.quota){item.basic++;difference--}
+            else if(difference<0&&item.basic>0){item.basic--;difference++}
+          }
+        }
+        for(const item of items){
+          item.updates.set(spec.basic,item.basic);
+          item.updates.set(spec.basic+1,item.quota-item.basic);
+        }
+      }
+      const totals=new Map();
+      const columns=[spec.previous,spec.basic,spec.basic+1,spec.basic+2,
+        ...Object.values(spec.channels).flat(),...Object.values(spec.external||{})];
+      for(const {row,values,updates} of items){
+        for(const [col,value] of updates)if(values[col]!==value)writeCell(row,col,value);
+        for(const col of columns)totals.set(col,(totals.get(col)||0)+(updates.get(col)??count(values,col)));
+      }
+      for(const [col,value] of totals)if(originalTotals[col]!==value)writeCell(totalRow,col,value);
+    });
+  }
+
   function fillMoe25Workbook(buffer, fillRow){
     return editFirstWorksheet(buffer,({rows,readRow,headers,writeCell})=>{
       const required={0:'學校名稱',1:'學年度',5:'單位',7:'學制班別',10:'總量內核定名額-新生招生名額-甄試',
@@ -1308,7 +1433,7 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     return { sheetName: selected.name, headerRow, rows:[...rows,...systemRows], admissionRows:rows.length, systemRows:systemRows.length };
   }
 
-  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, SYSTEM_HEADERS, LEVELS, createWorkbook, createRewardWorkbook, createDetailWorkbook, createRegistrarWorkbook, fillMoe25Workbook, fillMoe24Workbook, readAdmissionFeatures, parseWorkbook });
+  global.TNUAXlsx = Object.freeze({ HEADERS, INPUT_HEADERS, DETAIL_HEADERS, SYSTEM_HEADERS, LEVELS, createWorkbook, createRewardWorkbook, createDetailWorkbook, createRegistrarWorkbook, fillQuotaAllocation, fillMoe25Workbook, fillMoe24Workbook, readAdmissionFeatures, parseWorkbook });
 })(window);
 
 </script>
@@ -3111,6 +3236,25 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
 
   $('downloadRegistrar').addEventListener('click',exportRegistrarForm);
 
+
+  $('downloadQuotaAllocation').addEventListener('click',()=>$('quotaAllocationFile').click());
+  $('quotaAllocationFile').addEventListener('change',async event=>{
+    const file=event.target.files?.[0];
+    if(!file)return;
+    const button=$('downloadQuotaAllocation'),status=$('quotaAllocationStatus');
+    button.disabled=true;
+    status.textContent='正在核對招生名額…';
+    try{
+      if(file.size>10*1024*1024||!(/\.xlsx$/i).test(file.name))throw new Error('請先將 .xls 範本另存為 .xlsx，檔案上限 10 MB。');
+      const field=$('quotaBasicTarget');
+      if(!field.checkValidity())throw new Error('基本名額合計須為非負整數。');
+      const basic=field.value===''?null:Number(field.value);
+      const data=await XLSX.fillQuotaAllocation(await file.arrayBuffer(),MODEL.quota_detail?.records||[],basic);
+      downloadBytes(file.name.replace(/\.xlsx$/i,'')+'_招生名額回填.xlsx',data);
+      status.textContent='已下載。各系所與學制的基本、保留及管道名額已核對。';
+    }catch(error){status.textContent='無法回填：'+error.message}
+    finally{button.disabled=false;event.target.value=''}
+  });
   $('downloadMoe24').addEventListener('click',()=>$('moe24File').click());
   $('moe24File').addEventListener('change',async event=>{
     const file=event.target.files?.[0];
