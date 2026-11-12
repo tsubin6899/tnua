@@ -1387,7 +1387,9 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
     }
     const summary=tables.find(table=>table!==detail&&table.some(row=>row.length===2&&['博士班','碩士班','學士班'].includes(row[0])));
     for(const [level,zh] of summary||[]){
-      if(level&&zh)result.push({unit:'各學制（學24-1）',level,zh});
+      if(!zh)continue;
+      if(!level||level==='全校')result.push({unit:'全校（學24-2）',level:'全校',zh});
+      else result.push({unit:'各學制（學24-1）',level,zh});
     }
     if(!result.length)throw new Error('特色表格沒有明細。');
     return result;
@@ -3201,7 +3203,16 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
   $('registrarFile').addEventListener('change',event=>importRegistrarForm(event.target.files?.[0]));
 
   const FEATURE_KEY='tnuaAdmissionFeatures.v1';
+  function normalizeFeatureRows(rows){
+    const schoolRows=rows.filter(row=>row.level==='全校');
+    const official=schoolRows.find(row=>row.unit==='全校（學24-2）'&&row.zh?.trim());
+    const school=official||schoolRows.find(row=>row.zh?.trim());
+    return [...rows.filter(row=>row.level!=='全校'),{...school,unit:'全校（學24-2）',level:'全校'}];
+  }
   const featuresByYear=safeParse(localStorage.getItem(FEATURE_KEY),{})||{};
+  for(const [year,rows] of Object.entries(featuresByYear)){
+    if(Array.isArray(rows))featuresByYear[year]=normalizeFeatureRows(rows);
+  }
   const featureYear=$('featureYear'),featureStatus=$('featureStatus'),featureBody=$('featureRows');
   let displayedFeatureYear=featureYear.value;
   const featureFields=['zh','en','url'];
@@ -3277,10 +3288,13 @@ body[data-active-page="data-detail"] .detail-legend{border-left:5px solid var(--
       const schoolRow=featureRows().find(row=>row.level==='全校')||{unit:'全校（學24-2）',level:'全校'};
       const schoolIndex=featureRows().findIndex(row=>row.level==='全校');
       const schoolText=featureBody.children[schoolIndex]?.querySelector('[data-feature-field="zh"]')?.value;
-      persistAdmissionFeatures([...rows,{...schoolRow,zh:schoolText??schoolRow.zh}]);
+      const importedSchool=rows.find(row=>row.level==='全校');
+      const detailRows=rows.filter(row=>row.level!=='全校');
+      const zh=schoolText?.trim()?schoolText:importedSchool?.zh??schoolRow.zh;
+      persistAdmissionFeatures([...detailRows,{...schoolRow,zh}]);
       featureBody.dataset.dirty='false';
       renderAdmissionFeatures();
-      featureStatus.textContent='已匯入 '+year+' 學年度 '+rows.length+' 筆系所與學制特色。';
+      featureStatus.textContent='已匯入 '+year+' 學年度 '+detailRows.length+' 筆系所與學制特色。'+(importedSchool?'全校說明已整理至學24-2。':'');
     }catch(error){featureStatus.textContent='匯入失敗：'+error.message}
     finally{event.target.value=''}
   });
